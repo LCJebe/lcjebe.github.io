@@ -2120,9 +2120,9 @@ iframe {
 	margin: auto;
 	border: none;
 	/* Reset default border */
-	height: 50vh;
+	height: 31.5vw;
 	/* Viewport-relative units */
-	width: 50vw;
+	width: 56vw;
 }
 
 /* Form */
