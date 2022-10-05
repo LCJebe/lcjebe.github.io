@@ -2112,6 +2112,19 @@ button.primary.icon:before,
 	color: #ffffff !important;
 }
 
+/* IFrame */
+iframe {
+	display: block;
+	/* iframes are inline by default */
+	background: #000;
+	margin: auto;
+	border: none;
+	/* Reset default border */
+	height: 50vh;
+	/* Viewport-relative units */
+	width: 50vw;
+}
+
 /* Form */
 
 form {
