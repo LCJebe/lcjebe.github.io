@@ -2120,9 +2120,9 @@ iframe {
 	margin: auto;
 	border: none;
 	/* Reset default border */
-	height: min(56.25vw, 56.25vh);
+	height: calc(0.8*min(56.25vw, 56.25vh));
 	/* Viewport-relative units */
-	width: min(100vh, 100vw);
+	width: calc(0.8*min(100vh, 100vw));
 }
 
 /* Form */
