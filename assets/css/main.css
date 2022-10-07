@@ -2541,6 +2541,10 @@ input[type="radio"]:focus+label:before {
 	width: 100%;
 }
 
+.image.fit.sharp img {
+	border-radius: 0px;
+}
+
 .image.fit img {
 	width: 100%;
 }
@@ -2952,16 +2956,20 @@ table.alt tbody tr td {
 	-ms-justify-content: center;
 	justify-content: center;
 	width: calc(100% + 2em);
-	margin: 0 0 3em -2em;
-	padding: 0;
+	margin: 0 0 0em -1em;
+	padding: 0em;
 	list-style: none;
 }
 
 .features li {
-	width: calc(33.33333% - 2em);
-	margin-left: 2em;
-	margin-top: 3em;
-	padding: 0;
+	width: calc(33.33333% - 1em);
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	padding: 1em;
+	background-color: rgba(205, 205, 205, 0.5);
+	border-radius: 8px;
 }
 
 .features li:nth-child(1),
