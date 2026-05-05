@@ -1,0 +1,37 @@
+---
+import type { WorkLink } from "./WorkRow.astro";
+
+interface Props {
+  /** Image URL used as the visual half */
+  imageSrc: string;
+  imageAlt: string;
+  /** Top accent label, e.g. "Adobe Camera Raw · Oct 2024 · used by millions" */
+  label: string;
+  title: string;
+  /** Description paragraph */
+  description: string;
+  links?: WorkLink[];
+}
+
+const { imageSrc, imageAlt, label, title, description, links = [] } = Astro.props;
+---
+<div class="shipped">
+  <div
+    class="visual"
+    role="img"
+    aria-label={imageAlt}
+    style={`background-image: url('${imageSrc}');`}
+  />
+  <div class="copy">
+    <p class="label">{label}</p>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    {links.length > 0 && (
+      <div class="links">
+        {links.map((l) => (
+          <a href={l.href}>{l.label}</a>
+        ))}
+      </div>
+    )}
+  </div>
+</div>

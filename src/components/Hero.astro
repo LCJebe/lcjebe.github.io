@@ -1,0 +1,46 @@
+---
+import Button from "./Button.astro";
+import HeroCarousel, { type Frame } from "./HeroCarousel.astro";
+
+interface Props {
+  /** "Currently · Phota Labs · 2026" */
+  eyebrow: string;
+  /** Tagline HTML — pass as raw string. Use <em>...</em> for the italic accent. */
+  taglineHtml: string;
+  /** Optional subhead between tagline and lead — for a positioning claim. */
+  subtitleHtml?: string;
+  /** Lead paragraph HTML — supports inline <span class="smallcaps"> */
+  leadHtml: string;
+  primaryCta: { href: string; label: string };
+  secondaryCta?: { href: string; label: string };
+  frames: Frame[];
+}
+
+const { eyebrow, taglineHtml, subtitleHtml, leadHtml, primaryCta, secondaryCta, frames } = Astro.props;
+---
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="eyebrow">
+      <span class="pulse" aria-hidden="true" />
+      <span>{eyebrow}</span>
+    </div>
+
+    <h1 class="tagline" set:html={taglineHtml} />
+
+    {subtitleHtml && <p class="hero-subtitle" set:html={subtitleHtml} />}
+
+    <p class="sub" set:html={leadHtml} />
+
+    <div class="hero-cta">
+      <Button href={primaryCta.href} variant="primary">
+        {primaryCta.label} <span aria-hidden="true">→</span>
+      </Button>
+      {secondaryCta && (
+        <Button href={secondaryCta.href}>{secondaryCta.label}</Button>
+      )}
+      <span class="arrow" aria-hidden="true">↓ scroll</span>
+    </div>
+
+    <HeroCarousel frames={frames} />
+  </div>
+</section>

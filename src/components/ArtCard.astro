@@ -1,0 +1,23 @@
+---
+interface Props {
+  imageSrc: string;
+  imageAlt: string;
+  title: string;
+  description: string;
+  moreLink?: { href: string; label: string };
+}
+
+const { imageSrc, imageAlt, title, description, moreLink } = Astro.props;
+---
+<div class="artwork">
+  <div class="img">
+    <img src={imageSrc} alt={imageAlt} loading="lazy" decoding="async" />
+  </div>
+  <div class="copy">
+    <h4>{title}</h4>
+    <p>{description}</p>
+    {moreLink && (
+      <a class="link" href={moreLink.href}>{moreLink.label} →</a>
+    )}
+  </div>
+</div>

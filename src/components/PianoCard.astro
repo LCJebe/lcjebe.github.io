@@ -1,0 +1,78 @@
+---
+// Build-time CSS import — gets bundled into the global stylesheet.
+import "lite-youtube-embed/src/lite-yt-embed.css";
+
+interface Props {
+  /** YouTube video URL (canonical watch URL) — videoid is parsed from it */
+  videoUrl: string;
+  /** Duration string e.g. "07:42" — shown as overlay on the thumb */
+  duration: string;
+  /** Mono accent label above title, e.g. "Beethoven · Piano Sonata No. 8" */
+  label: string;
+  /** Italic display title — typically a movement name or a quote */
+  title: string;
+  description: string;
+}
+
+const { videoUrl, duration, label, title, description } = Astro.props;
+
+// Extract YouTube videoid from a watch URL (?v=...) or shortlink (youtu.be/...).
+function extractVideoId(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    return u.searchParams.get("v") ?? "";
+  } catch {
+    return "";
+  }
+}
+
+const videoId = extractVideoId(videoUrl);
+---
+<div class="piano-card">
+  <div class="piano-thumb-wrap">
+    <lite-youtube
+      videoid={videoId}
+      playlabel={`Play piano performance: ${label}`}
+    />
+    <span class="duration" aria-hidden="true">{duration}</span>
+  </div>
+  <div class="piano-copy">
+    <p class="label">{label}</p>
+    <h3>{title}</h3>
+    <p>{description}</p>
+  </div>
+</div>
+
+{/* The lite-yt-embed custom element registration is loaded ONCE at the
+    section level (in index.astro), not per card — multiple <script> tags
+    with the same src would re-execute customElements.define and throw. */}
+
+<style is:global>
+  /* Wrap lite-youtube to host the duration overlay + apply our framing. */
+  .piano-thumb-wrap {
+    position: relative;
+    background: var(--bg-sunken);
+    overflow: hidden;
+  }
+  .piano-thumb-wrap lite-youtube {
+    width: 100%;
+    max-width: none;
+    cursor: pointer;
+  }
+  .piano-thumb-wrap .duration {
+    position: absolute;
+    right: var(--s-3);
+    bottom: var(--s-3);
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: oklch(0.95 0.012 80 / 0.9);
+    background: oklch(0.21 0.014 70 / 0.55);
+    padding: 4px 8px;
+    border-radius: var(--r-1);
+    letter-spacing: var(--tracking-caps);
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+  }
+</style>

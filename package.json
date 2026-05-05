@@ -1,0 +1,27 @@
+{
+  "name": "lcjebe-portfolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal website of Lars Jebe",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^5.0.0",
+    "lite-youtube-embed": "^0.3.4",
+    "photoswipe": "^5.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/node": "^22.0.0",
+    "lightningcss": "^1.32.0",
+    "typescript": "^5.6.0"
+  }
+}

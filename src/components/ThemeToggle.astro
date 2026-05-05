@@ -1,0 +1,9 @@
+---
+// Phase 2: static markup. Phase 4 wires the click-handler script (kept inline elsewhere).
+// `aria-pressed` initial values are placeholders — the inline theme bootstrap script in
+// BaseLayout sets `data-theme` before paint; the toggle script (Phase 4) syncs aria-pressed.
+---
+<div class="theme-toggle" role="group" aria-label="Theme">
+  <button type="button" data-theme-set="dark" aria-pressed="true">Dark</button>
+  <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+</div>

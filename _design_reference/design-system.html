@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design System — Lars Jebe</title>
+<link rel="stylesheet" href="tokens.css?v=3" />
+<style>
+  /* —————————————————————— Page chrome */
+  body {
+    padding: var(--s-8) clamp(var(--s-5), 4vw, var(--s-9));
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .ds-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: var(--s-8);
+  }
+  .ds-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-caps);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+  }
+  .ds-header h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    font-size: clamp(40px, 5vw, 56px);
+    letter-spacing: var(--tracking-tight);
+    margin: 6px 0 0;
+    line-height: 1;
+  }
+  .ds-header .meta {
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+    text-align: right;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    display: inline-flex;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    padding: 2px;
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+  }
+  .theme-toggle button {
+    border: 0;
+    background: transparent;
+    color: var(--fg-muted);
+    padding: 6px 10px;
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+  .theme-toggle button[aria-pressed="true"] {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  /* Section */
+  .ds-section {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--s-6);
+    padding: var(--s-7) 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .ds-section:last-child { border-bottom: 0; }
+  .ds-section header h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 30;
+    font-size: 32px;
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--s-2);
+    line-height: 1;
+  }
+  .ds-section header .num {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+  }
+  .ds-section header p {
+    margin: var(--s-3) 0 0;
+    color: var(--fg-muted);
+    font-size: var(--t-meta);
+    line-height: 1.5;
+    max-width: 28ch;
+  }
+  @media (max-width: 720px) {
+    .ds-section { grid-template-columns: 1fr; gap: var(--s-4); }
+  }
+
+  /* Subsection label */
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    margin-bottom: var(--s-3);
+  }
+
+  /* —————————————————————— Type specimens */
+  .type-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: baseline;
+    padding: var(--s-3) 0;
+    border-top: 1px solid var(--hairline);
+    gap: var(--s-4);
+  }
+  .type-row:first-child { border-top: 0; }
+  .type-row .meta-col {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: 0;
+  }
+  .type-row .meta-col span { display: block; }
+  .type-row .meta-col span + span { color: var(--fg-muted); margin-top: 2px; }
+
+  .specimen-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+  }
+  .specimen-text {
+    font-family: var(--font-text);
+  }
+
+  /* Type-pairing card */
+  .pairing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+    margin-top: var(--s-5);
+  }
+  @media (max-width: 720px) { .pairing-grid { grid-template-columns: 1fr; } }
+  .pairing {
+    border: 1px solid var(--hairline);
+    padding: var(--s-5);
+    background: var(--bg-raised);
+  }
+  .pairing .ptag {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    margin-bottom: var(--s-3);
+  }
+  .pairing .pname {
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--s-2);
+  }
+  .pairing--A .pname { font-family: "Fraunces", serif; font-variation-settings: "opsz" 144, "SOFT" 30; }
+  .pairing--B .pname { font-family: "Fraunces", serif; font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 350; }
+
+  .pairing .pbody {
+    font-family: var(--font-text);
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+    line-height: 1.55;
+    margin-top: var(--s-3);
+  }
+
+  /* —————————————————————— Color */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--s-3);
+  }
+  .swatch {
+    border: 1px solid var(--hairline);
+    background: var(--bg-raised);
+    overflow: hidden;
+  }
+  .swatch .chip-fill {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+  }
+  .swatch .meta {
+    padding: var(--s-3);
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+  .swatch .meta .name {
+    display: block;
+    color: var(--fg);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+  }
+
+  .accent-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+    margin-top: var(--s-5);
+  }
+  @media (max-width: 720px) { .accent-row { grid-template-columns: 1fr; } }
+  .accent-tile {
+    border: 1px solid var(--hairline);
+    background: var(--bg-raised);
+    padding: var(--s-4);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: var(--s-4);
+    align-items: center;
+  }
+  .accent-tile .puck {
+    width: 56px; height: 56px; border-radius: var(--r-pill);
+  }
+  .accent-tile .name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+  }
+  .accent-tile .role {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .accent-tile.is-primary { border-color: var(--accent); }
+  .accent-tile.is-primary::after {
+    content: "PRIMARY";
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: var(--tracking-caps);
+    margin-left: auto;
+    align-self: start;
+  }
+
+  /* —————————————————————— Spacing */
+  .space-list { display: grid; gap: var(--s-3); }
+  .space-row {
+    display: grid;
+    grid-template-columns: 60px 80px 1fr;
+    align-items: center;
+    gap: var(--s-3);
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-muted);
+  }
+  .space-row .name { color: var(--fg); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+  .space-row .bar {
+    height: 10px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+
+  /* —————————————————————— Components */
+  .component {
+    border: 1px solid var(--hairline);
+    background: var(--bg-raised);
+    padding: var(--s-5);
+    margin-bottom: var(--s-5);
+  }
+  .component .compname {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--s-4);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .component .compname .h {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: var(--tracking-tight);
+  }
+  .component .compname .tag {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  /* Project row component */
+  .pr {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: var(--s-5);
+    align-items: center;
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .pr:first-of-type { border-top: 0; }
+  .pr .thumb {
+    width: 88px; height: 88px;
+    background: var(--bg-sunken);
+    overflow: hidden;
+  }
+  .pr .thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .pr .body .title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96, "SOFT" 30;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 4px;
+  }
+  .pr .body .meta {
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+    margin: 0 0 6px;
+  }
+  .pr .body .meta .smallcaps { color: var(--fg); }
+  .pr .body .note {
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 60ch;
+    line-height: 1.5;
+  }
+  .pr .links {
+    display: flex; gap: var(--s-3);
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-muted);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    align-self: start;
+    padding-top: 4px;
+  }
+  .pr .links a {
+    border-bottom: 1px solid var(--hairline-strong);
+    padding-bottom: 1px;
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+  .pr .links a:hover { color: var(--accent); border-color: var(--accent); }
+  @media (max-width: 600px) {
+    .pr { grid-template-columns: 64px 1fr; }
+    .pr .links { grid-column: 1 / -1; padding-top: 0; }
+    .pr .thumb { width: 64px; height: 64px; }
+  }
+
+  /* Photo card */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-2);
+  }
+  @media (max-width: 600px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+  .photo-card {
+    aspect-ratio: 1 / 1;
+    background: var(--bg-sunken);
+    overflow: hidden;
+    cursor: zoom-in;
+    position: relative;
+  }
+  .photo-card img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 400ms ease;
+    filter: saturate(0.95);
+  }
+  .photo-card:hover img { transform: scale(1.03); filter: saturate(1.05); }
+
+  /* Filter chip */
+  .filter-row {
+    display: flex; gap: var(--s-2); flex-wrap: wrap;
+    margin-bottom: var(--s-4);
+  }
+  .filter {
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    padding: 12px 14px;
+    min-height: 44px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+  }
+  .filter[aria-pressed="true"] {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  /* Nav */
+  .nav-demo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--hairline);
+    background: var(--bg);
+    backdrop-filter: blur(8px);
+  }
+  .nav-demo .brand {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: var(--tracking-tight);
+  }
+  .nav-demo nav {
+    display: flex; gap: var(--s-5);
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+  }
+  .nav-demo nav a:hover { color: var(--fg); }
+
+  /* Button row */
+  .btn-row { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+
+  /* Footer */
+  .ds-footer {
+    margin-top: var(--s-8);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: var(--t-micro);
+    color: var(--fg-faint);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  /* —————————————————————— Anti-pattern callouts */
+  .callout {
+    border-left: 2px solid var(--accent);
+    padding: var(--s-3) var(--s-4);
+    background: var(--bg-raised);
+    font-size: var(--t-meta);
+    color: var(--fg-muted);
+    margin-top: var(--s-4);
+    line-height: 1.55;
+  }
+  .callout strong { color: var(--fg); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<header class="ds-header">
+  <div>
+    <div class="eyebrow">DESIGN SYSTEM · v0.1 · DARK-FIRST</div>
+    <h1>Lars Jebe — design tokens &amp; primitives</h1>
+  </div>
+  <div class="meta">
+    <div class="theme-toggle" role="group" aria-label="Theme">
+      <button type="button" data-theme-set="dark" aria-pressed="true">Dark</button>
+      <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+    </div>
+    <div style="margin-top: 8px;">For implementation in Astro + hand-written CSS</div>
+  </div>
+</header>
+
+<!-- ——————————————————————————————————————— -->
+<section class="ds-section">
+  <header>
+    <div class="num">01</div>
+    <h2>Type</h2>
+    <p>Fraunces for the name, headlines, and section titles. Inter Tight for body, UI, and metadata. JetBrains Mono for labels, chips, years.</p>
+  </header>
+  <div>
+    <div class="label">Display scale — Fraunces, opsz 144, SOFT 30</div>
+
+    <div class="type-row">
+      <div class="meta-col"><span>96 / 1.05</span><span>display</span></div>
+      <div class="specimen-display" style="font-size: 96px;">Lars Jebe</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>64 / 1.05</span><span>h1</span></div>
+      <div class="specimen-display" style="font-size: 64px;">Selected work</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>40 / 1.05</span><span>h2</span></div>
+      <div class="specimen-display" style="font-size: 40px;">Photography</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>28 / 1.2</span><span>h3</span></div>
+      <div class="specimen-display" style="font-size: 28px;">Neural Lumigraph Rendering</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>22 / 1.2</span><span>h4</span></div>
+      <div class="specimen-display" style="font-size: 22px;">Adobe Adaptive Profile</div>
+    </div>
+
+    <div class="label" style="margin-top: var(--s-6);">Text scale — Inter Tight</div>
+
+    <div class="type-row">
+      <div class="meta-col"><span>18 / 1.45</span><span>lead</span></div>
+      <div class="specimen-text lead" style="margin: 0;">AI researcher and engineer building creative tools — where computational photography meets generative models.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>16 / 1.55</span><span>body</span></div>
+      <div class="specimen-text" style="font-size: 16px; color: var(--fg-muted); max-width: 60ch;">Four years on Marc Levoy's computational photography team at Adobe. Co-author on the Adobe Adaptive Profile shipped in Camera Raw, used by millions.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>13 / 1.55</span><span>meta</span></div>
+      <div class="specimen-text" style="font-size: 13px; color: var(--fg-muted);">Stanford EE · ex-Adobe (Marc Levoy's team) · CVPR · SIGGRAPH Asia</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>11 / 1.5</span><span>micro · mono</span></div>
+      <div class="mono">CVPR 2023 · CO-AUTHOR · ARXIV — &nbsp; v3 — &nbsp; 2024.10</div>
+    </div>
+    <div class="type-row">
+      <div class="meta-col"><span>—</span><span>small-caps</span></div>
+      <div class="specimen-text" style="font-size: 16px;">
+        Published at <span class="smallcaps">CVPR 2023</span>, <span class="smallcaps">SIGGRAPH Asia 2022</span>, and <span class="smallcaps">CVPR 2021</span>.
+      </div>
+    </div>
+
+    <div class="label" style="margin-top: var(--s-6);">Pairings explored</div>
+    <div class="pairing-grid">
+      <div class="pairing pairing--A">
+        <div class="ptag">A · Selected default</div>
+        <div class="pname">Fraunces / Inter Tight</div>
+        <div class="pbody">Fraunces gives display warmth without becoming literary; the variable SOFT axis lets us soften corners at large sizes for the name and harden them at smaller sizes for headings. Inter Tight is the modern engineering-portfolio default — neutral but slightly tighter than Inter, which reads as intentional. This is what the rest of the system is built on.</div>
+      </div>
+      <div class="pairing pairing--B">
+        <div class="ptag">B · Alternate</div>
+        <div class="pname" style="font-style: italic;">Fraunces italic / Inter Tight</div>
+        <div class="pbody">Same families, italic display variant. More editorial, more "writer," slightly less "engineer." Worth keeping as a fallback if the brief tilts more toward the Craig Mod / writer-photographer end of the reference set. Same body type so the rest of the system is unchanged.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ——————————————————————————————————————— -->
+<section class="ds-section">
+  <header>
+    <div class="num">02</div>
+    <h2>Color</h2>
+    <p>Warm near-black background, amber-tilted. Dark mode is designed, not inverted. Three accents share chroma 0.10; amber is primary.</p>
+  </header>
+  <div>
+    <div class="label">Surfaces &amp; ink</div>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--bg);"></div>
+        <div class="meta"><span class="name">bg</span>oklch(0.21 0.014 70)</div>
+      </div>
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--bg-raised);"></div>
+        <div class="meta"><span class="name">bg-raised</span>oklch(0.245 0.014 70)</div>
+      </div>
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--bg-sunken);"></div>
+        <div class="meta"><span class="name">bg-sunken</span>oklch(0.18 0.012 70)</div>
+      </div>
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--fg);"></div>
+        <div class="meta"><span class="name">fg</span>oklch(0.95 0.012 80)</div>
+      </div>
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--fg-muted);"></div>
+        <div class="meta"><span class="name">fg-muted</span>oklch(0.74 0.014 75)</div>
+      </div>
+      <div class="swatch">
+        <div class="chip-fill" style="background: var(--fg-faint);"></div>
+        <div class="meta"><span class="name">fg-faint</span>oklch(0.56 0.014 75)</div>
+      </div>
+    </div>
+
+    <div class="label" style="margin-top: var(--s-6);">Accents — same chroma, different hue</div>
+    <div class="accent-row">
+      <div class="accent-tile is-primary">
+        <div class="puck" style="background: var(--accent-amber);"></div>
+        <div>
+          <div class="name">Amber</div>
+          <div class="role">Golden hour · L 0.78 · C 0.10 · H 75</div>
+        </div>
+      </div>
+      <div class="accent-tile">
+        <div class="puck" style="background: var(--accent-teal);"></div>
+        <div>
+          <div class="name">Teal</div>
+          <div class="role">Kite-teal · L 0.78 · C 0.10 · H 200</div>
+        </div>
+      </div>
+      <div class="accent-tile">
+        <div class="puck" style="background: var(--accent-terracotta);"></div>
+        <div>
+          <div class="name">Terracotta</div>
+          <div class="role">Earth · L 0.78 · C 0.10 · H 30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Pick one accent.</strong> The system is built so swapping <code class="mono">--accent</code> swaps the entire personality of the site. Amber is the recommendation: it pulls directly from the kite-sunset shot, reads as warm rather than corporate, and sits comfortably on the warm-black background without demanding attention.
+    </div>
+  </div>
+</section>
+
+<!-- ——————————————————————————————————————— -->
+<section class="ds-section">
+  <header>
+    <div class="num">03</div>
+    <h2>Spacing</h2>
+    <p>Single scale, used everywhere. Anything off-scale is a mistake to fix, not a degree of freedom.</p>
+  </header>
+  <div>
+    <div class="space-list">
+      <div class="space-row"><span class="name">s-1</span><span>4 px</span><span class="bar" style="width: 4px;"></span></div>
+      <div class="space-row"><span class="name">s-2</span><span>8 px</span><span class="bar" style="width: 8px;"></span></div>
+      <div class="space-row"><span class="name">s-3</span><span>12 px</span><span class="bar" style="width: 12px;"></span></div>
+      <div class="space-row"><span class="name">s-4</span><span>16 px</span><span class="bar" style="width: 16px;"></span></div>
+      <div class="space-row"><span class="name">s-5</span><span>24 px</span><span class="bar" style="width: 24px;"></span></div>
+      <div class="space-row"><span class="name">s-6</span><span>32 px</span><span class="bar" style="width: 32px;"></span></div>
+      <div class="space-row"><span class="name">s-7</span><span>48 px</span><span class="bar" style="width: 48px;"></span></div>
+      <div class="space-row"><span class="name">s-8</span><span>64 px</span><span class="bar" style="width: 64px;"></span></div>
+      <div class="space-row"><span class="name">s-9</span><span>96 px</span><span class="bar" style="width: 96px;"></span></div>
+      <div class="space-row"><span class="name">s-10</span><span>128 px</span><span class="bar" style="width: 128px;"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ——————————————————————————————————————— -->
+<section class="ds-section">
+  <header>
+    <div class="num">04</div>
+    <h2>Components</h2>
+    <p>Small set on purpose. Project row, photo card, chip, button, nav, filter — that's everything the landing page uses.</p>
+  </header>
+  <div>
+
+    <!-- Project row -->
+    <div class="component">
+      <div class="compname"><div class="h">Project row</div><div class="tag">density · stanford-prof</div></div>
+
+      <div class="pr">
+        <div class="thumb"><img src="images/diffusionrig_teaser.jpg" alt="DiffusionRig teaser" /></div>
+        <div class="body">
+          <h4 class="title">DiffusionRig: Learning Personalized Priors for Facial Appearance Editing</h4>
+          <p class="meta"><span class="smallcaps">CVPR 2023</span> · co-author · with Z. Ding et al.</p>
+          <p class="note">Personalized priors for relighting and expression editing on faces using diffusion models. My contribution: data pipeline and per-subject fine-tuning regime.</p>
+        </div>
+        <div class="links">
+          <a href="#">Paper</a>
+          <a href="#">Code</a>
+        </div>
+      </div>
+      <div class="pr">
+        <div class="thumb"><img src="images/NeuralPhotoFinishing.jpg" alt="Neural Photo-Finishing" /></div>
+        <div class="body">
+          <h4 class="title">Neural Photo-Finishing</h4>
+          <p class="meta"><span class="smallcaps">SIGGRAPH Asia 2022</span> · co-author</p>
+          <p class="note">A learned finishing pipeline that takes raw sensor data and renders it the way a colorist would. Production-relevant; the parts I'm proudest of survived into shipped product.</p>
+        </div>
+        <div class="links">
+          <a href="#">Paper</a>
+          <a href="#">Project</a>
+        </div>
+      </div>
+      <div class="pr">
+        <div class="thumb"><img src="images/nlr_square.jpg" alt="Neural Lumigraph Rendering" /></div>
+        <div class="body">
+          <h4 class="title">Neural Lumigraph Rendering</h4>
+          <p class="meta"><span class="smallcaps">CVPR 2021</span> · best paper candidate · co-author</p>
+          <p class="note">Real-time view synthesis from sparse captures. The hard part was making it actually fast enough to be useful, not just novel.</p>
+        </div>
+        <div class="links">
+          <a href="#">Paper</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo card + filter -->
+    <div class="component">
+      <div class="compname"><div class="h">Photo grid + filter</div><div class="tag">photography section</div></div>
+
+      <div class="filter-row" role="tablist" aria-label="Photography filters">
+        <button class="filter" aria-pressed="true">All</button>
+        <button class="filter" aria-pressed="false">Kitesurf</button>
+        <button class="filter" aria-pressed="false">Landscapes</button>
+        <button class="filter" aria-pressed="false">Portraits</button>
+        <button class="filter" aria-pressed="false">Lucy</button>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card"><img src="images/gallery/kite_sunset.jpg" alt="Kite at sunset"/></div>
+        <div class="photo-card"><img src="images/gallery/waves_narrow.jpg" alt="Waves"/></div>
+        <div class="photo-card"><img src="images/gallery/lars_lucy3_square.jpg" alt="Lars and Lucy"/></div>
+      </div>
+    </div>
+
+    <!-- Chip + button + nav -->
+    <div class="component">
+      <div class="compname"><div class="h">Chip · Button · Nav</div><div class="tag">primitives</div></div>
+
+      <div class="label">Credential chips</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: var(--s-5);">
+        <span class="chip"><span class="dot"></span>STANFORD EE</span>
+        <span class="chip">EX-ADOBE · LEVOY TEAM</span>
+        <span class="chip">CVPR · SIGGRAPH ASIA</span>
+        <span class="chip">PHOTA LABS · 2026</span>
+      </div>
+
+      <div class="label">Buttons</div>
+      <div class="btn-row" style="margin-bottom: var(--s-5);">
+        <button class="btn btn--primary">Download CV →</button>
+        <button class="btn">Email</button>
+        <a href="#" class="btn">GitHub</a>
+      </div>
+
+      <div class="label">Sticky nav (post-hero)</div>
+      <div class="nav-demo">
+        <div class="brand">Lars Jebe</div>
+        <nav>
+          <a href="#">Work</a>
+          <a href="#">Photography</a>
+          <a href="#">Piano</a>
+          <a href="#">Artwork</a>
+          <a href="#">About</a>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ——————————————————————————————————————— -->
+<section class="ds-section">
+  <header>
+    <div class="num">05</div>
+    <h2>Anti-patterns</h2>
+    <p>Things this system specifically refuses to do.</p>
+  </header>
+  <div>
+    <div class="callout"><strong>No three-section axis split.</strong> Creative, personal, and accomplished must combine within single elements. The hero is the canonical example: portrait + voice + venues, not stacked.</div>
+    <div class="callout" style="margin-top: var(--s-3);"><strong>No card-shadow-radius treatment.</strong> Hairline dividers do the separating. Cards only when content genuinely groups (one used, sparingly, on the design-system page itself).</div>
+    <div class="callout" style="margin-top: var(--s-3);"><strong>No invented imagery.</strong> Every photograph in this system is one of his own. If we ever need a placeholder, it's a striped block, not a generated image.</div>
+    <div class="callout" style="margin-top: var(--s-3);"><strong>No off-scale spacing.</strong> If a layout wants 20px, the answer is 16 or 24, not 20.</div>
+    <div class="callout" style="margin-top: var(--s-3);"><strong>One craft moment, not many.</strong> Subtle hero-photo crossfade. No scroll-jacking, no entrance animations, no parallax.</div>
+  </div>
+</section>
+
+<footer class="ds-footer">
+  <span>v0.1 · 2026</span>
+  <span>Tokens → tokens.css</span>
+</footer>
+
+<script>
+  // Theme toggle (light follow-up shipping with the system; toggle is here so reviewers can verify both)
+  const root = document.documentElement;
+  document.querySelectorAll('[data-theme-set]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.themeSet;
+      root.dataset.theme = target;
+      document.querySelectorAll('[data-theme-set]').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.themeSet === target ? 'true' : 'false');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

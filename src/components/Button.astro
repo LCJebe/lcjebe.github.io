@@ -1,0 +1,29 @@
+---
+type Variant = "primary" | "ghost";
+
+interface Props {
+  href: string;
+  variant?: Variant;
+  download?: boolean | string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = "ghost",
+  download,
+  ariaLabel,
+} = Astro.props;
+
+const className = ["btn", variant === "primary" ? "btn--primary" : ""]
+  .filter(Boolean)
+  .join(" ");
+---
+<a
+  class={className}
+  href={href}
+  aria-label={ariaLabel}
+  download={download === undefined ? undefined : download === true ? "" : download}
+>
+  <slot />
+</a>

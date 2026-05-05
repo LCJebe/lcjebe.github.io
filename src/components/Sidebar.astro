@@ -1,0 +1,69 @@
+---
+import Chip from "./Chip.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+
+export interface NavItem {
+  href: string;
+  label: string;
+  /** Two-digit string like "01" */
+  num: string;
+}
+
+export interface SocialLink {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+export interface CredentialChip {
+  label: string;
+  withDot?: boolean;
+}
+
+interface Props {
+  name: string;
+  /** Role lines; line3 is optional — used for a tagline / philosophy line */
+  role: { line1: string; line2: string; line3?: string };
+  portrait: { src: string; alt: string };
+  chips: CredentialChip[];
+  navItems: NavItem[];
+  socials: SocialLink[];
+}
+
+const { name, role, portrait, chips, navItems, socials } = Astro.props;
+---
+<aside class="sidebar">
+  <div class="portrait">
+    <img src={portrait.src} alt={portrait.alt} />
+  </div>
+
+  {/* Page-level <h1> lives in Hero (SEO/a11y prefers one prominent h1).
+      Sidebar name is rendered as a <p> styled identically. */}
+  <p class="name">{name}</p>
+  <p class="role">
+    {role.line1}<br />{role.line2}{role.line3 && <><br />{role.line3}</>}
+  </p>
+
+  <div class="credentials">
+    {chips.map((c) => (
+      <Chip withDot={c.withDot}>{c.label}</Chip>
+    ))}
+  </div>
+
+  <nav aria-label="Sections">
+    {navItems.map((item) => (
+      <a href={item.href}>
+        <span>{item.label}</span>
+        <span class="num">{item.num}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="socials">
+    {socials.map((s) => (
+      <a href={s.href}>{s.label}</a>
+    ))}
+  </div>
+
+  <ThemeToggle />
+</aside>

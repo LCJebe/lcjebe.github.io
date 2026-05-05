@@ -1,0 +1,218 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+import Sidebar from "~/components/Sidebar.astro";
+import Hero from "~/components/Hero.astro";
+import SectionHeader from "~/components/SectionHeader.astro";
+import ShippedCard from "~/components/ShippedCard.astro";
+import WorkRow from "~/components/WorkRow.astro";
+import PhotoGrid from "~/components/PhotoGrid.astro";
+import PianoCard from "~/components/PianoCard.astro";
+import ArtCard from "~/components/ArtCard.astro";
+import ContactList from "~/components/ContactList.astro";
+import Footer from "~/components/Footer.astro";
+
+import { site, sidebar } from "~/data/site";
+import { hero } from "~/data/hero";
+import { now } from "~/data/now";
+import { shippedSection, pinnedShipped, shippedRows } from "~/data/shipped";
+import {
+  publicationsSection,
+  publications,
+  earlierPublications,
+} from "~/data/publications";
+import {
+  photographySection,
+  filters,
+  photos,
+  galleryFooterHtml,
+} from "~/data/photos";
+import { pianoSection, pianoVideos, pianoMoreUrl } from "~/data/piano";
+import { artworkSection, artwork } from "~/data/artwork";
+import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
+---
+<BaseLayout title={site.title} description={site.description} path="/">
+
+  <Sidebar
+    name={sidebar.name}
+    role={sidebar.role}
+    portrait={sidebar.portrait}
+    chips={[...sidebar.chips]}
+    navItems={[...sidebar.navItems]}
+    socials={[...sidebar.socials]}
+  />
+
+  <main class="main" id="main">
+
+    <Hero
+      eyebrow={hero.eyebrow}
+      taglineHtml={hero.taglineHtml}
+      subtitleHtml={hero.subtitleHtml}
+      leadHtml={hero.leadHtml}
+      primaryCta={hero.primaryCta}
+      secondaryCta={hero.secondaryCta}
+      frames={hero.frames}
+    />
+
+    {/* —— 01 NOW / HOW I WORK —— */}
+    <section class="section" id="now">
+      <div class="container">
+        <SectionHeader marker={now.marker} title={now.title} desc={now.desc} />
+        <div class="now-block">
+          {now.paragraphs.map((p) => (
+            <p set:html={p} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* —— 02 SHIPPED —— */}
+    <section class="section" id="shipped">
+      <div class="container">
+        <SectionHeader
+          marker={shippedSection.marker}
+          title={shippedSection.title}
+          desc={shippedSection.desc}
+        />
+        <ShippedCard
+          imageSrc={pinnedShipped.imageSrc}
+          imageAlt={pinnedShipped.imageAlt}
+          label={pinnedShipped.label}
+          title={pinnedShipped.title}
+          description={pinnedShipped.description}
+          links={pinnedShipped.links}
+        />
+        <div class="work-list">
+          {shippedRows.map((row) => (
+            <WorkRow
+              thumbSrc={row.thumbSrc}
+              thumbAlt={row.thumbAlt}
+              titleHtml={row.titleHtml}
+              meta={row.meta}
+              note={row.note}
+              links={row.links}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* —— 03 SELECTED PUBLICATIONS —— */}
+    <section class="section" id="publications">
+      <div class="container">
+        <SectionHeader
+          marker={publicationsSection.marker}
+          title={publicationsSection.title}
+          desc={publicationsSection.desc}
+        />
+        <div class="work-list">
+          {publications.map((row) => (
+            <WorkRow
+              thumbSrc={row.thumbSrc}
+              thumbAlt={row.thumbAlt}
+              titleHtml={row.titleHtml}
+              meta={row.meta}
+              note={row.note}
+              links={row.links}
+            />
+          ))}
+        </div>
+        <details class="earlier-expand">
+          <summary>
+            <span class="earlier-label">Earlier work</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </summary>
+          <div class="work-list">
+            {earlierPublications.map((row) => (
+              <WorkRow
+                thumbSrc={row.thumbSrc}
+                thumbAlt={row.thumbAlt}
+                titleHtml={row.titleHtml}
+                meta={row.meta}
+                note={row.note}
+                links={row.links}
+              />
+            ))}
+          </div>
+        </details>
+      </div>
+    </section>
+
+    {/* —— 04 PHOTOGRAPHY —— */}
+    <section class="section" id="photography">
+      <div class="container">
+        <SectionHeader
+          marker={photographySection.marker}
+          title={photographySection.title}
+          desc={photographySection.desc}
+        />
+        <PhotoGrid filters={filters} photos={photos} footerHtml={galleryFooterHtml} />
+      </div>
+    </section>
+
+    {/* —— 05 PIANO —— */}
+    <section class="section" id="piano">
+      <div class="container">
+        <SectionHeader
+          marker={pianoSection.marker}
+          title={pianoSection.title}
+          desc={pianoSection.desc}
+        />
+        <div class="piano-stack">
+          {pianoVideos.map((v) => (
+            <PianoCard
+              videoUrl={v.videoUrl}
+              duration={v.duration}
+              label={v.label}
+              title={v.title}
+              description={v.description}
+            />
+          ))}
+        </div>
+        <p class="piano-more">
+          <a class="link" href={pianoMoreUrl}>More on YouTube →</a>
+        </p>
+        {/* Single registration of the <lite-youtube> custom element. */}
+        <script is:inline src="/vendor/lite-yt-embed.js" defer></script>
+      </div>
+    </section>
+
+    {/* —— 06 ARTWORK —— */}
+    <section class="section" id="artwork">
+      <div class="container">
+        <SectionHeader
+          marker={artworkSection.marker}
+          title={artworkSection.title}
+          desc={artworkSection.desc}
+        />
+        <ArtCard
+          imageSrc={artwork.imageSrc}
+          imageAlt={artwork.imageAlt}
+          title={artwork.title}
+          description={artwork.description}
+          moreLink={artwork.moreLink}
+        />
+      </div>
+    </section>
+
+    {/* —— 07 ABOUT & CONTACT —— */}
+    <section class="section" id="about">
+      <div class="container">
+        <SectionHeader marker={aboutSection.marker} title={aboutSection.title} />
+        <div class="about">
+          <div>
+            {bioParagraphsHtml.map((p) => (
+              <p set:html={p} />
+            ))}
+          </div>
+          <div>
+            <ContactList rows={contactRows} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Footer year={2026} />
+
+  </main>
+</BaseLayout>

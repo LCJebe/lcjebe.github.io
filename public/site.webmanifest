@@ -1,0 +1,17 @@
+{
+  "name": "Lars Jebe",
+  "short_name": "Lars Jebe",
+  "description": "AI engineer building creative tools.",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "theme_color": "#251f19",
+  "background_color": "#1d1711",
+  "icons": [
+    {
+      "src": "/favicon/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}

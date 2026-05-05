@@ -1,0 +1,40 @@
+---
+export interface ContactRow {
+  /** Mono uppercase label, e.g. "Email", "GitHub" */
+  key: string;
+  /** Visible value text */
+  value: string;
+  /** Link target — if omitted, value renders as plain text */
+  href?: string;
+  /** Trailing arrow glyph; defaults to "↗" for external links, "↓" for downloads */
+  arrow?: string;
+  /** Treat as a downloadable file (sets the download attribute) */
+  download?: boolean;
+}
+
+interface Props {
+  rows: ContactRow[];
+}
+
+const { rows } = Astro.props;
+---
+<div class="contact-list">
+  {rows.map((r) => {
+    const arrow = r.arrow ?? (r.download ? "↓" : "↗");
+    return (
+      <div class="contact-row">
+        <span class="key">{r.key}</span>
+        {r.href ? (
+          <a
+            class="val link"
+            href={r.href}
+            download={r.download ? "" : undefined}
+          >{r.value}</a>
+        ) : (
+          <span class="val">{r.value}</span>
+        )}
+        <span class="arrow" aria-hidden="true">{arrow}</span>
+      </div>
+    );
+  })}
+</div>

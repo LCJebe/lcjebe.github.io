@@ -1,0 +1,60 @@
+---
+export interface Frame {
+  /** Image URL — absolute path or imported asset src */
+  src: string;
+  /** Alt-text equivalent / aria-label for the frame */
+  alt: string;
+  /** All-caps caption shown bottom-left, e.g. "KITE · SUNSET · O'AHU" */
+  caption: string;
+  /** Optional background-position override (e.g. "center 30%") */
+  position?: string;
+}
+
+interface Props {
+  frames: Frame[];
+}
+
+const { frames } = Astro.props;
+
+// Each frame uses CSS-keyframe-driven opacity with staggered delays.
+// The cycle is `n * 8s` total (n frames, 8s dwell each).
+const dwell = 8; // seconds per frame
+const total = dwell * frames.length;
+
+// Generate inline style for each frame's background-image + animation-delay.
+// The shared @keyframes lives in components.css and assumes 24s total / 3 frames;
+// for differing frame counts we'd need parameterized keyframes — start with 3 to match design ref.
+---
+<div class="hero-photo">
+  {frames.map((f, i) => (
+    <div
+      class="frame"
+      role="img"
+      aria-label={f.alt}
+      style={`background-image: url('${f.src}'); ${f.position ? `background-position: ${f.position};` : ""} animation-delay: ${i * dwell}s; animation-duration: ${total}s;`}
+    />
+  ))}
+  <div class="caption" id="hero-cap">{frames[0]?.caption ?? ""}</div>
+</div>
+
+<script
+  is:inline
+  define:vars={{ captions: frames.map((f) => f.caption), dwell }}
+>
+  (function () {
+    const cap = document.getElementById("hero-cap");
+    if (!cap) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+    cap.style.transition = "opacity 400ms ease";
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % captions.length;
+      cap.style.opacity = "0";
+      setTimeout(() => {
+        cap.textContent = captions[i];
+        cap.style.opacity = "1";
+      }, 400);
+    }, dwell * 1000);
+  })();
+</script>

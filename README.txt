@@ -1,31 +1,59 @@
-Stellar by HTML5 UP
-html5up.net | @ajlkn
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+Lars Jebe — personal website
+============================
 
+Source for https://lcjebe.github.io (and, once DNS is configured,
+https://larsjebe.com).
 
-Say hello to Stellar, a slick little one-pager with a super vibrant color palette (which
-I guess you can always tone down if it's a little too vibrant for you), a "sticky" in-page
-nav bar (powered by my Scrollex plugin), a separate generic page template (just in case
-you need one), and an assortment of pre-styled elements.
+Stack
+-----
+- Astro 5 (static output) — src/pages, src/layouts, src/components
+- Hand-written modern CSS (CSS custom properties, OKLCH, lightningcss)
+- Vanilla JS islands — theme toggle, hero caption rotator, photo filter
+- PhotoSwipe for the gallery lightbox; lite-youtube-embed for the piano
+- @astrojs/sitemap for SEO
 
-Demo images* courtesy of Unsplash, a radtastic collection of CC0 (public domain) images
-you can use for pretty much whatever.
+Local development
+-----------------
+  npm install
+  npm run dev      # http://localhost:4321
+  npm run build    # static output to dist/
+  npm run preview  # preview the production build
+  npm run check    # Astro + TypeScript type check
 
-(* = not included)
+Project structure
+-----------------
+  src/
+    layouts/BaseLayout.astro     — page shell, theme bootstrap, fonts
+    components/                  — all UI components
+    data/                        — typed content (shipped, publications, photos, etc.)
+    styles/                      — tokens.css, globals.css, components.css
+    pages/index.astro            — single-page site composition
+  public/
+    images/                      — gallery + thumbnail assets (resized)
+    cv.pdf                       — CV
+    robots.txt
+    google*.html                 — Search Console verification
+  _design_reference/             — Claude Design output (reference; not deployed)
+  _legacy/                       — previous HTML5UP "Stellar" site (kept for backup)
 
-AJ
-aj@lkn.io | @ajlkn
+Strategic + visual references
+-----------------------------
+- DESIGN.md      — strategic brief; engineer-not-researcher framing
+- MIGRATION.md   — implementation plan + custom-domain SEO migration notes
 
+Deploy
+------
+GitHub Actions builds + deploys to GitHub Pages on every push to main
+(see .github/workflows/deploy.yml). Once GitHub Pages settings are
+switched to "Source: GitHub Actions", pushes will deploy automatically.
 
-Credits:
+Custom domain (larsjebe.com) — see MIGRATION.md §"Phase 6" for the full
+DNS + Search Console "Change of Address" procedure.
 
-	Demo Images:
-		Unsplash (unsplash.com)
-
-	Icons:
-		Font Awesome (fontawesome.io)
-
-	Other:
-		jQuery (jquery.com)
-		Scrollex (github.com/ajlkn/jquery.scrollex)
-		Responsive Tools (github.com/ajlkn/responsive-tools)
+Credits
+-------
+- Design exploration: Claude Design (Anthropic), April 2026
+- Implementation: written by hand (Astro, CSS, vanilla JS)
+- PhotoSwipe — github.com/dimsemenov/PhotoSwipe (MIT)
+- lite-youtube-embed — github.com/paulirish/lite-youtube-embed (Apache-2.0)
+- Fonts: Fraunces, Inter Tight, JetBrains Mono (all OFL via Google Fonts)

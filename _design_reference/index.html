@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lars Jebe — AI researcher and engineer building creative tools</title>
+  <link rel="stylesheet" href="tokens.css?v=3" />
+  <style>
+    /* —————————————————————— Layout */
+    body {
+      min-height: 100vh;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 960px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* —————————————————————— Sidebar (identity, persistent on desktop) */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: var(--s-7) var(--s-6);
+      border-right: 1px solid var(--hairline);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    @media (max-width: 960px) {
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--hairline);
+        padding: var(--s-6) var(--s-5);
+      }
+    }
+
+    .portrait {
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--bg-sunken);
+      margin-bottom: var(--s-5);
+    }
+
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .sidebar .name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 144, "SOFT" 30;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: var(--tracking-tight);
+      margin: 0 0 var(--s-2);
+    }
+
+    .sidebar .role {
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      line-height: 1.5;
+      margin: 0 0 var(--s-5);
+      max-width: 30ch;
+    }
+
+    .credentials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: var(--s-5);
+    }
+
+    .sidebar nav {
+      margin-top: var(--s-5);
+      padding-top: var(--s-5);
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-2);
+    }
+
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      padding: 4px 0;
+      transition: color 160ms ease;
+    }
+
+    .sidebar nav a:hover {
+      color: var(--fg);
+    }
+
+    .sidebar nav a .num {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+    }
+
+    .sidebar nav a:hover .num {
+      color: var(--accent);
+    }
+
+    .sidebar .socials {
+      margin-top: auto;
+      padding-top: var(--s-5);
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      gap: var(--s-3);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      flex-wrap: wrap;
+    }
+
+    .sidebar .socials a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 960px) {
+      .sidebar nav {
+        flex-direction: row;
+        gap: var(--s-4);
+        flex-wrap: wrap;
+        padding-top: var(--s-4);
+        margin-top: var(--s-4);
+      }
+
+      .sidebar nav a {
+        padding: 12px 0;
+        justify-content: flex-start;
+        min-height: 44px;
+      }
+
+      .sidebar nav a .num {
+        display: none;
+      }
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      border: 1px solid var(--hairline-strong);
+      border-radius: var(--r-pill);
+      padding: 2px;
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      margin-top: var(--s-3);
+      align-self: flex-start;
+    }
+
+    .theme-toggle button {
+      border: 0;
+      background: transparent;
+      color: var(--fg-muted);
+      padding: 6px 10px;
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .theme-toggle button[aria-pressed="true"] {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* —————————————————————— Main column */
+    .main {
+      padding: 0;
+      min-width: 0;
+      /* prevent grid blowout */
+    }
+
+    /* —————————————————————— Hero */
+    .hero {
+      padding: var(--s-7) var(--s-7) var(--s-8);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding: var(--s-6) var(--s-5) var(--s-7);
+      }
+    }
+
+    .hero .eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      margin-bottom: var(--s-5);
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+    }
+
+    .hero .eyebrow .pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 var(--accent);
+      animation: pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 oklch(0.80 0.10 70 / 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px oklch(0.80 0.10 70 / 0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero .eyebrow .pulse {
+        animation: none;
+      }
+    }
+
+    .hero h1.tagline {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 144, "SOFT" 30;
+      font-size: clamp(36px, 5.6vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      margin: 0 0 var(--s-5);
+      max-width: 16ch;
+      text-wrap: balance;
+    }
+
+    @media (max-width: 540px) {
+      .hero h1.tagline {
+        max-width: none;
+      }
+    }
+
+    .hero h1.tagline em {
+      font-style: italic;
+      color: var(--fg-muted);
+    }
+
+    .hero .sub {
+      font-size: var(--t-lead);
+      line-height: 1.5;
+      color: var(--fg-muted);
+      max-width: 56ch;
+      margin: 0 0 var(--s-6);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: var(--s-3);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-cta .arrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      margin-left: var(--s-3);
+    }
+
+    /* Hero photograph (the craft moment lives here) */
+    .hero-photo {
+      position: relative;
+      aspect-ratio: 21 / 9;
+      margin-top: var(--s-7);
+      overflow: hidden;
+      background: var(--bg-sunken);
+    }
+
+    .hero-photo .frame {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      animation: hero-cycle 24s infinite;
+      will-change: opacity;
+    }
+
+    .hero-photo .frame:nth-child(1) {
+      background-image: url('images/gallery/kite_sunset.jpg');
+      animation-delay: 0s;
+    }
+
+    .hero-photo .frame:nth-child(2) {
+      background-image: url('images/gallery/waves_narrow.jpg');
+      animation-delay: 8s;
+    }
+
+    .hero-photo .frame:nth-child(3) {
+      background-image: url('images/gallery/lars_lucy3.jpg');
+      animation-delay: 16s;
+      background-position: center 30%;
+    }
+
+    @keyframes hero-cycle {
+
+      0%,
+      28% {
+        opacity: 1;
+      }
+
+      33%,
+      95% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-photo .frame {
+        animation: none;
+      }
+
+      .hero-photo .frame:nth-child(1) {
+        opacity: 1;
+      }
+
+      .hero-photo .frame:nth-child(2),
+      .hero-photo .frame:nth-child(3) {
+        opacity: 0;
+      }
+    }
+
+    .hero-photo .caption {
+      position: absolute;
+      left: var(--s-4);
+      bottom: var(--s-4);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: oklch(0.95 0.012 80 / 0.85);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      text-shadow: 0 1px 8px oklch(0.21 0.014 70 / 0.6);
+      background: oklch(0.21 0.014 70 / 0.4);
+      backdrop-filter: blur(6px);
+      padding: 5px 8px;
+      border-radius: var(--r-1);
+    }
+
+    /* —————————————————————— Section header pattern */
+    .section {
+      padding: var(--s-8) var(--s-7);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    @media (max-width: 720px) {
+      .section {
+        padding: var(--s-7) var(--s-5);
+      }
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: var(--s-5);
+      align-items: baseline;
+      margin-bottom: var(--s-6);
+    }
+
+    @media (max-width: 720px) {
+      .section-head {
+        grid-template-columns: 1fr;
+        gap: var(--s-2);
+      }
+    }
+
+    .section-head .marker {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 96, "SOFT" 30;
+      font-size: clamp(32px, 3.4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: var(--tracking-tight);
+      margin: 0;
+    }
+
+    .section-head .desc {
+      grid-column: 2;
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      margin-top: var(--s-2);
+      max-width: 60ch;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 720px) {
+      .section-head .desc {
+        grid-column: 1;
+      }
+    }
+
+    /* —————————————————————— Now / How I work */
+    .now-block {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: var(--s-5);
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .now-block {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .now-block p {
+      grid-column: 2;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(1.25rem, 2vw, 1.6rem);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      margin: 0 0 var(--s-4) 0;
+      max-width: 60ch;
+      text-wrap: pretty;
+    }
+
+    .now-block p:last-child {
+      margin-bottom: 0;
+      color: var(--fg-muted);
+    }
+
+    @media (max-width: 720px) {
+      .now-block p {
+        grid-column: 1;
+      }
+    }
+
+    /* —————————————————————— Work / publication rows */
+    .work-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .work-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 140px;
+      gap: var(--s-5);
+      align-items: center;
+      padding: var(--s-5) 0;
+      border-top: 1px solid var(--hairline);
+      transition: background-color 200ms ease;
+    }
+
+    .work-row:hover {
+      background: var(--bg-raised);
+    }
+
+    .work-row .thumb {
+      width: 88px;
+      height: 88px;
+      overflow: hidden;
+      background: var(--bg-sunken);
+    }
+
+    .work-row .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .work-row:hover .thumb img {
+      transform: scale(1.06);
+    }
+
+    .work-row .title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 96, "SOFT" 30;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: var(--tracking-tight);
+      margin: 0 0 4px;
+      text-wrap: balance;
+    }
+
+    .work-row .meta {
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      margin: 0 0 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      align-items: baseline;
+    }
+
+    .work-row .meta .smallcaps {
+      color: var(--fg);
+    }
+
+    .work-row .meta .sep {
+      color: var(--fg-faint);
+    }
+
+    .work-row .note {
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      margin: 0;
+      line-height: 1.55;
+      max-width: 60ch;
+    }
+
+    .work-row .links {
+      display: flex;
+      gap: var(--s-3);
+      justify-content: flex-end;
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    .work-row .links a {
+      border-bottom: 1px solid var(--hairline-strong);
+      padding-bottom: 1px;
+      transition: color 160ms ease, border-color 160ms ease;
+    }
+
+    .work-row .links a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 720px) {
+      .work-row {
+        grid-template-columns: 64px 1fr;
+        padding: var(--s-4) 0;
+      }
+
+      .work-row .thumb {
+        width: 64px;
+        height: 64px;
+      }
+
+      .work-row .links {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+        padding-top: var(--s-1);
+      }
+    }
+
+    /* Pinned shipped product callout */
+    .shipped {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--hairline);
+      margin-bottom: var(--s-6);
+      overflow: hidden;
+    }
+
+    @media (max-width: 720px) {
+      .shipped {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shipped .visual {
+      background-image: url('images/NeuralPhotoFinishing.jpg');
+      background-size: cover;
+      background-position: center;
+      min-height: 240px;
+    }
+
+    .shipped .copy {
+      padding: var(--s-5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--s-3);
+      background: var(--bg-raised);
+    }
+
+    .shipped .label {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--accent);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .shipped h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 96, "SOFT" 30;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: var(--tracking-tight);
+      margin: 0;
+    }
+
+    .shipped p {
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      margin: 0;
+      line-height: 1.55;
+      max-width: 50ch;
+    }
+
+    .shipped .links {
+      display: flex;
+      gap: var(--s-4);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      margin-top: var(--s-2);
+    }
+
+    .shipped .links a {
+      border-bottom: 1px solid var(--hairline-strong);
+      padding-bottom: 1px;
+    }
+
+    .shipped .links a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* —————————————————————— Photography */
+    .filter-row {
+      display: flex;
+      gap: var(--s-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--s-5);
+    }
+
+    .filter {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      padding: 12px 14px;
+      min-height: 44px;
+      border: 1px solid var(--hairline-strong);
+      border-radius: var(--r-pill);
+      background: transparent;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 160ms ease;
+    }
+
+    .filter[aria-pressed="true"] {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+
+    .masonry {
+      column-count: 3;
+      column-gap: var(--s-3);
+    }
+
+    @media (max-width: 900px) {
+      .masonry {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .masonry {
+        column-count: 1;
+      }
+    }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: var(--s-3);
+      background: var(--bg-sunken);
+      cursor: zoom-in;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 400ms ease;
+    }
+
+    .masonry-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .gallery-footer {
+      margin-top: var(--s-5);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    /* —————————————————————— Piano */
+    .piano-card {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0;
+      border: 1px solid var(--hairline);
+      overflow: hidden;
+    }
+
+    @media (max-width: 720px) {
+      .piano-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .piano-thumb {
+      aspect-ratio: 16 / 10;
+      background: linear-gradient(135deg, oklch(0.26 0.018 70) 0%, oklch(0.18 0.012 70) 100%);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    /* Stylized fallback "thumbnail" — we don't fabricate a still */
+    .piano-thumb::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg,
+          oklch(0.95 0.012 80 / 0.04) 0,
+          oklch(0.95 0.012 80 / 0.04) 1px,
+          transparent 1px,
+          transparent 14px), repeating-linear-gradient(90deg,
+          oklch(0.21 0.014 70) 0,
+          oklch(0.21 0.014 70) 4px,
+          oklch(0.95 0.012 80 / 0.06) 4px,
+          oklch(0.95 0.012 80 / 0.06) 5px);
+      background-size: 100% 100%, 100% 60%;
+      background-position: 0 0, 0 100%;
+      background-repeat: no-repeat;
+    }
+
+    .piano-thumb .play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: var(--fg);
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 200ms ease, background-color 200ms ease;
+    }
+
+    .piano-thumb:hover .play {
+      transform: translate(-50%, -50%) scale(1.06);
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .piano-thumb .play svg {
+      width: 20px;
+      height: 20px;
+      margin-left: 3px;
+    }
+
+    .piano-thumb .duration {
+      position: absolute;
+      right: var(--s-3);
+      bottom: var(--s-3);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: oklch(0.95 0.012 80 / 0.85);
+      background: oklch(0.21 0.014 70 / 0.5);
+      padding: 4px 8px;
+      border-radius: var(--r-1);
+      letter-spacing: var(--tracking-caps);
+    }
+
+    .piano-copy {
+      padding: var(--s-5);
+      background: var(--bg-raised);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--s-3);
+    }
+
+    .piano-copy .label {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--accent);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .piano-copy h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-variation-settings: "opsz" 96, "SOFT" 30;
+      font-style: italic;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: var(--tracking-tight);
+      margin: 0;
+    }
+
+    .piano-copy p {
+      margin: 0;
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      line-height: 1.55;
+    }
+
+    .piano-copy .more {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      border-bottom: 1px solid var(--hairline-strong);
+      padding-bottom: 1px;
+      align-self: flex-start;
+      margin-top: var(--s-2);
+    }
+
+    .piano-copy .more:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* —————————————————————— Artwork */
+    .artwork {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: var(--s-6);
+      align-items: end;
+    }
+
+    @media (max-width: 720px) {
+      .artwork {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .artwork .img {
+      background: var(--bg-sunken);
+      overflow: hidden;
+    }
+
+    .artwork .img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .artwork .copy p {
+      font-size: var(--t-meta);
+      color: var(--fg-muted);
+      line-height: 1.55;
+      margin: 0 0 var(--s-3);
+    }
+
+    .artwork .copy h4 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-style: italic;
+      font-variation-settings: "opsz" 96, "SOFT" 30;
+      font-size: 22px;
+      line-height: 1.2;
+      margin: 0 0 var(--s-2);
+    }
+
+    /* —————————————————————— About + contact */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-7);
+    }
+
+    @media (max-width: 720px) {
+      .about {
+        grid-template-columns: 1fr;
+        gap: var(--s-5);
+      }
+    }
+
+    .about p {
+      font-size: var(--t-body);
+      line-height: 1.65;
+      color: var(--fg-muted);
+      margin: 0 0 var(--s-4);
+      max-width: 56ch;
+      text-wrap: pretty;
+    }
+
+    .about p:first-child::first-letter {
+      font-family: var(--font-display);
+      font-size: 3.6em;
+      line-height: 0.85;
+      float: left;
+      padding: 6px 10px 0 0;
+      color: var(--fg);
+      font-weight: 400;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      align-items: center;
+      gap: var(--s-3);
+      padding: var(--s-3) 0;
+      border-top: 1px solid var(--hairline);
+      font-size: var(--t-meta);
+    }
+
+    .contact-row:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .contact-row .key {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+    }
+
+    .contact-row .val {
+      color: var(--fg);
+    }
+
+    .contact-row a.val:hover {
+      color: var(--accent);
+    }
+
+    .contact-row .arrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      color: var(--fg-faint);
+      letter-spacing: var(--tracking-caps);
+    }
+
+    /* —————————————————————— Footer */
+    .footer {
+      padding: var(--s-6) var(--s-7);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--s-3);
+      font-family: var(--font-mono);
+      font-size: var(--t-micro);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+
+    @media (max-width: 720px) {
+      .footer {
+        padding: var(--s-5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- ——————————————————————— SIDEBAR (persistent identity) -->
+    <aside class="sidebar">
+      <div class="portrait">
+        <img src="images/lars_pali.jpg" alt="Portrait of Lars Jebe in the Hawaiian mountains" />
+      </div>
+
+      <h1 class="name">Lars Jebe</h1>
+      <p class="role">AI engineer.<br />Building creative tools.</p>
+
+      <div class="credentials">
+        <span class="chip"><span class="dot"></span>PHOTA LABS</span>
+        <span class="chip">EX-ADOBE · LEVOY</span>
+        <span class="chip">STANFORD EE</span>
+      </div>
+
+      <nav>
+        <a href="#now"><span>Now</span><span class="num">01</span></a>
+        <a href="#shipped"><span>Shipped</span><span class="num">02</span></a>
+        <a href="#publications"><span>Publications</span><span class="num">03</span></a>
+        <a href="#photography"><span>Photography</span><span class="num">04</span></a>
+        <a href="#piano"><span>Piano</span><span class="num">05</span></a>
+        <a href="#artwork"><span>Artwork</span><span class="num">06</span></a>
+        <a href="#about"><span>About &amp; contact</span><span class="num">07</span></a>
+      </nav>
+
+      <div class="socials">
+        <a href="mailto:lars@example.com">Email</a>
+        <a href="#">GitHub</a>
+        <a href="#">Scholar</a>
+        <a href="#">Flickr</a>
+        <a href="#">LinkedIn</a>
+      </div>
+
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="dark" aria-pressed="true">Dark</button>
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+      </div>
+    </aside>
+
+    <!-- ——————————————————————— MAIN -->
+    <main class="main">
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="eyebrow">
+          <span class="pulse" aria-hidden="true"></span>
+          <span>Currently · Phota Labs · 2026</span>
+        </div>
+
+        <h1 class="tagline">
+          AI engineer building <em>creative tools.</em>
+        </h1>
+
+        <p class="sub">
+          Four years on Marc Levoy's computational photography team at Adobe, shipping the <span class="smallcaps">Adobe
+            Adaptive Profile</span> in Camera Raw to millions of photographers. Now at Phota Labs on generative AI for
+          visual content. The work is engineering — making AI features run reliably, on real users' devices, at scale.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#" class="btn btn--primary">Download CV <span aria-hidden="true">→</span></a>
+          <a href="#shipped" class="btn">See shipped work</a>
+          <span class="arrow" aria-hidden="true">↓ scroll</span>
+        </div>
+
+        <div class="hero-photo" aria-hidden="false">
+          <div class="frame" role="img" aria-label="Kite at sunset"></div>
+          <div class="frame" role="img" aria-label="Waves on the North Shore"></div>
+          <div class="frame" role="img" aria-label="Lars and Lucy on the beach"></div>
+          <div class="caption" id="hero-cap">KITE · SUNSET · O'AHU</div>
+        </div>
+      </section>
+
+      <!-- ——————————————————————— NOW / HOW I WORK -->
+      <section class="section" id="now">
+        <div class="section-head">
+          <div>
+            <div class="marker">01 · NOW</div>
+            <h2>How I work.</h2>
+          </div>
+          <p class="desc">
+            The seam between research and product is where I'm most useful — and where most of my work lives. Most of it
+            is invisible from the outside; the section below is the visible part.
+          </p>
+        </div>
+
+        <div class="now-block">
+          <p>
+            I'm currently at <span class="smallcaps">Phota Labs</span> working on generative AI for visual content — the
+            kind of model work that has to survive a real user pressing a button and getting back a result they want to
+            keep. Before that I spent four years on Marc Levoy's computational photography team at Adobe, mostly on
+            Camera Raw, where the same constraint applied at a much larger scale.
+          </p>
+          <p>
+            I take features from a paper-grade prototype to something that runs on a real device, every time, without
+            surprising anyone. Sometimes the engineering rises to a publication; more often it just ships. I prefer to
+            ship.
+          </p>
+        </div>
+      </section>
+
+      <!-- ——————————————————————— SHIPPED (headline) -->
+      <section class="section" id="shipped">
+        <div class="section-head">
+          <div>
+            <div class="marker">02 · SHIPPED</div>
+            <h2>Named products. Real users.</h2>
+          </div>
+          <p class="desc">
+            Production AI features I contributed to, with the specific thing I owned called out. Engineering at
+            research-grade depth — but the deliverable is the product, not the paper.
+          </p>
+        </div>
+
+        <!-- pinned shipped product -->
+        <div class="shipped">
+          <div class="visual" role="img" aria-label="Adobe Adaptive Profile result"></div>
+          <div class="copy">
+            <p class="label">Adobe Camera Raw · Oct 2024 · used by millions</p>
+            <h3>Adobe Adaptive Profile</h3>
+            <p>A learned, scene-adaptive raw-rendering profile shipped in Camera Raw and Lightroom. I worked on the
+              production model and dataset pipeline that took the technique from prototype to a feature you can turn on
+              in Camera Raw today.</p>
+            <div class="links">
+              <a href="#">Adobe blog post</a>
+              <a href="#">Try in Camera Raw</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-list">
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/cs148_final_square.jpg" alt="Phota Labs generative tools" /></div>
+            <div class="body">
+              <h3 class="title">Generative AI for visual content — Phota Labs</h3>
+              <p class="meta"><span class="smallcaps">2025 — present</span><span class="sep">·</span><span>production
+                  engineering</span><span class="sep">·</span><span>technical blog co-author</span></p>
+              <p class="note">Building model + serving infrastructure for a generative visual-content product. Co-author
+                on the company's technical write-ups; product detail on request.</p>
+            </div>
+            <div class="links">
+              <a href="#">Tech blog</a>
+              <a href="#">Phota Labs</a>
+            </div>
+          </article>
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/NeuralPhotoFinishing.jpg" alt="Adobe Camera Raw" /></div>
+            <div class="body">
+              <h3 class="title">Adobe Camera Raw — additional shipped features</h3>
+              <p class="meta"><span class="smallcaps">Adobe · Levoy team</span><span class="sep">·</span><span>2021 —
+                  2025</span></p>
+              <p class="note">Multiple features in the Camera Raw / Lightroom rendering pipeline beyond Adaptive
+                Profile. Image-quality work that ships only when it's invisible — full list available on request.</p>
+            </div>
+            <div class="links">
+              <a href="#">On request</a>
+            </div>
+          </article>
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/ar2_square.jpg" alt="Raxium / Compute Team" /></div>
+            <div class="body">
+              <h3 class="title">microLED display compute — Raxium (acq. by Google)</h3>
+              <p class="meta"><span class="smallcaps">2019 — 2020</span><span class="sep">·</span><span>compute
+                  team</span></p>
+              <p class="note">Image-processing pipelines for early microLED displays. The work shipped into prototype
+                hardware; Raxium was acquired by Google in 2022.</p>
+            </div>
+            <div class="links">
+              <a href="#">Press</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ——————————————————————— SELECTED PUBLICATIONS (caliber proof) -->
+      <section class="section" id="publications">
+        <div class="section-head">
+          <div>
+            <div class="marker">03 · SELECTED PUBLICATIONS</div>
+            <h2>Co-author at top venues, while shipping product.</h2>
+          </div>
+          <p class="desc">
+            Caliber evidence, not a CV section. The work above is the day job; these are the times the engineering rose
+            to something publishable.
+          </p>
+        </div>
+
+        <div class="work-list">
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/diffusionrig_teaser.jpg" alt="DiffusionRig teaser" /></div>
+            <div class="body">
+              <h3 class="title">DiffusionRig — Learning Personalized Priors for Facial Appearance Editing</h3>
+              <p class="meta"><span class="smallcaps">CVPR 2023</span><span class="sep">·</span><span>Z. Ding, X. Zhang,
+                  Z. Xia, L. Jebe, Z. Tu, X. Zhang</span></p>
+            </div>
+            <div class="links">
+              <a href="#">Project</a>
+              <a href="#">arXiv</a>
+            </div>
+          </article>
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/NeuralPhotoFinishing.jpg" alt="Neural Photo-Finishing" /></div>
+            <div class="body">
+              <h3 class="title">Neural Photo-Finishing</h3>
+              <p class="meta"><span class="smallcaps">SIGGRAPH Asia 2022</span><span class="sep">·</span><span>S. Kim,
+                  L. Jebe, A. Levin, M. Levoy, et al.</span></p>
+            </div>
+            <div class="links">
+              <a href="#">Project</a>
+              <a href="#">arXiv</a>
+            </div>
+          </article>
+
+          <article class="work-row">
+            <div class="thumb"><img src="images/nlr_square.jpg" alt="Neural Lumigraph Rendering" /></div>
+            <div class="body">
+              <h3 class="title">Neural Lumigraph Rendering <span class="smallcaps"
+                  style="color:var(--accent); font-weight:500;">— best paper candidate</span></h3>
+              <p class="meta"><span class="smallcaps">CVPR 2021</span><span class="sep">·</span><span>P. Kellnhofer, L.
+                  Jebe, A. Jones, R. Spicer, K. Pulli, G. Wetzstein</span></p>
+            </div>
+            <div class="links">
+              <a href="#">Project</a>
+              <a href="#">arXiv</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ——————————————————————— PHOTOGRAPHY -->
+      <section class="section" id="photography">
+        <div class="section-head">
+          <div>
+            <div class="marker">04 · PHOTOGRAPHY</div>
+            <h2>Mostly water, mountains, and Lucy.</h2>
+          </div>
+          <p class="desc">
+            Real portfolio, not a hobby footnote. Hand-curated; full-resolution available on click. Filters narrow by
+            subject — themed sections are the next iteration.
+          </p>
+        </div>
+
+        <div class="filter-row" role="tablist" aria-label="Photography filters">
+          <button class="filter" aria-pressed="true">All</button>
+          <button class="filter" aria-pressed="false">Kitesurf</button>
+          <button class="filter" aria-pressed="false">Landscapes</button>
+          <button class="filter" aria-pressed="false">Portraits</button>
+          <button class="filter" aria-pressed="false">Lucy</button>
+        </div>
+
+        <div class="masonry">
+          <div class="masonry-item"><img src="images/gallery/kite_sunset.jpg" alt="Kite at sunset" /></div>
+          <div class="masonry-item"><img src="images/gallery/waves_narrow.jpg" alt="Waves narrow" /></div>
+          <div class="masonry-item"><img src="images/gallery/lars_lucy3_square.jpg" alt="Lars and Lucy" /></div>
+          <div class="masonry-item"><img src="images/gallery/kitesurfing_square.jpg" alt="Kitesurfing square" /></div>
+          <div class="masonry-item"><img src="images/lars_lucy.jpg" alt="Lars and Lucy" /></div>
+          <div class="masonry-item"><img src="images/gallery/waves.jpg" alt="Waves" /></div>
+          <div class="masonry-item"><img src="images/lars_lucy2.jpg" alt="Lars and Lucy" /></div>
+          <div class="masonry-item"><img src="images/gallery/kitesurfing.jpg" alt="Kitesurfing" /></div>
+          <div class="masonry-item"><img src="images/lars_pali.jpg" alt="Pali lookout" /></div>
+        </div>
+
+        <div class="gallery-footer">
+          <a href="#" class="link">More on Flickr →</a> &nbsp; · &nbsp;
+          <a href="#" class="link">Instagram @larsjebe →</a>
+        </div>
+      </section>
+
+      <!-- ——————————————————————— PIANO -->
+      <section class="section" id="piano">
+        <div class="section-head">
+          <div>
+            <div class="marker">05 · PIANO</div>
+            <h2>Classical, recorded.</h2>
+          </div>
+          <p class="desc">
+            One performance, embedded. Lite-YouTube on the production site — load on click, no third-party JS until
+            then.
+          </p>
+        </div>
+
+        <div class="piano-card">
+          <a href="#" class="piano-thumb" aria-label="Play piano performance">
+            <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M3 2v12l11-6L3 2z" />
+              </svg></span>
+            <span class="duration">07:42</span>
+          </a>
+          <div class="piano-copy">
+            <p class="label">Schubert · Impromptu Op. 90 No. 3</p>
+            <h3>"…the kind of practice that's its own reward."</h3>
+            <p>Recorded at home. Imperfect, intentionally posted anyway — the same way I publish photographs.</p>
+            <a href="#" class="more">More on YouTube →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ——————————————————————— ARTWORK -->
+      <section class="section" id="artwork">
+        <div class="section-head">
+          <div>
+            <div class="marker">06 · ARTWORK</div>
+            <h2>A taste signal, not the main course.</h2>
+          </div>
+        </div>
+
+        <div class="artwork">
+          <div class="img">
+            <img src="images/art/art.jpg" alt="Visual artwork" />
+          </div>
+          <div class="copy">
+            <h4>Untitled, mixed digital</h4>
+            <p>One piece included for a reason: I want it visible that the visual instinct is older than the engineering
+              one. The full set lives elsewhere.</p>
+            <a href="#" class="link">See more →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ——————————————————————— ABOUT + CONTACT -->
+      <section class="section" id="about">
+        <div class="section-head">
+          <div>
+            <div class="marker">07 · ABOUT &amp; CONTACT</div>
+            <h2>Bio, by way of context.</h2>
+          </div>
+        </div>
+
+        <div class="about">
+          <div>
+            <p>
+              Born in Germany, schooled at <span class="smallcaps">RWTH Aachen</span> (BS, EE/IT) and <span
+                class="smallcaps">Stanford</span> (MS, EE). Four years at <span class="smallcaps">Adobe</span> on Marc
+              Levoy's computational photography team, mostly on what shipped in Camera Raw. Currently at <span
+                class="smallcaps">Phota Labs</span> on generative AI for visual content. Before that, the compute team
+              at <span class="smallcaps">Raxium</span> (acquired by Google).
+            </p>
+            <p>
+              Outside the engineering: classical piano since I was a kid, photography that actually leaves the house,
+              and Lucy — Siberian husky, much louder than I am. I write the way I'd talk; I'd rather be specific than
+              slick.
+            </p>
+            <p>
+              Open to conversations about <em>AI engineering for creative tools, computational photography, generative
+                visual systems, and image-quality work that ships.</em> If any of those overlap with what you're
+              building, please get in touch.
+            </p>
+          </div>
+
+          <div>
+            <div class="contact-list">
+              <div class="contact-row">
+                <span class="key">Email</span>
+                <a class="val link" href="mailto:lars@example.com">lars@example.com</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">GitHub</span>
+                <a class="val link" href="#">@lcjebe</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">Scholar</span>
+                <a class="val link" href="#">Google Scholar</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">Flickr</span>
+                <a class="val link" href="#">@larsjebe</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">Instagram</span>
+                <a class="val link" href="#">@larsjebe</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">LinkedIn</span>
+                <a class="val link" href="#">/in/larsjebe</a>
+                <span class="arrow">↗</span>
+              </div>
+              <div class="contact-row">
+                <span class="key">CV</span>
+                <a class="val link" href="#">cv-2026.pdf</a>
+                <span class="arrow">↓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>© 2026 Lars Jebe</span>
+        <span>Built in Astro · Hosted on Cloudflare Pages</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle
+    const root = document.documentElement;
+    document.querySelectorAll('[data-theme-set]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.themeSet;
+        root.dataset.theme = target;
+        document.querySelectorAll('[data-theme-set]').forEach(b => {
+          b.setAttribute('aria-pressed', b.dataset.themeSet === target ? 'true' : 'false');
+        });
+      });
+    });
+
+    // Hero caption follows the visible frame
+    const captions = ["KITE · SUNSET · O'AHU", "WAVES · NORTH SHORE", "LUCY · SIBERIAN HUSKY"];
+    const capEl = document.getElementById('hero-cap');
+    let i = 0;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (capEl && !reduced) {
+      setInterval(() => {
+        i = (i + 1) % captions.length;
+        capEl.style.opacity = '0';
+        setTimeout(() => {
+          capEl.textContent = captions[i];
+          capEl.style.opacity = '1';
+        }, 400);
+      }, 8000);
+      capEl.style.transition = 'opacity 400ms ease';
+    }
+
+    // Photo filter (visual only — real implementation in Astro)
+    document.querySelectorAll('.filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed', 'false'));
+        btn.setAttribute('aria-pressed', 'true');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

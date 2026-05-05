@@ -1,0 +1,136 @@
+---
+export type PhotoTheme = "kitesurf" | "landscapes" | "portraits" | "lucy";
+
+export interface Photo {
+  src: string;
+  alt: string;
+  /** Filter classification — used by Phase 4 filter logic */
+  theme: PhotoTheme;
+  /** Optional full-resolution source for the lightbox; defaults to `src` */
+  fullSrc?: string;
+  /** Native pixel dimensions for the lightbox + browser hint (highly recommended) */
+  width?: number;
+  height?: number;
+}
+
+export interface FilterDef {
+  id: "all" | PhotoTheme;
+  label: string;
+}
+
+interface Props {
+  filters: FilterDef[];
+  photos: Photo[];
+  /** Caption shown below the grid */
+  footerHtml?: string;
+}
+
+const { filters, photos, footerHtml } = Astro.props;
+---
+<div class="filter-row" role="tablist" aria-label="Photography filters">
+  {filters.map((f, i) => (
+    <button
+      type="button"
+      class="filter"
+      data-filter={f.id}
+      aria-pressed={i === 0 ? "true" : "false"}
+    >{f.label}</button>
+  ))}
+</div>
+
+<div class="masonry">
+  {photos.map((p) => (
+    <a
+      class="masonry-item"
+      data-theme={p.theme}
+      href={p.fullSrc ?? p.src}
+      data-pswp-width={p.width}
+      data-pswp-height={p.height}
+    >
+      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
+    </a>
+  ))}
+</div>
+
+{footerHtml && (
+  <div class="gallery-footer" set:html={footerHtml} />
+)}
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
+
+  // Photo filter — toggles visibility of .masonry-item by data-theme.
+  (function () {
+    const filterRow = document.querySelector(
+      '[role="tablist"][aria-label="Photography filters"]',
+    );
+    const grid = document.querySelector(".masonry");
+    if (!filterRow || !grid) return;
+
+    const buttons = filterRow.querySelectorAll<HTMLButtonElement>("button[data-filter]");
+    const items = grid.querySelectorAll<HTMLAnchorElement>(".masonry-item");
+
+    function applyFilter(filter: string) {
+      items.forEach((item) => {
+        const theme = item.dataset.theme;
+        const show = filter === "all" || theme === filter;
+        item.style.display = show ? "" : "none";
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+        if (!filter) return;
+        buttons.forEach((b) =>
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false"),
+        );
+        applyFilter(filter);
+      });
+    });
+  })();
+
+  // PhotoSwipe lightbox.
+  // Dimensions are populated lazily from each <img>'s natural size on first
+  // pointer-down — avoids requiring authors to specify width/height upfront.
+  (function () {
+    const grid = document.querySelector<HTMLElement>(".masonry");
+    if (!grid) return;
+
+    function ensureDimensions(item: HTMLAnchorElement) {
+      if (item.dataset.pswpWidth && item.dataset.pswpHeight) return Promise.resolve();
+      const img = item.querySelector("img");
+      if (!img) return Promise.resolve();
+      return new Promise<void>((resolve) => {
+        const apply = () => {
+          if (img.naturalWidth && img.naturalHeight) {
+            item.dataset.pswpWidth = String(img.naturalWidth);
+            item.dataset.pswpHeight = String(img.naturalHeight);
+          }
+          resolve();
+        };
+        if (img.complete) apply();
+        else {
+          img.addEventListener("load", apply, { once: true });
+          img.addEventListener("error", () => resolve(), { once: true });
+        }
+      });
+    }
+
+    // Populate dimensions on hover/touch so PhotoSwipe has them when click fires.
+    grid.addEventListener("pointerdown", (e) => {
+      const item = (e.target as Element).closest<HTMLAnchorElement>(".masonry-item");
+      if (item) void ensureDimensions(item);
+    });
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: ".masonry",
+      children: ".masonry-item",
+      pswpModule: () => import("photoswipe"),
+      bgOpacity: 0.95,
+      showHideAnimationType: "fade",
+    });
+    lightbox.init();
+  })();
+</script>

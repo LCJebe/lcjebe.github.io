@@ -1,2 +1,18 @@
 data
 .DS_Store
+.claude/settings.local.json
+
+# Astro
+node_modules/
+dist/
+.astro/
+*.log
+npm-debug.log*
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Office lock files
+~$*

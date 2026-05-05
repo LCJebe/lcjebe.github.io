@@ -1,0 +1,16 @@
+---
+interface Props {
+  /** Year — defaults to current year */
+  year?: number;
+  /** Right-side line, e.g. "Built in Astro · Hosted on GitHub Pages" */
+  built?: string;
+}
+
+const { year = new Date().getFullYear(), built = "Built in Astro · Hosted on GitHub Pages" } = Astro.props;
+---
+<footer class="footer">
+  <div class="container footer-row">
+    <span>© {year} Lars Jebe</span>
+    <span>{built}</span>
+  </div>
+</footer>

@@ -1,0 +1,75 @@
+---
+export interface MetaPart {
+  /** "smallcaps" renders with all-small-caps treatment; "plain" is regular text */
+  kind: "smallcaps" | "plain";
+  text: string;
+}
+
+export interface WorkLink {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+interface Props {
+  /** Path or URL for the 88×88 thumbnail image */
+  thumbSrc: string;
+  thumbAlt: string;
+  /**
+   * Title can include a trailing accent like "— best paper candidate".
+   * Pass HTML to allow inline <span class="smallcaps">.
+   */
+  titleHtml: string;
+  /** Meta row parts; renders with " · " separators between parts */
+  meta: MetaPart[];
+  /** Optional descriptive note */
+  note?: string;
+  /** Right-column link list (mono, uppercase) */
+  links?: WorkLink[];
+}
+
+const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [] } = Astro.props;
+---
+<article class="work-row">
+  <div class="thumb">
+    <img src={thumbSrc} alt={thumbAlt} loading="lazy" decoding="async" />
+  </div>
+  <div class="body">
+    <h3 class="title" set:html={titleHtml} />
+    <p class="meta">
+      {meta.map((part, i) => (
+        <>
+          {i > 0 && <span class="sep">·</span>}
+          {part.kind === "smallcaps" ? (
+            <span class="smallcaps">{part.text}</span>
+          ) : (
+            <span>{part.text}</span>
+          )}
+        </>
+      ))}
+    </p>
+    {note && <p class="note">{note}</p>}
+  </div>
+  {links.length > 0 && (
+    <div class="links">
+      {links.map((l) => (
+        <a href={l.href}>{l.label}</a>
+      ))}
+    </div>
+  )}
+</article>
+
+<script>
+  // Whole-row click → navigate to the first link in the row's links column.
+  // Clicks on any inner <a> propagate normally and aren't intercepted.
+  document.querySelectorAll<HTMLElement>(".work-row").forEach((row) => {
+    const firstLink = row.querySelector<HTMLAnchorElement>(".links a");
+    if (!firstLink) return;
+
+    row.addEventListener("click", (e) => {
+      const target = e.target as Element | null;
+      if (target?.closest("a")) return;
+      firstLink.click();
+    });
+  });
+</script>

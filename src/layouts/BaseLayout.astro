@@ -1,0 +1,134 @@
+---
+import "~/styles/tokens.css";
+import "~/styles/globals.css";
+import "~/styles/components.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Path of this page (used for canonical). e.g. "/" or "/projects" */
+  path?: string;
+}
+
+const {
+  title,
+  description = "AI engineer building creative tools. Computational photography, generative AI, image quality.",
+  path = "/",
+} = Astro.props;
+
+const canonical = new URL(path, Astro.site ?? "https://larsjebe.com").toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {/* Favicon — SVG everywhere. Modern browsers (incl. iOS Safari 16.4+) support
+        SVG for both the tab icon and apple-touch-icon. No PNG fallback. */}
+    <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    {/* Browser chrome tint (mobile address bar). Light mode: amber brand accent.
+        Dark mode: matches --bg-raised (warm dark, same as the favicon background). */}
+    <meta name="theme-color" content="#e7b375" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#251f19" media="(prefers-color-scheme: dark)" />
+
+    {/* Fonts: Fraunces (display, variable), Inter Tight (text), JetBrains Mono (mono) */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter+Tight:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    {/* LCP preload: first frame of the hero carousel.
+        Update path here if the lead hero photograph changes in src/data/hero.ts. */}
+    <link
+      rel="preload"
+      as="image"
+      href="/images/gallery/kite_sunset.jpg"
+      fetchpriority="high"
+    />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    {/* No-FOUC theme: read preference before paint */}
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var prefers = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          var theme = stored === "light" || stored === "dark" ? stored : prefers;
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          /* SSR / private mode — fall back to dark default */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <slot />
+
+    {/* Theme toggle wiring. The boot script in <head> already sets data-theme.
+        This script syncs the toggle buttons' aria-pressed and persists clicks. */}
+    <script is:inline>
+      (function () {
+        const root = document.documentElement;
+        const buttons = document.querySelectorAll("[data-theme-set]");
+        if (!buttons.length) return;
+
+        function syncPressed(theme) {
+          buttons.forEach((btn) => {
+            btn.setAttribute(
+              "aria-pressed",
+              btn.dataset.themeSet === theme ? "true" : "false",
+            );
+          });
+        }
+
+        // Initial sync (boot script already set data-theme).
+        syncPressed(root.dataset.theme || "dark");
+
+        buttons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const target = btn.dataset.themeSet;
+            if (target !== "light" && target !== "dark") return;
+            root.dataset.theme = target;
+            try { localStorage.setItem("theme", target); } catch (e) {}
+            syncPressed(target);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
+<style is:global>
+  /* Page-shell layout (sidebar + main) lives here so every page inherits it. */
+  body {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: 100dvh;
+  }
+
+  @media (max-width: 960px) {
+    body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+interface Props {
+  /** Show the accent dot (signals "currently / live") */
+  withDot?: boolean;
+}
+
+const { withDot = false } = Astro.props;
+---
+<span class="chip">
+  {withDot && <span class="dot" aria-hidden="true" />}
+  <slot />
+</span>
