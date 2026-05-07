@@ -28,7 +28,7 @@ import {
   galleryFooterHtml,
 } from "~/data/photos";
 import { pianoSection, pianoVideos, pianoMoreUrl } from "~/data/piano";
-import { artworkSection, artwork } from "~/data/artwork";
+import { artworkSection, artworks } from "~/data/artwork";
 import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
 ---
 <BaseLayout title={site.title} description={site.description} path="/">
@@ -185,13 +185,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
           title={artworkSection.title}
           desc={artworkSection.desc}
         />
-        <ArtCard
-          imageSrc={artwork.imageSrc}
-          imageAlt={artwork.imageAlt}
-          title={artwork.title}
-          description={artwork.description}
-          moreLink={artwork.moreLink}
-        />
+        <ArtCard pieces={artworks} />
       </div>
     </section>
 

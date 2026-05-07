@@ -1,23 +1,79 @@
 ---
+import type { ArtPiece } from "~/data/artwork";
+
 interface Props {
-  imageSrc: string;
-  imageAlt: string;
-  title: string;
-  description: string;
-  moreLink?: { href: string; label: string };
+  pieces: ArtPiece[];
 }
 
-const { imageSrc, imageAlt, title, description, moreLink } = Astro.props;
+const { pieces } = Astro.props;
+const showNav = pieces.length > 1;
 ---
-<div class="artwork">
-  <div class="img">
-    <img src={imageSrc} alt={imageAlt} loading="lazy" decoding="async" />
+<div class="artwork-block">
+  <div class="image-stack">
+    {pieces.map((p, i) => (
+      <div class:list={["art-img", { "is-active": i === 0 }]} data-index={i}>
+        <img src={p.imageSrc} alt={p.imageAlt}
+             width={p.width} height={p.height}
+             loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+      </div>
+    ))}
   </div>
-  <div class="copy">
-    <h4>{title}</h4>
-    <p>{description}</p>
-    {moreLink && (
-      <a class="link" href={moreLink.href}>{moreLink.label} →</a>
+
+  <div class="copy-col">
+    <div class="copy-stack">
+      {pieces.map((p, i) => (
+        <div class:list={["art-copy", { "is-active": i === 0 }]} data-index={i}>
+          <h4>{p.title}</h4>
+          <p>{p.description}</p>
+        </div>
+      ))}
+    </div>
+    {showNav && (
+      <div class="art-controls">
+        <button type="button" class="art-prev" aria-label="Previous piece">←</button>
+        <div class="art-dots" role="tablist" aria-label="Artwork indicator">
+          {pieces.map((_, i) => (
+            <button type="button"
+              class:list={["art-dot", { "is-active": i === 0 }]}
+              data-index={i}
+              aria-label={`Show piece ${i + 1}`}
+            />
+          ))}
+        </div>
+        <button type="button" class="art-next" aria-label="Next piece">→</button>
+      </div>
     )}
   </div>
 </div>
+
+<script>
+  const block = document.querySelector<HTMLElement>(".artwork-block");
+  if (block) {
+    const imgs = Array.from(block.querySelectorAll<HTMLElement>(".art-img"));
+    const copies = Array.from(block.querySelectorAll<HTMLElement>(".art-copy"));
+    const dots = Array.from(block.querySelectorAll<HTMLElement>(".art-dot"));
+    const N = imgs.length;
+    let active = 0;
+
+    const show = (next: number) => {
+      const target = (next + N) % N;
+      if (target === active) return;
+      [imgs, copies, dots].forEach((group) => {
+        group[active]?.classList.remove("is-active");
+        group[target]?.classList.add("is-active");
+      });
+      active = target;
+    };
+
+    block.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest(".art-next")) return show(active + 1);
+      if (t.closest(".art-prev")) return show(active - 1);
+      const dot = t.closest<HTMLElement>(".art-dot");
+      if (dot) {
+        const idx = Number(dot.dataset.index);
+        if (!Number.isNaN(idx)) show(idx);
+      }
+    });
+  }
+</script>

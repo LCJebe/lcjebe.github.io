@@ -387,7 +387,7 @@
 
 .section-head {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 260px 1fr;
   gap: var(--s-5);
   align-items: baseline;
   margin-bottom: var(--s-6);
@@ -839,31 +839,65 @@
 }
 
 /* —————————————————————— Artwork */
-.artwork {
+.artwork-block {
   display: grid;
   grid-template-columns: 1fr 320px;
   gap: var(--s-6);
   align-items: end;
 }
 @media (max-width: 720px) {
-  .artwork { grid-template-columns: 1fr; }
+  .artwork-block { grid-template-columns: 1fr; }
 }
-.artwork .img {
-  background: var(--bg-sunken);
+
+/* Image and copy each get their own "stack" so multiple pieces can
+ * occupy the same cell and crossfade via opacity. */
+.image-stack { grid-column: 1; grid-row: 1; display: grid; }
+.copy-col {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--s-3);
+}
+.copy-stack { display: grid; align-items: end; }
+@media (max-width: 720px) {
+  .image-stack { grid-column: 1; grid-row: 1; }
+  .copy-col    { grid-column: 1; grid-row: 2; }
+}
+
+.art-img, .art-copy {
+  grid-column: 1;
+  grid-row: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+.art-img.is-active, .art-copy.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.art-img {
+  background: var(--bg);
   overflow: hidden;
+  aspect-ratio: 4 / 3;
 }
-.artwork .img img {
+.art-img img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
   display: block;
 }
-.artwork .copy p {
+
+.art-copy p {
   font-size: var(--t-meta);
   color: var(--fg-muted);
   line-height: 1.55;
   margin: 0 0 var(--s-3);
 }
-.artwork .copy h4 {
+.art-copy h4 {
   font-family: var(--font-display);
   font-weight: 400;
   font-style: italic;
@@ -871,6 +905,54 @@
   font-size: 22px;
   line-height: 1.2;
   margin: 0 0 var(--s-2);
+}
+
+/* Prev/next + dots row at the bottom of the copy column. */
+.art-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.art-controls > button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--fg-faint);
+  font-size: 16px;
+  line-height: 1;
+  transition: background 400ms ease, border-color 400ms ease, color 400ms ease;
+}
+.art-controls > button:hover {
+  color: var(--fg-muted);
+  border-color: var(--hairline-strong);
+}
+.art-dots {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+}
+.art-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fg-faint);
+  opacity: 0.5;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 300ms ease, background 300ms ease;
+}
+.art-dot:hover { opacity: 0.8; }
+.art-dot.is-active {
+  opacity: 1;
+  background: var(--fg-muted);
 }
 
 /* —————————————————————— About + contact */
