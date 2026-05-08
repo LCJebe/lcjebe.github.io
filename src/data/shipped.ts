@@ -11,7 +11,7 @@ export interface ShippedRow {
 
 export const shippedSection = {
   marker: "02 · SHIPPED",
-  title: "Real users.",
+  title: "Real users",
   desc:
     "Production AI features I contributed to, with what I specifically owned " +
     "called out. Research-grade engineering — but the deliverable is the " +

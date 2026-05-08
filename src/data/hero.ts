@@ -1,13 +1,8 @@
 import type { Frame } from "~/components/HeroCarousel.astro";
 
 export const hero = {
-  eyebrow: "Currently · Phota Labs · 2026",
-
   // <em> renders italicized in muted color (see .hero h1.tagline em)
-  taglineHtml: `AI engineer building <em>creative tools.</em>`,
-
-  // Subhead between tagline and lead — the positioning claim.
-  subtitleHtml: `Bridging research and production with product-first instinct.`,
+  taglineHtml: `AI engineer building<br /><em>creative tools</em>`,
 
   // Lead paragraph. Frames Adobe tenure by scope/scale rather than by any
   // single feature — Adaptive Profile, Indigo, and the rest are detailed

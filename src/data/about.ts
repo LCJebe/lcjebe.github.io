@@ -2,7 +2,7 @@ import type { ContactRow } from "~/components/ContactList.astro";
 
 export const aboutSection = {
   marker: "07 · ABOUT & CONTACT",
-  title: "Bio.",
+  title: "Bio",
 };
 
 /**

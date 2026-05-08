@@ -1,6 +1,6 @@
 export const pianoSection = {
   marker: "05 · from the studio",
-  title: "Piano.",
+  title: "Piano",
   desc: "Two pieces I keep coming back to. Recorded with my phone at Brown Music Center at Stanford.",
 };
 
@@ -23,7 +23,7 @@ export const pianoVideos: PianoVideo[] = [
     videoUrl: "https://www.youtube.com/watch?v=WqjmNg-FRLI",
     duration: "04:30", // placeholder — Lars to confirm
     label: "Liszt · Liebestraum No. 3",
-    title: "S. 541, No. 3.",
+    title: "S. 541, No. 3",
     description:
       "Played at the slowest tempo I could justify and still call it Liszt. " +
       "Stitched together from a few takes.",
@@ -33,7 +33,7 @@ export const pianoVideos: PianoVideo[] = [
     videoUrl: "https://www.youtube.com/watch?v=upXb8zjPaz8",
     duration: "08:45", // placeholder — Lars to confirm
     label: "Beethoven · Piano Sonata No. 8 (“Pathétique”)",
-    title: "I. Grave — Allegro di molto e con brio.",
+    title: "I. Grave — Allegro di molto e con brio",
     description:
       "Beethoven is one of the few composers I never get tired of. Don't be discouraged by the slow start -- it turns into a really fun piece to listen to!",
     startSeconds: 10,

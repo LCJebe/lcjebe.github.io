@@ -10,7 +10,7 @@
 
 export const now = {
   marker: "01 · NOW",
-  title: "How I work.",
+  title: "How I work",
   desc:
     "The seam between research and product is where I'm most useful — and " +
     "where most of my work lives. Most of it is invisible from the outside; " +

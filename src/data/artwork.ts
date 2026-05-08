@@ -1,6 +1,6 @@
 export const artworkSection = {
   marker: "06 · Art + Craft",
-  title: "Made by hand.",
+  title: "Made by hand",
   desc: "Older than the engineering. Quieter, but always running.",
 };
 

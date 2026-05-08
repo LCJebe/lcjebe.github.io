@@ -3,8 +3,6 @@ import Button from "./Button.astro";
 import HeroCarousel, { type Frame } from "./HeroCarousel.astro";
 
 interface Props {
-  /** "Currently · Phota Labs · 2026" */
-  eyebrow: string;
   /** Tagline HTML — pass as raw string. Use <em>...</em> for the italic accent. */
   taglineHtml: string;
   /** Optional subhead between tagline and lead — for a positioning claim. */
@@ -16,13 +14,17 @@ interface Props {
   frames: Frame[];
 }
 
-const { eyebrow, taglineHtml, subtitleHtml, leadHtml, primaryCta, secondaryCta, frames } = Astro.props;
+const { taglineHtml, subtitleHtml, leadHtml, primaryCta, secondaryCta, frames } = Astro.props;
 ---
 <section class="hero" id="hero">
   <div class="container">
     <div class="eyebrow">
-      <span class="pulse" aria-hidden="true" />
-      <span>{eyebrow}</span>
+      <span
+        class="term"
+        data-phrases='["/build","/ship","/scale","/repeat"]'
+        data-prompt="›"
+        aria-label="build, ship, scale, repeat"
+      ></span>
     </div>
 
     <h1 class="tagline" set:html={taglineHtml} />
@@ -44,3 +46,8 @@ const { eyebrow, taglineHtml, subtitleHtml, leadHtml, primaryCta, secondaryCta, 
     <HeroCarousel frames={frames} />
   </div>
 </section>
+
+<script>
+  import { mountTerminals } from "~/scripts/term";
+  mountTerminals();
+</script>

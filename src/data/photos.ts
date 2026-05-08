@@ -2,7 +2,7 @@ import type { Photo, FilterDef } from "~/components/PhotoGrid.astro";
 
 export const photographySection = {
   marker: "04 · through the lens",
-  title: "Photography.",
+  title: "Photography",
   desc:
     "Hand-curated. Some have appeared in Adobe launch blogs " +
     "(Project Indigo, Adobe Adaptive Profile). " +

@@ -1,0 +1,79 @@
+/* ---------------------------------------------------------------
+   Design variants — deltas only, keyed off <html data-*> attrs
+   set by BaseLayout.astro from src/design.ts.
+
+   The default look is in tokens.css + components.css. Rules here
+   only apply when an axis is set to a non-default value, so values
+   live in exactly one place.
+   --------------------------------------------------------------- */
+
+/* ─── Type scale: "dramatic" ─── */
+:root[data-type-scale="dramatic"] {
+  --t-micro: 13px;
+  --t-meta: 13px;
+  --t-body: 17px;
+  --t-lead: 19px;
+  --t-h4: 19px;
+  --t-h3: 28px;
+  --t-h2: 32px;
+  --t-h1: 96px;
+  --t-display: 120px;
+}
+:root[data-type-scale="dramatic"] .hero-subtitle {
+  font-size: clamp(20px, 2.2vw, 26px);
+}
+:root[data-type-scale="dramatic"] .section-head h2 {
+  font-size: 32px;
+}
+:root[data-type-scale="dramatic"] .now-block p {
+  font-size: clamp(17px, 1.4vw, 19px);
+  font-family: var(--font-text);
+  letter-spacing: 0;
+  line-height: 1.55;
+}
+/* Hero h1 is intentionally NOT bound to the scale here — its size is
+   driven by the type pairing (mono-display tightens it) or stays at the
+   default clamp from components.css otherwise. */
+
+/* ─── Type pairing: "mono-display" ─── */
+:root[data-type-pairing="mono-display"] {
+  /* Repoint the display family to Inter Tight — applies to all consumers
+     of var(--font-display) (work titles, paper titles, piano cards, etc.). */
+  --font-display: var(--font-text);
+}
+:root[data-type-pairing="mono-display"] .hero h1.tagline,
+:root[data-type-pairing="mono-display"] .section-head h2,
+:root[data-type-pairing="mono-display"] .sidebar .name {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variation-settings: normal;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+:root[data-type-pairing="mono-display"] .sidebar .name {
+  font-size: var(--t-h2);
+  letter-spacing: -0.02em;
+}
+:root[data-type-pairing="mono-display"] .hero h1.tagline {
+  /* JBMono is wider per char — drop the 16ch cap from components.css and
+     let the title use the full container width. */
+  font-size: clamp(36px, 5.6vw, 72px);
+  max-width: none;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+:root[data-type-pairing="mono-display"] .hero-subtitle {
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* ─── Selection color: "foreground" ─── */
+:root[data-selection-color="foreground"] ::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* ─── Hero CTA arrow: "off" ─── */
+:root[data-hero-cta-arrow="off"] .hero-cta .arrow {
+  display: none;
+}

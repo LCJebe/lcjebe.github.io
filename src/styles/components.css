@@ -249,45 +249,64 @@
   font-family: var(--font-mono);
   font-size: var(--t-micro);
   color: var(--fg-faint);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin-bottom: var(--s-5);
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
 }
-.hero .eyebrow .pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 0 var(--accent);
-  animation: pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+/* —————————————————————————— Hero terminal (eyebrow-mounted) */
+.eyebrow .term {
+  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: baseline;
+  white-space: pre;
+  letter-spacing: 0.02em;
+  font-size: var(--t-micro);
+  color: var(--fg-muted);
+  /* keep height stable while characters type/delete */
+  min-height: 1em;
 }
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.80 0.10 70 / 0.4); }
-  50%      { box-shadow: 0 0 0 8px oklch(0.80 0.10 70 / 0); }
+
+.eyebrow .term .prompt {
+  color: var(--accent);
+  margin-right: 0.6ch;
+  flex: none;
 }
+
+.eyebrow .term .text {
+  color: var(--fg);
+}
+
+.eyebrow .term .cursor {
+  display: inline-block;
+  width: 0.6ch;
+  height: 0.9em;
+  background: var(--fg);
+  margin-left: 1px;
+  transform: translateY(0.12em);
+  animation: term-blink 1.05s steps(1) infinite;
+}
+
+@keyframes term-blink {
+  50% { background: transparent; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero .eyebrow .pulse { animation: none; }
+  .eyebrow .term .cursor { animation: none; }
 }
 
 .hero h1.tagline {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-family: var(--font-mono);
+  font-weight: 700;
   font-size: clamp(36px, 5.6vw, 72px);
   line-height: 1.02;
   letter-spacing: -0.025em;
   margin: 0 0 var(--s-5);
-  max-width: 16ch;
-  text-wrap: balance;
-}
-@media (max-width: 540px) {
-  .hero h1.tagline { max-width: none; }
 }
 .hero h1.tagline em {
+  font-family: var(--font-text);
   font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--fg-muted);
 }
 

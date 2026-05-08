@@ -15,11 +15,12 @@ export const site = {
 };
 
 export const sidebar = {
-  name: "Hi, I'm Lars.",
+  name: "Hi, I'm Lars",
   role: {
-    line1: "AI engineer.",
-    line2: "Building creative tools.",
-    line3: "Product-first instinct.",
+    line1: "AI Research Engineer",
+    line2: "Data, Infra, Inference",
+    line3: "Computational Photography",
+    line4: "Product-first instinct",
   },
   portrait: {
     src: "/images/lars_pali.jpg",

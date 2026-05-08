@@ -11,7 +11,7 @@ export interface PublicationRow {
 
 export const publicationsSection = {
   marker: "03 · SELECTED PUBLICATIONS",
-  title: "Peer-reviewed.",
+  title: "Peer-reviewed",
   desc:
     "Caliber evidence, not a CV section. The work above is the day job; " +
     "these are the times the engineering rose to something publishable.",
