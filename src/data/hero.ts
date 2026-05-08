@@ -7,7 +7,7 @@ export const hero = {
   taglineHtml: `AI engineer building <em>creative tools.</em>`,
 
   // Subhead between tagline and lead — the positioning claim.
-  subtitleHtml: `Bridging research, production, and product taste.`,
+  subtitleHtml: `Bridging research and production with product-first instinct.`,
 
   // Lead paragraph. Frames Adobe tenure by scope/scale rather than by any
   // single feature — Adaptive Profile, Indigo, and the rest are detailed

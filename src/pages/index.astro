@@ -166,11 +166,12 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
               label={v.label}
               title={v.title}
               description={v.description}
+              startSeconds={v.startSeconds}
             />
           ))}
         </div>
         <p class="piano-more">
-          <a class="link" href={pianoMoreUrl}>More on YouTube →</a>
+          <a class="link" href={pianoMoreUrl}>Piano arrangements of “Frozen” and “Demons” — from years back →</a>
         </p>
         {/* Single registration of the <lite-youtube> custom element. */}
         <script is:inline src="/vendor/lite-yt-embed.js" defer></script>

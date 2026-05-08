@@ -9,10 +9,22 @@ interface Props {
 }
 
 const { marker, title, desc } = Astro.props;
+
+// Split "01 · NOW" so the dot can be styled independently.
+// Falls back to plain text if the marker doesn't match the expected shape.
+const parts = marker.match(/^(\s*\S+)\s*·\s*(.+?)\s*$/);
 ---
 <div class="section-head">
   <div>
-    <div class="marker">{marker}</div>
+    <div class="marker">
+      {parts ? (
+        <>
+          <span class="num">{parts[1]}</span><span class="dot" aria-hidden="true">·</span><span class="label">{parts[2]}</span>
+        </>
+      ) : (
+        marker
+      )}
+    </div>
     <h2>{title}</h2>
   </div>
   {desc && <p class="desc">{desc}</p>}
