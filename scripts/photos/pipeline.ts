@@ -2,7 +2,7 @@
 //
 // Three exported functions:
 //   - resizeUltraHdrJpeg   resize an ISO 21496-1 Ultra HDR JPEG, gain map intact
-//   - resizeSdr            resize to AVIF/JPEG (no HDR — for grid thumbs / lightbox medium)
+//   - resizeSdr            resize to AVIF/WebP/JPEG (no HDR — for grid thumbs / lightbox medium)
 //   - readPhotoMetadata    pull IPTC keywords (→ filter tags), dimensions, alt/caption
 //
 // System requirements (NOT npm packages):
@@ -38,9 +38,9 @@ export interface PhotoMetadata {
 export interface SdrResizeOptions {
   /** Long-edge size in pixels. Aspect ratio is preserved. */
   maxEdge: number;
-  /** Output codec. Use AVIF for primary delivery, JPEG for fallback. */
-  format: "avif" | "jpeg";
-  /** Quality [1-100]. Defaults: AVIF 60, JPEG 85. */
+  /** Output codec. AVIF (smallest), WebP (faster encode, broad tooling), JPEG (universal fallback). */
+  format: "avif" | "webp" | "jpeg";
+  /** Quality [1-100]. Defaults: AVIF 60, WebP 80, JPEG 85. */
   quality?: number;
 }
 
@@ -137,6 +137,8 @@ export async function resizeSdr(
 
   if (format === "avif") {
     await pipeline.avif({ quality: quality ?? 60, effort: 6 }).toFile(outputPath);
+  } else if (format === "webp") {
+    await pipeline.webp({ quality: quality ?? 80, effort: 6 }).toFile(outputPath);
   } else {
     await pipeline.jpeg({ quality: quality ?? 85, mozjpeg: true }).toFile(outputPath);
   }

@@ -1,0 +1,45 @@
+---
+// Dev-only portfolio builder. Two layers of belt-and-suspenders gate:
+// 1. The frontmatter check below short-circuits production renders so the
+//    page is never emitted to dist/builder/.
+// 2. The Vite save plugin (scripts/builder/savePlugin.ts) is `apply: "serve"`
+//    so the save endpoint never ships either.
+//
+// Verify after build: `! grep -rq "builder" dist/`
+
+// Same design tokens as the live site so the inner masonry preview matches.
+import "~/styles/tokens.css";
+import "~/styles/globals.css";
+import "~/styles/components.css";
+import "~/styles/variants.css";
+import "~/styles/builder.css";
+import { designDataAttrs } from "~/design";
+import BuilderRoot from "~/components/builder/BuilderRoot";
+
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
+---
+
+<!doctype html>
+<html lang="en" {...designDataAttrs}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Portfolio builder</title>
+  </head>
+  <body class="builder-body">
+    <BuilderRoot client:only="react" />
+  </body>
+</html>
+
+<style is:global>
+  body.builder-body {
+    /* Override the live site's sidebar/grid layout — the builder owns its
+       own chrome. Inherits color, fonts, and tokens from the imports. */
+    display: block;
+    padding: 24px;
+    max-width: none;
+  }
+</style>

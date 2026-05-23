@@ -1,31 +1,56 @@
 ---
-export type PhotoTheme = "kitesurf" | "landscapes" | "portraits" | "lucy";
-
 export interface Photo {
+  /** Photo id (basename). Used as the data-id key so per-category repacking
+   *  can map ordered-id lists back to DOM nodes. */
+  id: string;
+  /** URL for the masonry tile. */
   src: string;
+  /** Alt text. */
   alt: string;
-  /** Filter classification — used by Phase 4 filter logic */
-  theme: PhotoTheme;
-  /** Optional full-resolution source for the lightbox; defaults to `src` */
-  fullSrc?: string;
-  /** Native pixel dimensions for the lightbox + browser hint (highly recommended) */
-  width?: number;
-  height?: number;
+  /** Category memberships — used by the chip filter. A photo with multiple
+   *  categories shows up under any of its chips. */
+  categories: string[];
+  /** Full-resolution URL opened in the PhotoSwipe lightbox. */
+  fullSrc: string;
+  /** Native pixel dimensions for layout + lightbox. Required — drives
+   *  aspect-ratio reservation and prevents layout shift. */
+  width: number;
+  height: number;
 }
 
 export interface FilterDef {
-  id: "all" | PhotoTheme;
+  /** Either "all" (special) or a category id from portfolio.json. */
+  id: string;
   label: string;
 }
 
 interface Props {
   filters: FilterDef[];
   photos: Photo[];
+  /** Per-category ordered photo-id lists. Keyed by category id. The "all"
+   *  filter is computed client-side from `photos` order. The client repacks
+   *  the masonry against the selected filter's order on every filter change. */
+  categoryOrders: Record<string, string[]>;
   /** Caption shown below the grid */
   footerHtml?: string;
 }
 
-const { filters, photos, footerHtml } = Astro.props;
+import { packIntoColumns } from "~/lib/masonryPack";
+
+const { filters, photos, categoryOrders, footerHtml } = Astro.props;
+
+// Server-render the desktop (3-column) pack of the "all" view. The client
+// script repacks (and re-filters) in-place on filter changes and on narrower
+// viewports using the same algorithm.
+const SSR_COLS = 3;
+const packed = packIntoColumns(photos, SSR_COLS);
+
+// Build the orders payload consumed by the client. "all" is the photos array
+// order; the rest comes from the loader's resolved per-category orders.
+const orders: Record<string, string[]> = {
+  all: photos.map((p) => p.id),
+  ...categoryOrders,
+};
 ---
 <div class="filter-row" role="tablist" aria-label="Photography filters">
   {filters.map((f, i) => (
@@ -38,19 +63,32 @@ const { filters, photos, footerHtml } = Astro.props;
   ))}
 </div>
 
-<div class="masonry">
-  {photos.map((p) => (
-    <a
-      class="masonry-item"
-      data-theme={p.theme}
-      href={p.fullSrc ?? p.src}
-      data-pswp-width={p.width}
-      data-pswp-height={p.height}
-    >
-      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
-    </a>
+<div class="masonry" data-cols={SSR_COLS}>
+  {packed.map((col) => (
+    <div class="masonry-col">
+      {col.map((p) => (
+        <a
+          class="masonry-item"
+          data-id={p.id}
+          href={p.fullSrc}
+          data-pswp-width={p.width}
+          data-pswp-height={p.height}
+        >
+          <img src={p.src} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async" />
+        </a>
+      ))}
+    </div>
   ))}
 </div>
+
+{/* Hidden sibling for items filtered out by the active chip. Keeping them out
+    of `.masonry` means PhotoSwipe's lightbox query (`.masonry .masonry-item`)
+    naturally skips filtered items — no extra opt-out logic needed. */}
+<div class="masonry-stash" hidden />
+
+{/* Per-filter ordered id lists. Inlined as JSON so the client repack can read
+    them without an extra fetch. Built server-side by loadPortfolio. */}
+<script is:inline type="application/json" id="masonry-orders" set:html={JSON.stringify(orders)} />
 
 {footerHtml && (
   <div class="gallery-footer" set:html={footerHtml} />
@@ -60,69 +98,117 @@ const { filters, photos, footerHtml } = Astro.props;
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import "photoswipe/style.css";
 
-  // Photo filter — toggles visibility of .masonry-item by data-theme.
+  // Unified filter + responsive repack. The server SSRs the "all" view in
+  // 3 columns; the client repacks on hydration (matches on desktop, restacks
+  // on narrower viewports) and on every filter chip click. Filtered-out
+  // items move to .masonry-stash so PhotoSwipe's gallery selector skips them.
+  //
+  // Per-filter ordering comes from #masonry-orders (JSON, server-built).
+  // Categories with an explicit `category_orders` entry use that order;
+  // others fall back to the global order filtered to category members. Both
+  // shapes are resolved in loadPortfolio — the client just consumes ids.
   (function () {
-    const filterRow = document.querySelector(
+    const filterRow = document.querySelector<HTMLElement>(
       '[role="tablist"][aria-label="Photography filters"]',
     );
-    const grid = document.querySelector(".masonry");
-    if (!filterRow || !grid) return;
+    const grid = document.querySelector<HTMLElement>(".masonry");
+    const stash = document.querySelector<HTMLElement>(".masonry-stash");
+    const ordersEl = document.querySelector<HTMLScriptElement>("#masonry-orders");
+    if (!filterRow || !grid || !stash || !ordersEl) return;
 
-    const buttons = filterRow.querySelectorAll<HTMLButtonElement>("button[data-filter]");
-    const items = grid.querySelectorAll<HTMLAnchorElement>(".masonry-item");
+    const orders: Record<string, string[]> = JSON.parse(ordersEl.textContent || "{}");
 
-    function applyFilter(filter: string) {
-      items.forEach((item) => {
-        const theme = item.dataset.theme;
-        const show = filter === "all" || theme === filter;
-        item.style.display = show ? "" : "none";
-      });
+    // Index every tile once. Items live either in .masonry (visible) or in
+    // .masonry-stash (filtered). The map persists across repacks.
+    const itemsById = new Map<string, HTMLAnchorElement>();
+    for (const item of grid.querySelectorAll<HTMLAnchorElement>(".masonry-item")) {
+      const id = item.dataset.id;
+      if (id) itemsById.set(id, item);
     }
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const filter = btn.dataset.filter;
-        if (!filter) return;
-        buttons.forEach((b) =>
-          b.setAttribute("aria-pressed", b === btn ? "true" : "false"),
-        );
-        applyFilter(filter);
-      });
+    function pickColCount(): number {
+      if (window.innerWidth < 540) return 1;
+      if (window.innerWidth < 900) return 2;
+      return 3;
+    }
+
+    let currentFilter = "all";
+    let currentCols = Number(grid.dataset.cols ?? 0);
+
+    function render(filter: string, nCols: number) {
+      const ids = orders[filter] ?? [];
+      const visible = new Set(ids);
+
+      // Stash items not in the active filter. We move first so the grid is
+      // free of stale nodes before we rebuild columns.
+      for (const [id, el] of itemsById) {
+        if (!visible.has(id) && el.parentElement !== stash) {
+          stash!.appendChild(el);
+        }
+      }
+
+      const colEls: HTMLDivElement[] = [];
+      const heights: number[] = new Array(nCols).fill(0);
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < nCols; i++) {
+        const col = document.createElement("div");
+        col.className = "masonry-col";
+        colEls.push(col);
+        frag.appendChild(col);
+      }
+
+      for (const id of ids) {
+        const item = itemsById.get(id);
+        if (!item) continue;
+        const w = Number(item.dataset.pswpWidth) || 1;
+        const h = Number(item.dataset.pswpHeight) || 1;
+        const ar = w > 0 ? h / w : 1;
+        let minIdx = 0;
+        for (let i = 1; i < nCols; i++) {
+          if (heights[i] < heights[minIdx]) minIdx = i;
+        }
+        colEls[minIdx].appendChild(item);
+        heights[minIdx] += ar;
+      }
+
+      grid!.replaceChildren(frag);
+      grid!.dataset.cols = String(nCols);
+      grid!.dataset.filter = filter;
+      currentCols = nCols;
+    }
+
+    render(currentFilter, pickColCount());
+
+    filterRow.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-filter]");
+      if (!btn || !filterRow!.contains(btn)) return;
+      const filter = btn.dataset.filter;
+      if (!filter) return;
+      filterRow!
+        .querySelectorAll<HTMLButtonElement>("button[data-filter]")
+        .forEach((b) => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+      if (filter === currentFilter) return;
+      currentFilter = filter;
+      render(currentFilter, currentCols);
+    });
+
+    let resizeTimer: number | undefined;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        const next = pickColCount();
+        if (next !== currentCols) render(currentFilter, next);
+      }, 100);
     });
   })();
 
-  // PhotoSwipe lightbox.
-  // Dimensions are populated lazily from each <img>'s natural size on first
-  // pointer-down — avoids requiring authors to specify width/height upfront.
+  // PhotoSwipe lightbox. Dimensions come from the JSON manifest and are set
+  // directly on data-pswp-width/height — no lazy natural-size probe needed.
   (function () {
     const grid = document.querySelector<HTMLElement>(".masonry");
     if (!grid) return;
 
-    function ensureDimensions(item: HTMLAnchorElement) {
-      if (item.dataset.pswpWidth && item.dataset.pswpHeight) return Promise.resolve();
-      const img = item.querySelector("img");
-      if (!img) return Promise.resolve();
-      return new Promise<void>((resolve) => {
-        const apply = () => {
-          if (img.naturalWidth && img.naturalHeight) {
-            item.dataset.pswpWidth = String(img.naturalWidth);
-            item.dataset.pswpHeight = String(img.naturalHeight);
-          }
-          resolve();
-        };
-        if (img.complete) apply();
-        else {
-          img.addEventListener("load", apply, { once: true });
-          img.addEventListener("error", () => resolve(), { once: true });
-        }
-      });
-    }
-
-    // Populate dimensions on hover/touch so PhotoSwipe has them when click fires.
-    grid.addEventListener("pointerdown", (e) => {
-      const item = (e.target as Element).closest<HTMLAnchorElement>(".masonry-item");
-      if (item) void ensureDimensions(item);
-    });
+    const FILMSTRIP_HEIGHT = 96;
 
     const lightbox = new PhotoSwipeLightbox({
       gallery: ".masonry",
@@ -130,7 +216,79 @@ const { filters, photos, footerHtml } = Astro.props;
       pswpModule: () => import("photoswipe"),
       bgOpacity: 0.95,
       showHideAnimationType: "fade",
+      // No wraparound — first/last slide is a hard stop, matching the
+      // filmstrip's non-looping behavior.
+      loop: false,
+      // Reserve the bottom strip so the slide image doesn't sit underneath.
+      padding: { top: 0, bottom: FILMSTRIP_HEIGHT, left: 0, right: 0 },
     });
+
+    // Custom UI: thumbnail filmstrip pinned to the bottom of the viewport,
+    // active thumb scrolled to center, click-to-jump.
+    lightbox.on("uiRegister", () => {
+      lightbox.pswp!.ui!.registerElement({
+        name: "filmstrip",
+        appendTo: "root",
+        onInit: (el, pswp) => {
+          el.className = "pswp__filmstrip";
+          const track = document.createElement("div");
+          track.className = "pswp__filmstrip-track";
+          el.appendChild(track);
+
+          // Source from the same DOM nodes PhotoSwipe's gallery uses so
+          // indices line up with pswp.currIndex / pswp.goTo(). Scope to
+          // `.masonry` to exclude filtered items currently sitting in
+          // `.masonry-stash`.
+          const items = Array.from(
+            document.querySelectorAll<HTMLAnchorElement>(".masonry .masonry-item"),
+          );
+          const thumbs = items.map((item, i) => {
+            const tileImg = item.querySelector<HTMLImageElement>("img");
+            const w = Number(item.dataset.pswpWidth) || 1;
+            const h = Number(item.dataset.pswpHeight) || 1;
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "pswp__filmstrip-thumb";
+            btn.style.aspectRatio = `${w} / ${h}`;
+            btn.setAttribute("aria-label", `Photo ${i + 1} of ${items.length}`);
+            const img = document.createElement("img");
+            img.src = tileImg?.src ?? "";
+            img.alt = "";
+            img.loading = "lazy";
+            img.decoding = "async";
+            btn.appendChild(img);
+            btn.addEventListener("click", () => pswp.goTo(i));
+            track.appendChild(btn);
+            return btn;
+          });
+
+          // Smooth-scroll only for in-lightbox navigation; the first call on
+          // open uses instant so the strip isn't already animating when the
+          // lightbox fades in.
+          let scrollBehavior: ScrollBehavior = "auto";
+          const setActive = (i: number) => {
+            thumbs.forEach((t, idx) => {
+              const isActive = idx === i;
+              t.classList.toggle("is-active", isActive);
+              if (isActive) t.setAttribute("aria-current", "true");
+              else t.removeAttribute("aria-current");
+            });
+            const active = thumbs[i];
+            if (!active) return;
+            const center = active.offsetLeft + active.offsetWidth / 2;
+            el.scrollTo({
+              left: center - el.clientWidth / 2,
+              behavior: scrollBehavior,
+            });
+            scrollBehavior = "smooth";
+          };
+
+          setActive(pswp.currIndex);
+          pswp.on("change", () => setActive(pswp.currIndex));
+        },
+      });
+    });
+
     lightbox.init();
   })();
 </script>

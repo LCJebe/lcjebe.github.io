@@ -1,0 +1,599 @@
+{
+  "version": 1,
+  "photos": [
+    {
+      "id": "_DSC0170",
+      "filename": "_DSC0170.jpg",
+      "width": 270,
+      "height": 212,
+      "ai_categories": [
+        "wildlife",
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0222-2",
+      "filename": "_DSC0222-2.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0273",
+      "filename": "_DSC0273.jpg",
+      "width": 270,
+      "height": 188,
+      "ai_categories": [
+        "wildlife",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0286",
+      "filename": "_DSC0286.jpg",
+      "width": 270,
+      "height": 166,
+      "ai_categories": [
+        "wildlife"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0427-2",
+      "filename": "_DSC0427-2.jpg",
+      "width": 270,
+      "height": 270,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "floral",
+        "nature"
+      ]
+    },
+    {
+      "id": "_DSC0433-2",
+      "filename": "_DSC0433-2.jpg",
+      "width": 270,
+      "height": 183,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "floral",
+        "nature"
+      ]
+    },
+    {
+      "id": "_DSC0438-2",
+      "filename": "_DSC0438-2.jpg",
+      "width": 270,
+      "height": 270,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "floral",
+        "nature"
+      ]
+    },
+    {
+      "id": "_DSC0444-2",
+      "filename": "_DSC0444-2.jpg",
+      "width": 270,
+      "height": 224,
+      "ai_categories": [
+        "creative",
+        "abstract"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0452",
+      "filename": "_DSC0452.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "creative",
+        "abstract",
+        "pattern"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0588",
+      "filename": "_DSC0588.jpg",
+      "width": 270,
+      "height": 232,
+      "ai_categories": [
+        "wildlife",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "_DSC0957-2",
+      "filename": "_DSC0957-2.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "wildlife"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "20201108_155457",
+      "filename": "20201108_155457.jpg",
+      "width": 205,
+      "height": 270,
+      "ai_categories": [
+        "pattern"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "20201203_191526",
+      "filename": "20201203_191526.jpg",
+      "width": 270,
+      "height": 152,
+      "ai_categories": [
+        "architecture",
+        "water",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "20201225_153200",
+      "filename": "20201225_153200.jpg",
+      "width": 270,
+      "height": 152,
+      "ai_categories": [
+        "hawaii",
+        "water",
+        "creative"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "20210101_142433",
+      "filename": "20210101_142433.jpg",
+      "width": 270,
+      "height": 152,
+      "ai_categories": [
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "20210213_161831",
+      "filename": "20210213_161831.jpg",
+      "width": 270,
+      "height": 152,
+      "ai_categories": [
+        "hawaii",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20240630_192641_217",
+      "filename": "BNS_20240630_192641_217.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "dynamic",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20240701_160430_374",
+      "filename": "BNS_20240701_160430_374.jpg",
+      "width": 203,
+      "height": 270,
+      "ai_categories": [
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20240702_170228_858",
+      "filename": "BNS_20240702_170228_858.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "wildlife"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20240702_194926_459",
+      "filename": "BNS_20240702_194926_459.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "architecture"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20250111_140733_427",
+      "filename": "BNS_20250111_140733_427.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "wildlife",
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20250307_123805_423",
+      "filename": "BNS_20250307_123805_423.jpg",
+      "width": 270,
+      "height": 202,
+      "ai_categories": [
+        "architecture",
+        "pattern"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "BNS_20250307_175640_743",
+      "filename": "BNS_20250307_175640_743.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "landscape",
+        "nature"
+      ]
+    },
+    {
+      "id": "BNS_20250309_134447_544",
+      "filename": "BNS_20250309_134447_544.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20230214_155633_953",
+      "filename": "CML_20230214_155633_953.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "abstract",
+        "pattern",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20230216_105202_116",
+      "filename": "CML_20230216_105202_116.jpg",
+      "width": 270,
+      "height": 202,
+      "ai_categories": [
+        "architecture"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20230227_180522_359_merged",
+      "filename": "CML_20230227_180522_359_merged.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "architecture"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20230610_123706_733_merged_look",
+      "filename": "CML_20230610_123706_733_merged_look.jpg",
+      "width": 203,
+      "height": 270,
+      "ai_categories": [
+        "wildlife",
+        "pattern"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20230903_162627_927_merged",
+      "filename": "CML_20230903_162627_927_merged.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "architecture",
+        "pattern",
+        "abstract"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "CML_20231124_151005_534_merged",
+      "filename": "CML_20231124_151005_534_merged.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "winter",
+        "landscape",
+        "nature"
+      ]
+    },
+    {
+      "id": "CML_20231212_071135_66_merged",
+      "filename": "CML_20231212_071135_66_merged.jpg",
+      "width": 270,
+      "height": 183,
+      "ai_categories": [
+        "hawaii",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "HPYV9359",
+      "filename": "HPYV9359.jpg",
+      "width": 270,
+      "height": 163,
+      "ai_categories": [
+        "water",
+        "dynamic",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IDG_20251116_174827_531",
+      "filename": "IDG_20251116_174827_531.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water",
+        "dynamic",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_4673",
+      "filename": "IMG_4673.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_5007",
+      "filename": "IMG_5007.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "architecture",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_5105",
+      "filename": "IMG_5105.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_5311",
+      "filename": "IMG_5311.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_5424",
+      "filename": "IMG_5424.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "hawaii",
+        "dynamic"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_5466",
+      "filename": "IMG_5466.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "hawaii",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_6494-Enhanced-NR",
+      "filename": "IMG_6494-Enhanced-NR.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "interior",
+        "still life"
+      ]
+    },
+    {
+      "id": "IMG_6874",
+      "filename": "IMG_6874.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "wildlife"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_6891",
+      "filename": "IMG_6891.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_6953",
+      "filename": "IMG_6953.jpg",
+      "width": 270,
+      "height": 170,
+      "ai_categories": [
+        "wildlife"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_6977",
+      "filename": "IMG_6977.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "wildlife",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_7091",
+      "filename": "IMG_7091.jpg",
+      "width": 270,
+      "height": 180,
+      "ai_categories": [
+        "dynamic",
+        "creative"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_8102",
+      "filename": "IMG_8102.jpg",
+      "width": 203,
+      "height": 270,
+      "ai_categories": [
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "IMG_9238",
+      "filename": "IMG_9238.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "hawaii",
+        "water"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "merged (2)",
+      "filename": "merged (2).jpg",
+      "width": 270,
+      "height": 256,
+      "ai_categories": [
+        "dynamic",
+        "abstract",
+        "creative"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "merged (3)",
+      "filename": "merged (3).jpg",
+      "width": 256,
+      "height": 270,
+      "ai_categories": [
+        "dynamic",
+        "abstract",
+        "creative"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "MilkyWayLakeSonoma",
+      "filename": "MilkyWayLakeSonoma.jpg",
+      "width": 180,
+      "height": 270,
+      "ai_categories": [],
+      "ai_suggested_categories": [
+        "astrophotography",
+        "landscape",
+        "nature"
+      ]
+    },
+    {
+      "id": "NXT_20220619_185630_634_merged",
+      "filename": "NXT_20220619_185630_634_merged.jpg",
+      "width": 270,
+      "height": 270,
+      "ai_categories": [
+        "architecture",
+        "pattern"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "NXT_20221023_153048_246_merged",
+      "filename": "NXT_20221023_153048_246_merged.jpg",
+      "width": 270,
+      "height": 270,
+      "ai_categories": [
+        "pattern",
+        "creative"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "SZQL7745",
+      "filename": "SZQL7745.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "water",
+        "hawaii"
+      ],
+      "ai_suggested_categories": []
+    },
+    {
+      "id": "TZSB3470",
+      "filename": "TZSB3470.jpg",
+      "width": 270,
+      "height": 203,
+      "ai_categories": [
+        "architecture"
+      ],
+      "ai_suggested_categories": []
+    }
+  ]
+}

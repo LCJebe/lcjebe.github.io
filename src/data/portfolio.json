@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "wildlife",
+      "label": "wildlife"
+    },
+    {
+      "id": "creative",
+      "label": "impressions"
+    },
+    {
+      "id": "water",
+      "label": "water"
+    },
+    {
+      "id": "landscape",
+      "label": "landscape"
+    }
+  ],
+  "order": [
+    "BNS_20250307_123805_423",
+    "MilkyWayLakeSonoma",
+    "HPYV9359",
+    "CML_20230216_105202_116",
+    "20210101_142433",
+    "_DSC0588",
+    "CML_20231124_151005_534_merged",
+    "BNS_20250111_140733_427",
+    "BNS_20250309_134447_544",
+    "20210213_161831",
+    "_DSC0273",
+    "BNS_20240702_194926_459",
+    "IMG_9238",
+    "IMG_5424",
+    "_DSC0170",
+    "BNS_20250307_175640_743",
+    "IMG_6977",
+    "20201108_155457",
+    "IMG_6953",
+    "CML_20230214_155633_953",
+    "IMG_8102",
+    "IMG_7091",
+    "CML_20231212_071135_66_merged",
+    "_DSC0286",
+    "CML_20230903_162627_927_merged",
+    "NXT_20220619_185630_634_merged",
+    "CML_20230227_180522_359_merged",
+    "20201203_191526",
+    "_DSC0452",
+    "BNS_20240702_170228_858",
+    "_DSC0957-2",
+    "IMG_6874",
+    "IMG_6891",
+    "_DSC0444-2",
+    "_DSC0438-2",
+    "NXT_20221023_153048_246_merged",
+    "_DSC0427-2",
+    "IMG_5007",
+    "CML_20230610_123706_733_merged_look",
+    "_DSC0433-2",
+    "20201225_153200"
+  ],
+  "photo_categories": {
+    "20201108_155457": [
+      "creative"
+    ],
+    "20201203_191526": [],
+    "20201225_153200": [
+      "creative"
+    ],
+    "20210101_142433": [
+      "water"
+    ],
+    "20210213_161831": [],
+    "BNS_20240630_192641_217": [
+      "water"
+    ],
+    "BNS_20240701_160430_374": [
+      "water"
+    ],
+    "BNS_20240702_170228_858": [
+      "wildlife"
+    ],
+    "BNS_20240702_194926_459": [],
+    "BNS_20250111_140733_427": [
+      "wildlife",
+      "water"
+    ],
+    "BNS_20250307_123805_423": [],
+    "BNS_20250307_175640_743": [
+      "landscape"
+    ],
+    "BNS_20250309_134447_544": [
+      "water"
+    ],
+    "CML_20230214_155633_953": [
+      "creative",
+      "water"
+    ],
+    "CML_20230216_105202_116": [],
+    "CML_20230227_180522_359_merged": [],
+    "CML_20230610_123706_733_merged_look": [
+      "wildlife"
+    ],
+    "CML_20230903_162627_927_merged": [],
+    "CML_20231124_151005_534_merged": [
+      "landscape"
+    ],
+    "CML_20231212_071135_66_merged": [
+      "landscape"
+    ],
+    "HPYV9359": [
+      "water"
+    ],
+    "IDG_20251116_174827_531": [
+      "landscape"
+    ],
+    "IMG_4673": [
+      "water"
+    ],
+    "IMG_5007": [
+      "landscape"
+    ],
+    "IMG_5105": [
+      "water"
+    ],
+    "IMG_5311": [
+      "water"
+    ],
+    "IMG_5424": [
+      "landscape"
+    ],
+    "IMG_5466": [
+      "landscape"
+    ],
+    "IMG_6494-Enhanced-NR": [],
+    "IMG_6874": [
+      "wildlife"
+    ],
+    "IMG_6891": [
+      "landscape",
+      "water"
+    ],
+    "IMG_6953": [
+      "wildlife"
+    ],
+    "IMG_6977": [
+      "wildlife"
+    ],
+    "IMG_7091": [
+      "landscape"
+    ],
+    "IMG_8102": [
+      "water"
+    ],
+    "IMG_9238": [
+      "landscape"
+    ],
+    "MilkyWayLakeSonoma": [
+      "landscape"
+    ],
+    "NXT_20220619_185630_634_merged": [
+      "creative"
+    ],
+    "NXT_20221023_153048_246_merged": [
+      "creative"
+    ],
+    "SZQL7745": [],
+    "TZSB3470": [],
+    "_DSC0170": [
+      "wildlife"
+    ],
+    "_DSC0222-2": [
+      "water",
+      "landscape"
+    ],
+    "_DSC0273": [],
+    "_DSC0286": [
+      "wildlife"
+    ],
+    "_DSC0427-2": [],
+    "_DSC0433-2": [],
+    "_DSC0438-2": [],
+    "_DSC0444-2": [
+      "creative"
+    ],
+    "_DSC0452": [
+      "creative"
+    ],
+    "_DSC0588": [
+      "wildlife"
+    ],
+    "_DSC0957-2": [
+      "wildlife"
+    ],
+    "merged (2)": [
+      "creative"
+    ],
+    "merged (3)": [
+      "creative"
+    ]
+  },
+  "category_orders": {
+    "landscape": [
+      "CML_20231124_151005_534_merged",
+      "IMG_7091",
+      "BNS_20250307_175640_743",
+      "IMG_9238",
+      "IMG_5424",
+      "IMG_5007",
+      "MilkyWayLakeSonoma",
+      "CML_20231212_071135_66_merged",
+      "IMG_6891"
+    ],
+    "water": [
+      "20210101_142433",
+      "IMG_6891",
+      "BNS_20250309_134447_544",
+      "CML_20230214_155633_953",
+      "IMG_8102",
+      "BNS_20250111_140733_427",
+      "HPYV9359"
+    ],
+    "wildlife": [
+      "_DSC0588",
+      "_DSC0286",
+      "BNS_20250111_140733_427",
+      "CML_20230610_123706_733_merged_look",
+      "_DSC0170",
+      "IMG_6977",
+      "IMG_6953",
+      "BNS_20240702_170228_858",
+      "_DSC0957-2",
+      "IMG_6874"
+    ]
+  },
+  "render": {
+    "tile_size": "540",
+    "tile_format": "hdr_jpg",
+    "lightbox_size": "full",
+    "lightbox_format": "hdr_jpg"
+  }
+}

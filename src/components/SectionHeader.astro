@@ -4,11 +4,9 @@ interface Props {
   marker: string;
   /** Heading text */
   title: string;
-  /** Optional description shown on the right column */
-  desc?: string;
 }
 
-const { marker, title, desc } = Astro.props;
+const { marker, title } = Astro.props;
 
 // Split "01 · NOW" so the dot can be styled independently.
 // Falls back to plain text if the marker doesn't match the expected shape.
@@ -27,5 +25,4 @@ const parts = marker.match(/^(\s*\S+)\s*·\s*(.+?)\s*$/);
     </div>
     <h2>{title}</h2>
   </div>
-  {desc && <p class="desc">{desc}</p>}
 </div>

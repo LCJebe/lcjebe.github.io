@@ -65,8 +65,8 @@ export const contactRows: ContactRow[] = [
   },
   {
     key: "CV",
-    value: "cv-2026.pdf",
-    href: "/cv.pdf",
+    value: "cv-larsjebe-2026.pdf",
+    href: "/cv-larsjebe-2026.pdf",
     download: true,
   },
 ];

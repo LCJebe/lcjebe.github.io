@@ -29,7 +29,7 @@ export const sidebar = {
   // Per DESIGN.md §3: company affiliations only — no CVPR/SIGGRAPH chips here.
   chips: [
     { label: "PHOTA LABS", withDot: true },
-    { label: "ADOBE · LEVOY" },
+    { label: "ADOBE" },
     { label: "STANFORD EE" },
   ],
   navItems: [

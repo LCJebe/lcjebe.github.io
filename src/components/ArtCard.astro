@@ -24,7 +24,6 @@ const showNav = pieces.length > 1;
       {pieces.map((p, i) => (
         <div class:list={["art-copy", { "is-active": i === 0 }]} data-index={i}>
           <h4>{p.title}</h4>
-          <p>{p.description}</p>
         </div>
       ))}
     </div>

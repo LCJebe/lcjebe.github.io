@@ -12,9 +12,6 @@ export interface PublicationRow {
 export const publicationsSection = {
   marker: "03 · SELECTED PUBLICATIONS",
   title: "Peer-reviewed",
-  desc:
-    "Caliber evidence, not a CV section. The work above is the day job; " +
-    "these are the times the engineering rose to something publishable.",
 };
 
 export const publications: PublicationRow[] = [
@@ -25,8 +22,9 @@ export const publications: PublicationRow[] = [
       "DiffusionRig — Learning Personalized Priors for Facial Appearance Editing",
     meta: [
       { kind: "smallcaps", text: "CVPR 2023" },
-      { kind: "plain", text: "Z. Ding, C. Zhang, Z. Xia, L. Jebe, Z. Tu, X. Zhang" },
+      { kind: "plain", text: "Z. Ding, C. Zhang, Z. Xia, <strong>L. Jebe</strong>, Z. Tu, X. Zhang" },
     ],
+    note: "Adobe. I co-mentored and contributed.",
     links: [
       { href: "https://diffusionrig.github.io/", label: "Project", external: true },
       { href: "https://arxiv.org/abs/2304.06711", label: "arXiv", external: true },
@@ -40,9 +38,12 @@ export const publications: PublicationRow[] = [
       { kind: "smallcaps", text: "SIGGRAPH Asia 2022" },
       {
         kind: "plain",
-        text: "E. Tseng, Y. Zhang, L. Jebe, C. Zhang, Z. Xia, Y. Fan, F. Heide, J. Chen",
+        text: "E. Tseng, Y. Zhang, <strong>L. Jebe</strong>, C. Zhang, Z. Xia, Y. Fan, F. Heide, J. Chen",
       },
     ],
+    note:
+      "Adobe. I developed and trained the style transfer network, and " +
+      "contributed to the differentiable rendering pipeline development.",
     links: [
       {
         href: "https://light.princeton.edu/publication/neural-photo-finishing/",
@@ -66,11 +67,11 @@ export const publications: PublicationRow[] = [
       { kind: "smallcaps", text: "CVPR 2021" },
       {
         kind: "plain",
-        text: "P. Kellnhofer, L. Jebe, A. Jones, R. Spicer, K. Pulli, G. Wetzstein",
+        text: "P. Kellnhofer, <strong>L. Jebe</strong>, A. Jones, R. Spicer, K. Pulli, G. Wetzstein",
       },
     ],
     note:
-      "Done at Raxium. I designed, built, and calibrated the multi-camera " +
+      "Raxium. I designed, built, and calibrated the multi-camera " +
       "video rig and prototyped the 3D video reconstruction algorithms it " +
       "feeds.",
     links: [
@@ -96,7 +97,7 @@ export const earlierPublications: PublicationRow[] = [
       "Online Phase Current and Voltage Offset Calibration using Inverter Voltage Distortion",
     meta: [
       { kind: "smallcaps", text: "IEEE PEDS 2017" },
-      { kind: "plain", text: "M. Schubert, L. Jebe, M. Gossen, R. W. De Doncker" },
+      { kind: "plain", text: "M. Schubert, <strong>L. Jebe</strong>, M. Gossen, R. W. De Doncker" },
     ],
     links: [
       {
@@ -113,7 +114,7 @@ export const earlierPublications: PublicationRow[] = [
       "Gate Driver Integrated Instantaneous Phase Voltage Measurement in PWM Voltage Source Inverters",
     meta: [
       { kind: "smallcaps", text: "IEEE INTELEC 2016" },
-      { kind: "plain", text: "M. Schubert, L. Jebe, R. W. De Doncker" },
+      { kind: "plain", text: "M. Schubert, <strong>L. Jebe</strong>, R. W. De Doncker" },
     ],
     links: [
       {

@@ -21,12 +21,10 @@ import {
   publications,
   earlierPublications,
 } from "~/data/publications";
-import {
-  photographySection,
-  filters,
-  photos,
-  galleryFooterHtml,
-} from "~/data/photos";
+import { photographySection, galleryFooterHtml } from "~/data/photographyMeta";
+import { loadPortfolio } from "~/lib/loadPortfolio";
+
+const { photos, filters, categoryOrders } = loadPortfolio();
 import { pianoSection, pianoVideos, pianoMoreUrl } from "~/data/piano";
 import { artworkSection, artworks } from "~/data/artwork";
 import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
@@ -55,7 +53,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
     {/* —— 01 NOW / HOW I WORK —— */}
     <section class="section" id="now">
       <div class="container">
-        <SectionHeader marker={now.marker} title={now.title} desc={now.desc} />
+        <SectionHeader marker={now.marker} title={now.title} />
         <div class="now-block">
           {now.paragraphs.map((p) => (
             <p set:html={p} />
@@ -70,7 +68,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <SectionHeader
           marker={shippedSection.marker}
           title={shippedSection.title}
-          desc={shippedSection.desc}
         />
         <ShippedCard
           imageSrc={pinnedShipped.imageSrc}
@@ -89,6 +86,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
               meta={row.meta}
               note={row.note}
               links={row.links}
+              press={row.press}
             />
           ))}
         </div>
@@ -101,7 +99,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <SectionHeader
           marker={publicationsSection.marker}
           title={publicationsSection.title}
-          desc={publicationsSection.desc}
         />
         <div class="work-list">
           {publications.map((row) => (
@@ -142,9 +139,8 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <SectionHeader
           marker={photographySection.marker}
           title={photographySection.title}
-          desc={photographySection.desc}
         />
-        <PhotoGrid filters={filters} photos={photos} footerHtml={galleryFooterHtml} />
+        <PhotoGrid filters={filters} photos={photos} categoryOrders={categoryOrders} footerHtml={galleryFooterHtml} />
       </div>
     </section>
 
@@ -154,7 +150,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <SectionHeader
           marker={pianoSection.marker}
           title={pianoSection.title}
-          desc={pianoSection.desc}
         />
         <div class="piano-stack">
           {pianoVideos.map((v) => (
@@ -169,7 +164,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
           ))}
         </div>
         <p class="piano-more">
-          <a class="link" href={pianoMoreUrl}>Piano arrangements of “Frozen” and “Demons” — from years back →</a>
+          <a class="link" href={pianoMoreUrl}>Piano arrangements of “Frozen” and “Demons” from years back →</a>
         </p>
         {/* Single registration of the <lite-youtube> custom element. */}
         <script is:inline src="/vendor/lite-yt-embed.js" defer></script>
@@ -182,7 +177,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <SectionHeader
           marker={artworkSection.marker}
           title={artworkSection.title}
-          desc={artworkSection.desc}
         />
         <ArtCard pieces={artworks} />
       </div>

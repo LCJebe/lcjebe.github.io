@@ -11,10 +11,6 @@
 export const now = {
   marker: "01 · NOW",
   title: "How I work",
-  desc:
-    "The seam between research and product is where I'm most useful — and " +
-    "where most of my work lives. Most of it is invisible from the outside; " +
-    "the section below is the visible part.",
 
   paragraphs: [
     `Most of my best engineering isn't visible from the outside. The papers ` +

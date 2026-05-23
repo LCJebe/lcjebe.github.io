@@ -11,6 +11,13 @@ export interface WorkLink {
   external?: boolean;
 }
 
+export interface PressItem {
+  href: string;
+  venue: string;
+  title: string;
+  external?: boolean;
+}
+
 interface Props {
   /** Path or URL for the 88×88 thumbnail image */
   thumbSrc: string;
@@ -26,9 +33,11 @@ interface Props {
   note?: string;
   /** Right-column link list (mono, uppercase) */
   links?: WorkLink[];
+  /** Optional press/media coverage; renders as a collapsible "Press" expander. */
+  press?: PressItem[];
 }
 
-const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [] } = Astro.props;
+const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [] } = Astro.props;
 ---
 <article class="work-row">
   <div class="thumb">
@@ -43,7 +52,7 @@ const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [] } = Astro.props;
           {part.kind === "smallcaps" ? (
             <span class="smallcaps">{part.text}</span>
           ) : (
-            <span>{part.text}</span>
+            <span set:html={part.text} />
           )}
         </>
       ))}
@@ -57,11 +66,37 @@ const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [] } = Astro.props;
       ))}
     </div>
   )}
+  {press.length > 0 && (
+    <details class="press-expand">
+      <summary>
+        <span class="press-label">Press</span>
+        <span class="press-count">({press.length})</span>
+        <span class="chevron" aria-hidden="true">↓</span>
+      </summary>
+    </details>
+  )}
+  {press.length > 0 && (
+    <ul class="press-list">
+      {press.map((p) => (
+        <li>
+          <span class="press-venue">{p.venue}</span>
+          <span class="press-sep" aria-hidden="true">—</span>
+          <a
+            class="press-title"
+            href={p.href}
+            target={p.external ? "_blank" : undefined}
+            rel={p.external ? "noopener noreferrer" : undefined}
+          >{p.title}</a>
+        </li>
+      ))}
+    </ul>
+  )}
 </article>
 
 <script>
   // Whole-row click → navigate to the first link in the row's links column.
-  // Clicks on any inner <a> propagate normally and aren't intercepted.
+  // Clicks on any inner <a>, <summary>, or inside the press expander propagate
+  // normally and aren't intercepted.
   document.querySelectorAll<HTMLElement>(".work-row").forEach((row) => {
     const firstLink = row.querySelector<HTMLAnchorElement>(".links a");
     if (!firstLink) return;
@@ -69,6 +104,7 @@ const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [] } = Astro.props;
     row.addEventListener("click", (e) => {
       const target = e.target as Element | null;
       if (target?.closest("a")) return;
+      if (target?.closest(".press-expand, .press-list")) return;
       firstLink.click();
     });
   });

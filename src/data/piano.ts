@@ -1,7 +1,6 @@
 export const pianoSection = {
   marker: "05 · from the studio",
   title: "Piano",
-  desc: "Two pieces I keep coming back to. Recorded with my phone at Brown Music Center at Stanford.",
 };
 
 export interface PianoVideo {
@@ -26,7 +25,8 @@ export const pianoVideos: PianoVideo[] = [
     title: "S. 541, No. 3",
     description:
       "Played at the slowest tempo I could justify and still call it Liszt. " +
-      "Stitched together from a few takes.",
+      "Stitched together from a few takes. " +
+      "Recorded with my phone at Brown Music Center at Stanford.",
     startSeconds: 7,
   },
   {
@@ -35,7 +35,8 @@ export const pianoVideos: PianoVideo[] = [
     label: "Beethoven · Piano Sonata No. 8 (“Pathétique”)",
     title: "I. Grave — Allegro di molto e con brio",
     description:
-      "Beethoven is one of the few composers I never get tired of. Don't be discouraged by the slow start -- it turns into a really fun piece to listen to!",
+      "Beethoven is one of the few composers I never get tired of. Don't be discouraged by the slow start -- it turns into a really fun piece to listen to! " +
+      "Recorded with my phone at Brown Music Center at Stanford.",
     startSeconds: 10,
   },
 ];

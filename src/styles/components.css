@@ -405,14 +405,7 @@
 }
 
 .section-head {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: var(--s-5);
-  align-items: baseline;
   margin-bottom: var(--s-6);
-}
-@media (max-width: 720px) {
-  .section-head { grid-template-columns: 1fr; gap: var(--s-2); }
 }
 .section-head .marker {
   font-family: var(--font-mono);
@@ -436,17 +429,6 @@
   letter-spacing: var(--tracking-tight);
   margin: 0;
 }
-.section-head .desc {
-  grid-column: 2;
-  font-size: var(--t-meta);
-  color: var(--fg-muted);
-  margin-top: var(--s-2);
-  max-width: 60ch;
-  line-height: 1.55;
-}
-@media (max-width: 720px) {
-  .section-head .desc { grid-column: 1; }
-}
 
 /* —————————————————————— Now / How I work */
 .now-block p {
@@ -468,9 +450,16 @@
 /* —————————————————————— Work / publication rows */
 .work-list { display: grid; gap: 0; }
 .work-row {
+  position: relative;
   display: grid;
   grid-template-columns: 88px 1fr 140px;
-  gap: var(--s-5);
+  /* row-gap kept at 0: <details display:contents> induces a phantom row 2
+     in Chrome's grid even when the press-list is display:none, so a
+     non-zero row-gap would push the next-row divider 24px lower when the
+     press section is closed. Visual spacing above the open press-list is
+     restored via margin-top on .press-list. */
+  column-gap: var(--s-5);
+  row-gap: 0;
   align-items: center;
   padding: var(--s-5) 0 var(--s-5) var(--s-5);
   border-top: 1px solid var(--hairline);
@@ -512,7 +501,7 @@
   gap: 6px 10px;
   align-items: baseline;
 }
-.work-row .meta .smallcaps { color: var(--fg); }
+.work-row .meta .smallcaps { color: var(--fg); font-size: 16px; }
 .work-row .meta .sep { color: var(--fg-faint); }
 .work-row .note {
   font-size: var(--t-meta);
@@ -522,14 +511,19 @@
   max-width: 60ch;
 }
 .work-row .links {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
   display: flex;
-  gap: var(--s-3);
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-2);
   font-family: var(--font-mono);
   font-size: var(--t-micro);
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--fg-muted);
+  text-align: right;
 }
 .work-row .links a {
   border-bottom: 1px solid var(--hairline-strong);
@@ -546,9 +540,103 @@
   .work-row .thumb { width: 64px; height: 64px; }
   .work-row .links {
     grid-column: 1 / -1;
-    justify-content: flex-start;
+    grid-row: auto;
+    align-items: flex-start;
+    text-align: left;
     padding-top: var(--s-1);
   }
+  .work-row .press-expand > summary {
+    grid-column: 2;
+  }
+}
+
+/* —————————————————————— Press expander (per-row, bottom-right)
+   <details> uses display: contents so its <summary> becomes a direct grid
+   item of .work-row, pinned to column 3 / row 1 bottom. The <ul.press-list>
+   is a sibling of <details> (also a direct grid item) so its full-width
+   row-2 placement isn't lost to <details>'s internal box. :has() toggles
+   visibility based on the disclosure state — no jump on click. */
+.work-row .press-expand {
+  display: contents;
+}
+.work-row .press-expand > summary {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: end;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  list-style: none;
+  user-select: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+.work-row .press-expand > summary::-webkit-details-marker { display: none; }
+.work-row .press-expand > summary::marker { content: ""; }
+.work-row .press-expand > summary:hover { color: var(--fg); }
+.work-row .press-expand[open] > summary { color: var(--fg); }
+.work-row .press-expand .press-count { color: var(--fg-faint); }
+.work-row .press-expand .chevron {
+  display: inline-block;
+  font-family: var(--font-mono);
+  transition: transform var(--dur-med) var(--ease);
+}
+.work-row .press-expand[open] > summary .chevron {
+  transform: rotate(180deg);
+}
+
+.work-row .press-list {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: none;
+  list-style: none;
+  /* margin-top replaces the row-gap that .work-row no longer applies. */
+  margin: var(--s-5) 0 0;
+  padding: var(--s-3) 0 0;
+  border-top: 1px solid var(--hairline);
+  flex-direction: column;
+}
+.work-row:has(.press-expand[open]) .press-list {
+  display: flex;
+}
+.work-row .press-list li {
+  display: flex;
+  gap: var(--s-2);
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding: var(--s-1) 0;
+}
+.work-row .press-list li:hover .press-title {
+  color: var(--accent);
+}
+.work-row .press-venue {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  flex: none;
+}
+.work-row .press-sep {
+  color: var(--fg-faint);
+  flex: none;
+}
+.work-row .press-title {
+  font-size: var(--t-meta);
+  color: var(--fg-muted);
+  flex: 1;
+  min-width: 0;
+  transition: color var(--dur-fast) var(--ease);
+}
+.work-row .press-title:hover {
+  color: var(--accent);
 }
 
 /* —————————————————————— Earlier-work expand (Publications) */
@@ -680,21 +768,44 @@
   cursor: pointer;
   transition: all var(--dur-fast) var(--ease);
 }
+.filter:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+}
+.filter:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
 .filter[aria-pressed="true"] {
   background: var(--fg);
   color: var(--bg);
   border-color: var(--fg);
 }
-
-.masonry {
-  column-count: 3;
-  column-gap: var(--s-3);
+.filter[aria-pressed="true"]:hover {
+  background: var(--fg);
+  color: var(--bg);
 }
-@media (max-width: 900px) { .masonry { column-count: 2; } }
-@media (max-width: 540px) { .masonry { column-count: 1; } }
+
+/* CSS grid for the outer container (explicit equal-width columns), with
+   each column itself a flex stack. Column assignment is decided in
+   PhotoGrid.astro (greedy shortest-fit pack on the source order); the
+   client script swaps the column count attribute on viewport change. */
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+  align-items: start;
+}
+.masonry[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.masonry[data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+.masonry-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+}
 .masonry-item {
-  break-inside: avoid;
-  margin-bottom: var(--s-3);
+  width: 100%;
   background: var(--bg-sunken);
   cursor: zoom-in;
   overflow: hidden;
@@ -718,6 +829,80 @@
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--fg-muted);
+}
+
+/* —————————————————————— PhotoSwipe lightbox theming
+   PhotoSwipe's stylesheet is JS-imported, so it loads after this file.
+   `html .pswp` bumps specificity above PhotoSwipe's own `.pswp { --pswp-bg: #000 }`
+   defaults. CSS variables cascade from <html> (where data-theme lives), so
+   the lightbox automatically follows the site's light/dark toggle. */
+html .pswp {
+  --pswp-bg: var(--bg);
+  --pswp-icon-color: var(--fg);
+  --pswp-icon-color-secondary: var(--bg);
+}
+
+/* Filmstrip — fixed-height thumbnail strip at the bottom of the lightbox.
+   PhotoSwipe is told (via its `padding.bottom` option in PhotoGrid.astro)
+   to leave 96px of slide-area room for this strip; the height value below
+   must match that constant. */
+.pswp__filmstrip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: color-mix(in oklch, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--hairline);
+  z-index: 1;
+  scrollbar-width: none;
+}
+.pswp__filmstrip::-webkit-scrollbar { display: none; }
+
+.pswp__filmstrip-track {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  /* Allow the first and last thumbs to scroll all the way to the strip's
+     visual center — without this, scrollLeft can't push them past the edge. */
+  padding-inline: 50%;
+  height: 100%;
+}
+
+.pswp__filmstrip-thumb {
+  flex: none;
+  height: 72px;
+  background: var(--bg-sunken);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0.5;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    outline-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+.pswp__filmstrip-thumb:hover { opacity: 0.85; }
+.pswp__filmstrip-thumb:focus-visible {
+  opacity: 1;
+  outline-color: var(--focus);
+}
+.pswp__filmstrip-thumb.is-active {
+  opacity: 1;
+  outline-color: var(--accent);
+}
+.pswp__filmstrip-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* —————————————————————— Piano */

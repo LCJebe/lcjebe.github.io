@@ -87,6 +87,16 @@ const canonical = new URL(path, Astro.site ?? "https://larsjebe.com").toString()
     <a href="#main" class="skip-link">Skip to content</a>
     <slot />
 
+    {/* Dev-only: when the builder saves portfolio.json, the savePlugin
+        broadcasts a custom HMR event so any open viewer page reloads with
+        the new layout, render settings, and lightbox URLs. The builder
+        page uses its own layout and doesn't pick up this listener. */}
+    <script>
+      if (import.meta.hot) {
+        import.meta.hot.on("portfolio:saved", () => location.reload());
+      }
+    </script>
+
     {/* Theme toggle wiring. The boot script in <head> already sets data-theme.
         This script syncs the toggle buttons' aria-pressed and persists clicks. */}
     <script is:inline>

@@ -2,6 +2,14 @@
 .DS_Store
 .claude/settings.local.json
 
+# Local secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Throwaway local artifacts (review HTML, etc.)
+tmp/
+
 # Astro
 node_modules/
 dist/
