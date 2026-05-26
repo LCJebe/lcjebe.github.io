@@ -1,15 +1,31 @@
 export const artworkSection = {
-  marker: "06 · Art + Craft",
-  title: "Made by hand",
+  marker: "06 · Made by hand",
+  title: "Artwork",
 };
 
-export interface ArtPiece {
+export interface ArtImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+export interface ArtSingle {
+  kind?: "single";
   imageSrc: string;
   imageAlt: string;
   title: string;
   width: number;
   height: number;
 }
+
+export interface ArtCollage {
+  kind: "collage";
+  title: string;
+  images: ArtImage[];
+}
+
+export type ArtPiece = ArtSingle | ArtCollage;
 
 export const artworks: ArtPiece[] = [
   {
@@ -27,10 +43,27 @@ export const artworks: ArtPiece[] = [
     height: 2376,
   },
   {
-    imageSrc: "/images/art/painting2.jpg",
-    imageAlt: "Painting of cherry blossoms framing a snow-capped mountain",
+    kind: "collage",
     title: "venice, unfinished",
-    width: 1856,
-    height: 3694,
+    images: [
+      {
+        src: "/images/art/venice1.jpg",
+        alt: "Venice painting in progress — panel one",
+        width: 3618,
+        height: 4824,
+      },
+      {
+        src: "/images/art/venice2.jpg",
+        alt: "Venice painting in progress — panel two",
+        width: 3710,
+        height: 4947,
+      },
+      {
+        src: "/images/art/venice3.jpg",
+        alt: "Venice painting in progress — panel three",
+        width: 3652,
+        height: 4869,
+      },
+    ],
   },
 ];

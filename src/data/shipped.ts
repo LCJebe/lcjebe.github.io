@@ -8,35 +8,41 @@ export interface ShippedRow {
   note?: string;
   links?: WorkLink[];
   press?: PressItem[];
+  /** Visually highlight this row (subtle accent tint + left border).
+   *  Used for the pinned current-role entry. */
+  highlight?: boolean;
 }
 
 export const shippedSection = {
-  marker: "02 · SHIPPED",
-  title: "Real users",
-};
-
-export const pinnedShipped = {
-  imageSrc: "/images/phota-blog.webp",
-  imageAlt: "Phota Labs",
-  label: "Phota Labs · 2025 — present\nfounding technical staff",
-  title: "Generative AI for photography",
-  description:
-    "Building an identity-preserving generative photography product. I own " +
-    "the production stack — inference + serving " +
-    "infrastructure, computer-vision and data pipelines, and the API " +
-    "surface that turn the team's research into a shipped product. The " +
-    "launch post covers what's live now.",
-  links: [
-    { href: "https://www.photalabs.com/", label: "Phota Labs", external: true },
-    {
-      href: "https://www.photalabs.com/blog/the-new-photo-experience-starts-here",
-      label: "Launch post",
-      external: true,
-    },
-  ] satisfies WorkLink[],
+  marker: "02 · Real users",
+  title: "Shipped products",
 };
 
 export const shippedRows: ShippedRow[] = [
+  {
+    thumbSrc: "/images/phota-blog.webp",
+    thumbAlt: "Phota Labs",
+    titleHtml: "Generative AI for photography",
+    meta: [
+      { kind: "smallcaps", text: "Phota Labs · 2025 — present" },
+      { kind: "plain", text: "founding engineer" },
+    ],
+    note:
+      "Building an identity-preserving generative photography product. I own " +
+      "the production stack — inference + serving infrastructure, " +
+      "computer-vision and data pipelines, and the API surface that turn the " +
+      "team's research into a shipped product. The launch post covers what's " +
+      "live now.",
+    links: [
+      { href: "https://www.photalabs.com/", label: "Phota Labs", external: true },
+      {
+        href: "https://www.photalabs.com/blog/the-new-photo-experience-starts-here",
+        label: "Launch post",
+        external: true,
+      },
+    ],
+    highlight: true,
+  },
   {
     thumbSrc: "/images/indigo2.png",
     thumbAlt: "Project Indigo",
@@ -181,7 +187,7 @@ export const shippedRows: ShippedRow[] = [
   {
     thumbSrc: "/images/reflection-teaser.jpg",
     thumbAlt: "Adobe Reflection Removal result",
-    titleHtml: "Reflection Removal — Camera Raw and Lightroom",
+    titleHtml: "Reflection Removal — Camera Raw, Lightroom, Photoshop",
     meta: [
       { kind: "smallcaps", text: "Adobe · Dec 2024" },
       { kind: "plain", text: "contributor · hybrid-synthetic training-data pipeline" },

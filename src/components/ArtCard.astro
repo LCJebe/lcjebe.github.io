@@ -12,9 +12,19 @@ const showNav = pieces.length > 1;
   <div class="image-stack">
     {pieces.map((p, i) => (
       <div class:list={["art-img", { "is-active": i === 0 }]} data-index={i}>
-        <img src={p.imageSrc} alt={p.imageAlt}
-             width={p.width} height={p.height}
-             loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+        {p.kind === "collage" ? (
+          <div class="art-collage">
+            {p.images.map((img) => (
+              <img src={img.src} alt={img.alt}
+                   width={img.width} height={img.height}
+                   loading="lazy" decoding="async" />
+            ))}
+          </div>
+        ) : (
+          <img src={p.imageSrc} alt={p.imageAlt}
+               width={p.width} height={p.height}
+               loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+        )}
       </div>
     ))}
   </div>

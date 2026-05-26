@@ -16,8 +16,8 @@ export const hero = {
     `real users, on real devices, at scale. I think product-first -- ` +
     `and build the tools I'd want to use myself.`,
 
-  primaryCta: { href: "/cv-larsjebe-2026.pdf", label: "Download CV" },
-  secondaryCta: { href: "#shipped", label: "See shipped work" },
+  primaryCta: { href: "#shipped", label: "See shipped work" },
+  secondaryCta: { href: "/cv-larsjebe-2026.pdf", label: "Download CV" },
 
   // 21:9 carousel frames.
   //

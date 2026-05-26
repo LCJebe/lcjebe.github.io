@@ -52,15 +52,46 @@ const orders: Record<string, string[]> = {
   ...categoryOrders,
 };
 ---
-<div class="filter-row" role="tablist" aria-label="Photography filters">
-  {filters.map((f, i) => (
+<div class="gallery-toolbar">
+  <div class="filter-row" role="tablist" aria-label="Photography filters">
+    {filters.map((f, i) => (
+      <button
+        type="button"
+        class="filter"
+        data-filter={f.id}
+        aria-pressed={i === 0 ? "true" : "false"}
+      >{f.label}</button>
+    ))}
+  </div>
+
+  {/* HDR badge. data-state is set at hydration from matchMedia and toggled
+      if the display changes mid-session (e.g. plugging in an HDR monitor).
+      SSR'd as "checking" (visually hidden) so no-JS users never see the
+      wrong hint. */}
+  <div class="hdr-badge-wrap" data-state="checking">
     <button
       type="button"
-      class="filter"
-      data-filter={f.id}
-      aria-pressed={i === 0 ? "true" : "false"}
-    >{f.label}</button>
-  ))}
+      class="hdr-badge"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="hdr-popover"
+    >
+      <span class="hdr-label">HDR</span>
+      <span class="hdr-state-on" aria-hidden="true">· ON</span>
+      <span class="hdr-state-off" aria-hidden="true">· OFF</span>
+      <span class="hdr-dot" aria-hidden="true" />
+      <span class="hdr-glyph" aria-hidden="true">!</span>
+    </button>
+    <div id="hdr-popover" class="hdr-popover" role="dialog" aria-label="About HDR" hidden>
+      <p class="hdr-popover-on">
+        Your display reports HDR. These photos render with their full dynamic range.
+      </p>
+      <p class="hdr-popover-suggest">
+        These photos are HDR (gain-map JPEG). For the intended look, view on
+        an HDR-capable display — recent MacBooks, iPhones, or modern OLED monitors.
+      </p>
+    </div>
+  </div>
 </div>
 
 <div class="masonry" data-cols={SSR_COLS}>
@@ -202,6 +233,87 @@ const orders: Record<string, string[]> = {
     });
   })();
 
+  // HDR badge — detect display capability and toggle the explanatory
+  // popover. The wrap's data-state flips between "on" (display reports
+  // HDR) and "suggest" (SDR display — show the "view on HDR for full
+  // effect" hint). Photos are gain-map JPEGs that render correctly on
+  // both, so this is purely an "awareness" UI — no source swap needed.
+  (function () {
+    const wrap = document.querySelector<HTMLElement>(".hdr-badge-wrap");
+    const badge = wrap?.querySelector<HTMLButtonElement>(".hdr-badge");
+    const popover = wrap?.querySelector<HTMLElement>(".hdr-popover");
+    if (!wrap || !badge || !popover) return;
+
+    // Older Safari only exposes `dynamic-range` since 13.1; on browsers
+    // without support, `matches` is false and the badge stays in
+    // "suggest" — a safe default that errs toward the prompt rather
+    // than a confidently-wrong "your display is HDR" claim.
+    const mql = window.matchMedia("(dynamic-range: high)");
+    const setState = () => {
+      wrap.dataset.state = mql.matches ? "on" : "suggest";
+    };
+    setState();
+    // Some browsers fire change when an external HDR display is plugged
+    // in or when the OS toggles HDR mode. addEventListener over
+    // addListener — the latter is deprecated.
+    mql.addEventListener?.("change", setState);
+
+    const openPopover = () => {
+      popover.hidden = false;
+      badge.setAttribute("aria-expanded", "true");
+    };
+    const closePopover = () => {
+      popover.hidden = true;
+      badge.setAttribute("aria-expanded", "false");
+    };
+    const togglePopover = () => {
+      if (popover.hidden) openPopover();
+      else closePopover();
+    };
+
+    // Hover-to-open on desktop, with a small close delay so the cursor can
+    // cross the gap into the popover without it disappearing. A pseudo-
+    // element bridge inside .hdr-popover keeps the gap inside the wrap's
+    // hover area, but the delay covers the brief gap on fast cursors.
+    let closeTimer: number | undefined;
+    const cancelClose = () => {
+      if (closeTimer !== undefined) {
+        window.clearTimeout(closeTimer);
+        closeTimer = undefined;
+      }
+    };
+    const scheduleClose = () => {
+      cancelClose();
+      closeTimer = window.setTimeout(closePopover, 120);
+    };
+
+    wrap.addEventListener("mouseenter", () => {
+      cancelClose();
+      openPopover();
+    });
+    wrap.addEventListener("mouseleave", scheduleClose);
+
+    // Click stays as a fallback for touch devices (and keyboard activation).
+    badge.addEventListener("click", (e) => {
+      e.stopPropagation();
+      cancelClose();
+      togglePopover();
+    });
+
+    // Click outside / Esc to dismiss.
+    document.addEventListener("click", (e) => {
+      if (popover.hidden) return;
+      if (wrap.contains(e.target as Node)) return;
+      closePopover();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !popover.hidden) {
+        closePopover();
+        badge.focus();
+      }
+    });
+  })();
+
   // PhotoSwipe lightbox. Dimensions come from the JSON manifest and are set
   // directly on data-pswp-width/height — no lazy natural-size probe needed.
   (function () {
@@ -209,18 +321,25 @@ const orders: Record<string, string[]> = {
     if (!grid) return;
 
     const FILMSTRIP_HEIGHT = 96;
+    const SLIDE_INSET = 48;
 
     const lightbox = new PhotoSwipeLightbox({
       gallery: ".masonry",
       children: ".masonry-item",
       pswpModule: () => import("photoswipe"),
-      bgOpacity: 0.95,
+      bgOpacity: 1,
       showHideAnimationType: "fade",
       // No wraparound — first/last slide is a hard stop, matching the
       // filmstrip's non-looping behavior.
       loop: false,
-      // Reserve the bottom strip so the slide image doesn't sit underneath.
-      padding: { top: 0, bottom: FILMSTRIP_HEIGHT, left: 0, right: 0 },
+      // Reserve the bottom strip so the slide image doesn't sit underneath,
+      // and inset all sides so the photo doesn't touch the viewport edges.
+      padding: {
+        top: SLIDE_INSET,
+        bottom: FILMSTRIP_HEIGHT + SLIDE_INSET,
+        left: SLIDE_INSET,
+        right: SLIDE_INSET,
+      },
     });
 
     // Custom UI: thumbnail filmstrip pinned to the bottom of the viewport,

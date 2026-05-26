@@ -33,7 +33,7 @@ export const sidebar = {
     { label: "STANFORD EE" },
   ],
   navItems: [
-    { href: "#now", label: "Now", num: "01" },
+    { href: "#now", label: "How I work", num: "01" },
     { href: "#shipped", label: "Shipped products", num: "02" },
     { href: "#publications", label: "Publications", num: "03" },
     { href: "#photography", label: "Photography", num: "04" },
@@ -43,7 +43,6 @@ export const sidebar = {
   ],
   socials: [
     { href: "mailto:lars.jebe@gmail.com", label: "Email" },
-    { href: "https://github.com/LCJebe", label: "GitHub", external: true },
     { href: "https://scholar.google.com/citations?user=LN7Fd_QAAAAJ", label: "Scholar", external: true },
     { href: "https://www.flickr.com/photos/larsjebe/", label: "Flickr", external: true },
     { href: "https://www.linkedin.com/in/larsjebe/", label: "LinkedIn", external: true },

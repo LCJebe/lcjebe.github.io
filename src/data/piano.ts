@@ -1,5 +1,5 @@
 export const pianoSection = {
-  marker: "05 · from the studio",
+  marker: "05 · From the studio",
   title: "Piano",
 };
 
@@ -24,7 +24,6 @@ export const pianoVideos: PianoVideo[] = [
     label: "Liszt · Liebestraum No. 3",
     title: "S. 541, No. 3",
     description:
-      "Played at the slowest tempo I could justify and still call it Liszt. " +
       "Stitched together from a few takes. " +
       "Recorded with my phone at Brown Music Center at Stanford.",
     startSeconds: 7,

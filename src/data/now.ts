@@ -9,7 +9,7 @@
  */
 
 export const now = {
-  marker: "01 · NOW",
+  marker: "01 · Now",
   title: "How I work",
 
   paragraphs: [

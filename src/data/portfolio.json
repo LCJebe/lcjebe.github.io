@@ -2,6 +2,10 @@
   "version": 1,
   "categories": [
     {
+      "id": "landscape",
+      "label": "landscape"
+    },
+    {
       "id": "wildlife",
       "label": "wildlife"
     },
@@ -12,10 +16,6 @@
     {
       "id": "water",
       "label": "water"
-    },
-    {
-      "id": "landscape",
-      "label": "landscape"
     }
   ],
   "order": [

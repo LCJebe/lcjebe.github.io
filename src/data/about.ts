@@ -1,8 +1,8 @@
 import type { ContactRow } from "~/components/ContactList.astro";
 
 export const aboutSection = {
-  marker: "07 · ABOUT & CONTACT",
-  title: "Bio",
+  marker: "07 · Off the clock",
+  title: "About & contact",
 };
 
 /**
@@ -14,22 +14,24 @@ export const aboutSection = {
  * sidebar already list affiliations; this section adds the through-line.
  */
 export const bioParagraphsHtml: string[] = [
-  `Grew up in Germany. Studied EE at <span class="smallcaps">RWTH Aachen</span> ` +
-    `and <span class="smallcaps">Stanford</span> because I wanted to know how ` +
-    `cameras actually work — and ended up on Marc Levoy's computational ` +
-    `photography team at <span class="smallcaps">Adobe</span>, which is roughly ` +
-    `the answer to that question. Now at <span class="smallcaps">Phota Labs</span>: ` +
-    `same instinct, larger toolkit.`,
+  `Grew up in Germany. Studied Electrical Engineering and Information ` +
+    `Technology at <strong>RWTH Aachen</strong> and ` +
+    `<strong>Stanford</strong> because I've always been ` +
+    `fascinated by building things, seeing how they work, and iterating ` +
+    `on them. Worked for a MicroLED startup first, then switched to ` +
+    `Marc Levoy's <strong>computational photography</strong> team at ` +
+    `<strong>Adobe</strong>. Now at <strong>Phota Labs</strong>, taking ` +
+    `my passion for photography and colors to a new level.`,
 
-  `Outside the engineering: classical piano since I was a kid, photography ` +
-    `that actually leaves the house, kitesurfing when the wind cooperates, ` +
-    `and Lucy — Siberian husky, much louder than I am. I write the way I'd ` +
-    `talk; I'd rather be specific than slick.`,
+  `Outside the engineering I've played <strong>classical piano</strong> ` +
+    `since I was a kid, and I'm constantly chasing bigger waves and ` +
+    `marine animals when <strong>kitesurfing</strong>. I like every ` +
+    `aspect of nature, and ideally I can explore it with Lucy, the Husky.`,
 
-  `Open to conversations about <em>AI engineering for creative tools, ` +
-    `computational photography, generative visual systems, and image-quality ` +
-    `work that ships.</em> If any of those overlap with what you're building, ` +
-    `please get in touch.`,
+  `Open to conversations about <em>AI engineering, including infrastructure, ` +
+    `data + inference pipelines, computational photography, generative ` +
+    `visual systems, and image-quality work.</em> If any of those overlap ` +
+    `with what you're building, please get in touch.`,
 ];
 
 export const contactRows: ContactRow[] = [
@@ -37,11 +39,6 @@ export const contactRows: ContactRow[] = [
     key: "Email",
     value: "lars.jebe@gmail.com",
     href: "mailto:lars.jebe@gmail.com",
-  },
-  {
-    key: "GitHub",
-    value: "@LCJebe",
-    href: "https://github.com/LCJebe",
   },
   {
     key: "Scholar",

@@ -10,8 +10,8 @@ export interface PublicationRow {
 }
 
 export const publicationsSection = {
-  marker: "03 · SELECTED PUBLICATIONS",
-  title: "Peer-reviewed",
+  marker: "03 · Peer-reviewed",
+  title: "Publications",
 };
 
 export const publications: PublicationRow[] = [

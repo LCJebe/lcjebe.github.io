@@ -31,15 +31,18 @@ interface Props {
   meta: MetaPart[];
   /** Optional descriptive note */
   note?: string;
-  /** Right-column link list (mono, uppercase) */
+  /** Pill row: external destinations rendered after the press disclosure */
   links?: WorkLink[];
-  /** Optional press/media coverage; renders as a collapsible "Press" expander. */
+  /** Optional press/media coverage; collapsible "Press (N)" pill at the front of the pill row. */
   press?: PressItem[];
+  /** Visual highlight: subtle accent tint + left accent border. Reserved for
+   *  pinning the current-role entry at the top of a list. */
+  highlight?: boolean;
 }
 
-const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [] } = Astro.props;
+const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [], highlight = false } = Astro.props;
 ---
-<article class="work-row">
+<article class={`work-row${highlight ? " is-highlighted" : ""}`}>
   <div class="thumb">
     <img src={thumbSrc} alt={thumbAlt} loading="lazy" decoding="async" />
   </div>
@@ -58,23 +61,29 @@ const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [] } = As
       ))}
     </p>
     {note && <p class="note">{note}</p>}
+    {(press.length > 0 || links.length > 0) && (
+      <div class="pills">
+        {press.length > 0 && (
+          <button class="pill pill--press" type="button" aria-expanded="false">
+            <span>Press</span>
+            <span class="pill-count">{press.length}</span>
+            <span class="arr" aria-hidden="true">▾</span>
+          </button>
+        )}
+        {links.map((l) => (
+          <a
+            class="pill"
+            href={l.href}
+            target={l.external ? "_blank" : undefined}
+            rel={l.external ? "noopener noreferrer" : undefined}
+          >
+            <span>{l.label}</span>
+            <span class="arr" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    )}
   </div>
-  {links.length > 0 && (
-    <div class="links">
-      {links.map((l) => (
-        <a href={l.href}>{l.label}</a>
-      ))}
-    </div>
-  )}
-  {press.length > 0 && (
-    <details class="press-expand">
-      <summary>
-        <span class="press-label">Press</span>
-        <span class="press-count">({press.length})</span>
-        <span class="chevron" aria-hidden="true">↓</span>
-      </summary>
-    </details>
-  )}
   {press.length > 0 && (
     <ul class="press-list">
       {press.map((p) => (
@@ -94,18 +103,27 @@ const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [] } = As
 </article>
 
 <script>
-  // Whole-row click → navigate to the first link in the row's links column.
-  // Clicks on any inner <a>, <summary>, or inside the press expander propagate
-  // normally and aren't intercepted.
+  // Whole-row click → navigate to the first link pill (skipping the press
+  // button). Clicks on any pill, <a>, or the press-list propagate normally.
+  // Press button toggles aria-expanded; CSS :has() reveals .press-list.
   document.querySelectorAll<HTMLElement>(".work-row").forEach((row) => {
-    const firstLink = row.querySelector<HTMLAnchorElement>(".links a");
-    if (!firstLink) return;
+    const firstLink = row.querySelector<HTMLAnchorElement>(".pills a.pill");
+    if (firstLink) {
+      row.addEventListener("click", (e) => {
+        const target = e.target as Element | null;
+        if (target?.closest("a")) return;
+        if (target?.closest(".pill--press, .press-list")) return;
+        firstLink.click();
+      });
+    }
 
-    row.addEventListener("click", (e) => {
-      const target = e.target as Element | null;
-      if (target?.closest("a")) return;
-      if (target?.closest(".press-expand, .press-list")) return;
-      firstLink.click();
-    });
+    const pressBtn = row.querySelector<HTMLButtonElement>(".pill--press");
+    if (pressBtn) {
+      pressBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const expanded = pressBtn.getAttribute("aria-expanded") === "true";
+        pressBtn.setAttribute("aria-expanded", expanded ? "false" : "true");
+      });
+    }
   });
 </script>

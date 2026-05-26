@@ -452,21 +452,28 @@
 .work-row {
   position: relative;
   display: grid;
-  grid-template-columns: 88px 1fr 140px;
-  /* row-gap kept at 0: <details display:contents> induces a phantom row 2
-     in Chrome's grid even when the press-list is display:none, so a
-     non-zero row-gap would push the next-row divider 24px lower when the
-     press section is closed. Visual spacing above the open press-list is
-     restored via margin-top on .press-list. */
+  grid-template-columns: 88px 1fr;
   column-gap: var(--s-5);
   row-gap: 0;
   align-items: center;
-  padding: var(--s-5) 0 var(--s-5) var(--s-5);
+  padding: var(--s-5);
   border-top: 1px solid var(--hairline);
   transition: background-color 200ms var(--ease);
 }
 .work-row:hover { background: var(--bg-raised); }
-.work-row:has(.links a) { cursor: pointer; }
+.work-row:has(.pills a.pill) { cursor: pointer; }
+
+/* Highlighted row — used for the pinned current-role entry. Subtle accent
+   tint + left accent border so it reads as "this is the current thing"
+   without breaking the row rhythm of the rest of the list. */
+.work-row.is-highlighted {
+  background: color-mix(in oklch, var(--accent) 6%, transparent);
+  border-left: 2px solid var(--accent);
+  padding-left: calc(var(--s-5) - 2px);
+}
+.work-row.is-highlighted:hover {
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
 .work-row .thumb {
   width: 88px;
   height: 88px;
@@ -508,89 +515,60 @@
   color: var(--fg-muted);
   margin: 0;
   line-height: 1.55;
-  max-width: 60ch;
+  max-width: 80ch;
 }
-.work-row .links {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: start;
+/* —————————————————————— Pill row (links + press disclosure)
+   Lives inside .body, after the note. Press button comes first (▾) followed
+   by link pills (↗). All pills share identical chrome — only the arrow
+   differentiates "expands in place" from "navigates away". */
+.work-row .pills {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--s-2);
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  text-align: right;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: var(--s-3) 0 0;
 }
-.work-row .links a {
-  border-bottom: 1px solid var(--hairline-strong);
-  padding-bottom: 1px;
-  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
-}
-.work-row .links a:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-@media (max-width: 720px) {
-  .work-row { grid-template-columns: 64px 1fr; padding: var(--s-4) 0 var(--s-4) var(--s-4); }
-  .work-row .thumb { width: 64px; height: 64px; }
-  .work-row .links {
-    grid-column: 1 / -1;
-    grid-row: auto;
-    align-items: flex-start;
-    text-align: left;
-    padding-top: var(--s-1);
-  }
-  .work-row .press-expand > summary {
-    grid-column: 2;
-  }
-}
-
-/* —————————————————————— Press expander (per-row, bottom-right)
-   <details> uses display: contents so its <summary> becomes a direct grid
-   item of .work-row, pinned to column 3 / row 1 bottom. The <ul.press-list>
-   is a sibling of <details> (also a direct grid item) so its full-width
-   row-2 placement isn't lost to <details>'s internal box. :has() toggles
-   visibility based on the disclosure state — no jump on click. */
-.work-row .press-expand {
-  display: contents;
-}
-.work-row .press-expand > summary {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: end;
-  justify-self: end;
+.work-row .pill {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  cursor: pointer;
   font-family: var(--font-mono);
-  font-size: var(--t-micro);
+  font-size: 11px;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--fg-muted);
-  list-style: none;
-  user-select: none;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
-.work-row .press-expand > summary::-webkit-details-marker { display: none; }
-.work-row .press-expand > summary::marker { content: ""; }
-.work-row .press-expand > summary:hover { color: var(--fg); }
-.work-row .press-expand[open] > summary { color: var(--fg); }
-.work-row .press-expand .press-count { color: var(--fg-faint); }
-.work-row .press-expand .chevron {
-  display: inline-block;
+.work-row .pill:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.work-row .pill .arr {
+  color: var(--fg-faint);
   font-family: var(--font-mono);
-  transition: transform var(--dur-med) var(--ease);
+  display: inline-block;
+  transition: color var(--dur-fast) var(--ease), transform var(--dur-med) var(--ease);
 }
-.work-row .press-expand[open] > summary .chevron {
+.work-row .pill:hover .arr { color: var(--accent); }
+/* Press count picks up the amber accent + medium weight, so the volume of
+   coverage reads louder at a glance without re-coloring the rest of the pill. */
+.work-row .pill-count {
+  color: var(--accent);
+  font-weight: 500;
+  margin-left: -2px;
+}
+/* Rotate the disclosure arrow when the press list is open. */
+.work-row .pill--press[aria-expanded="true"] .arr {
   transform: rotate(180deg);
 }
 
+/* —————————————————————— Press list (revealed under the row)
+   Full-width grid item below the row body; shown when the press pill is
+   expanded. :has() toggles visibility from the disclosure state — no jump. */
 .work-row .press-list {
   grid-column: 1 / -1;
   grid-row: 2;
@@ -602,8 +580,13 @@
   border-top: 1px solid var(--hairline);
   flex-direction: column;
 }
-.work-row:has(.press-expand[open]) .press-list {
+.work-row:has(.pill--press[aria-expanded="true"]) .press-list {
   display: flex;
+}
+
+@media (max-width: 720px) {
+  .work-row { grid-template-columns: 64px 1fr; padding: var(--s-4); }
+  .work-row .thumb { width: 64px; height: 64px; }
 }
 .work-row .press-list li {
   display: flex;
@@ -646,8 +629,8 @@
 .earlier-expand > summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
+  justify-content: flex-start;
+  gap: var(--s-2);
   padding: var(--s-4) 0;
   border-top: 1px solid var(--hairline);
   cursor: pointer;
@@ -748,11 +731,164 @@
 }
 
 /* —————————————————————— Photography */
+.gallery-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+}
 .filter-row {
   display: flex;
   gap: var(--s-2);
   flex-wrap: wrap;
-  margin-bottom: var(--s-5);
+}
+@media (max-width: 540px) {
+  .gallery-toolbar { flex-direction: column; }
+}
+
+/* —— HDR badge —— */
+/* Awareness UI: tells viewers their display reports HDR (state="on") or
+   nudges SDR viewers to switch to an HDR-capable display (state="suggest").
+   "checking" is the SSR fallback — visually hidden until JS resolves the
+   matchMedia query so no-JS users never see a confidently-wrong hint. */
+.hdr-badge-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+.hdr-badge-wrap[data-state="checking"] {
+  visibility: hidden;
+}
+/* Plain inline label — no border, no background, no chip chrome. Reads as
+   a quiet status annotation rather than another tap target competing with
+   the filter chips. The native <button> element is preserved for keyboard
+   activation + the click-to-toggle popover (touch fallback), but visually
+   it's just text + indicator. */
+.hdr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  border: 0;
+  background: transparent;
+  color: var(--fg-faint);
+  cursor: default;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease);
+}
+.hdr-badge:hover {
+  color: var(--fg-muted);
+}
+.hdr-badge:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.hdr-badge[aria-expanded="true"] {
+  color: var(--fg-muted);
+}
+/* Indicator dot — shown only in the ON state. The dot is a tiny HDR-tagged
+   AVIF (public/hdr-dot.avif, generated by scripts/build-hdr-dot.ts) with
+   BT.2020 primaries + PQ transfer signaling. On HDR displays Chrome /
+   Safari render its amber fill brighter than SDR diffuse white via the
+   same HDR image pipeline that handles the photos — much more reliable
+   than pure CSS HDR colors (which browsers inconsistently honor for
+   non-media elements). Solid `background-color` provides the SDR fallback
+   for browsers without AVIF; the box-shadow halo is SDR amber. */
+.hdr-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  flex: none;
+  background-color: var(--accent);
+  /* Query string forces a refetch after regenerating hdr-dot.avif so
+     browsers don't keep the previous build's cached image. */
+  background-image: url("/hdr-dot.avif?v=3");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Subtle halo only — the HDR-tagged AVIF does the brightness work on
+     capable displays; the box-shadow just keeps the dot from feeling
+     stranded next to the text. */
+  box-shadow: 0 0 6px -2px oklch(0.80 0.10 70 / 0.5);
+}
+
+/* Warning glyph — shown only in the OFF state. Red exclamation, bold weight,
+   sized + colored to read clearly against both themes' near-white / near-black
+   backgrounds. Sits in a small circle so it reads as a "look at me" badge
+   rather than a stray character. */
+.hdr-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-pill);
+  color: oklch(0.62 0.22 28);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  flex: none;
+}
+
+/* State-based show/hide. On-state: dot + "HDR · ON". Suggest-state:
+   "HDR · OFF ⚠". The "HDR" label is constant; the suffix and indicator
+   swap to reflect what the viewer's display is actually doing. */
+.hdr-badge-wrap[data-state="on"] .hdr-glyph,
+.hdr-badge-wrap[data-state="on"] .hdr-state-off,
+.hdr-badge-wrap[data-state="suggest"] .hdr-dot,
+.hdr-badge-wrap[data-state="suggest"] .hdr-state-on {
+  display: none;
+}
+.hdr-state-on,
+.hdr-state-off {
+  color: var(--fg-faint);
+}
+.hdr-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  padding: var(--s-4);
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-2);
+  font-size: var(--t-meta);
+  line-height: 1.5;
+  color: var(--fg);
+  box-shadow: 0 8px 24px oklch(0 0 0 / 0.10);
+  z-index: 10;
+}
+/* Invisible bridge across the 8px gap to the badge. Keeps the cursor
+   "inside" the wrap on its way from the badge to the popover, so hover-
+   to-open doesn't flicker closed mid-traverse. */
+.hdr-popover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px;
+  height: 8px;
+}
+.hdr-popover p {
+  margin: 0;
+}
+.hdr-badge-wrap[data-state="on"] .hdr-popover-suggest,
+.hdr-badge-wrap[data-state="suggest"] .hdr-popover-on {
+  display: none;
+}
+@media (max-width: 540px) {
+  .hdr-popover {
+    right: auto;
+    left: 0;
+  }
 }
 .filter {
   font-family: var(--font-mono);
@@ -854,8 +990,7 @@ html .pswp {
   height: 96px;
   overflow-x: auto;
   overflow-y: hidden;
-  background: color-mix(in oklch, var(--bg) 88%, transparent);
-  backdrop-filter: blur(8px);
+  background: var(--bg);
   border-top: 1px solid var(--hairline);
   z-index: 1;
   scrollbar-width: none;
@@ -881,22 +1016,17 @@ html .pswp {
   margin: 0;
   cursor: pointer;
   overflow: hidden;
-  opacity: 0.5;
   outline: 2px solid transparent;
   outline-offset: -2px;
   transition:
-    opacity var(--dur-fast) var(--ease),
     outline-color var(--dur-fast) var(--ease),
     transform var(--dur-fast) var(--ease);
 }
-.pswp__filmstrip-thumb:hover { opacity: 0.85; }
 .pswp__filmstrip-thumb:focus-visible {
-  opacity: 1;
   outline-color: var(--focus);
 }
 .pswp__filmstrip-thumb.is-active {
-  opacity: 1;
-  outline-color: var(--accent);
+  outline-color: var(--fg);
 }
 .pswp__filmstrip-thumb img {
   width: 100%;
@@ -1093,7 +1223,25 @@ html .pswp {
   overflow: hidden;
   aspect-ratio: 4 / 3;
 }
-.art-img img {
+.art-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.art-collage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--s-2);
+}
+.art-collage img {
+  flex: 1 1 0;
+  min-width: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -1190,6 +1338,10 @@ html .pswp {
   padding: 6px 10px 0 0;
   color: var(--fg);
   font-weight: 400;
+}
+.about p strong {
+  color: var(--fg);
+  font-weight: 600;
 }
 
 .contact-list {

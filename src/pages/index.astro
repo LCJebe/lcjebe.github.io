@@ -4,7 +4,6 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import Sidebar from "~/components/Sidebar.astro";
 import Hero from "~/components/Hero.astro";
 import SectionHeader from "~/components/SectionHeader.astro";
-import ShippedCard from "~/components/ShippedCard.astro";
 import WorkRow from "~/components/WorkRow.astro";
 import PhotoGrid from "~/components/PhotoGrid.astro";
 import PianoCard from "~/components/PianoCard.astro";
@@ -15,7 +14,7 @@ import Footer from "~/components/Footer.astro";
 import { site, sidebar } from "~/data/site";
 import { hero } from "~/data/hero";
 import { now } from "~/data/now";
-import { shippedSection, pinnedShipped, shippedRows } from "~/data/shipped";
+import { shippedSection, shippedRows } from "~/data/shipped";
 import {
   publicationsSection,
   publications,
@@ -69,14 +68,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
           marker={shippedSection.marker}
           title={shippedSection.title}
         />
-        <ShippedCard
-          imageSrc={pinnedShipped.imageSrc}
-          imageAlt={pinnedShipped.imageAlt}
-          label={pinnedShipped.label}
-          title={pinnedShipped.title}
-          description={pinnedShipped.description}
-          links={pinnedShipped.links}
-        />
         <div class="work-list">
           {shippedRows.map((row) => (
             <WorkRow
@@ -87,6 +78,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
               note={row.note}
               links={row.links}
               press={row.press}
+              highlight={row.highlight}
             />
           ))}
         </div>

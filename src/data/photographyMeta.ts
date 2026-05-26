@@ -3,7 +3,7 @@
 // This file holds only the surrounding presentation strings.
 
 export const photographySection = {
-  marker: "04 · through the lens",
+  marker: "04 · Through the lens",
   title: "Photography",
 };
 
