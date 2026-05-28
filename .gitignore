@@ -10,6 +10,11 @@
 # Throwaway local artifacts (review HTML, etc.)
 tmp/
 
+# Site image sources — now served from Cloudflare R2 (see scripts/photos/
+# sync-site-assets.ts). Originals live at site/originals/ in the assets bucket;
+# we keep local copies on disk for sync re-runs but don't ship them through git.
+public/images/
+
 # Astro
 node_modules/
 dist/

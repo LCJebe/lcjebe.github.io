@@ -2,18 +2,21 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import Sidebar from "~/components/Sidebar.astro";
 import { sidebar } from "~/data/site";
+import { hero } from "~/data/hero";
 import { shippedRows } from "~/data/shipped";
+import { siteAssetUrl } from "~/lib/siteAssetUrl";
 
 // Use Indigo (2 external links + 10 press items) — the most complex row, which
 // is where the right-rail problems show up most clearly.
 const indigo = shippedRows.find((r) => /Indigo/.test(r.titleHtml)) ?? shippedRows[1];
-const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [] } = indigo;
+const { thumbPath, thumbAlt, titleHtml, meta, note, links = [], press = [] } = indigo;
+const thumbSrc = siteAssetUrl(thumbPath, "270");
 ---
 <BaseLayout title="Work-row mockups" path="/mockups/work-rows">
   <Sidebar
     name={sidebar.name}
     role={sidebar.role}
-    portrait={sidebar.portrait}
+    frames={hero.frames}
     chips={[...sidebar.chips]}
     navItems={[...sidebar.navItems]}
     socials={[...sidebar.socials]}

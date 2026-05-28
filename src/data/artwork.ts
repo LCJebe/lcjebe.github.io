@@ -4,7 +4,8 @@ export const artworkSection = {
 };
 
 export interface ArtImage {
-  src: string;
+  /** R2 site-asset path, e.g. "artwork/venice_1". Resolved via siteAssetUrl. */
+  path: string;
   alt: string;
   width: number;
   height: number;
@@ -12,7 +13,8 @@ export interface ArtImage {
 
 export interface ArtSingle {
   kind?: "single";
-  imageSrc: string;
+  /** R2 site-asset path, e.g. "artwork/painting_sunrise". */
+  path: string;
   imageAlt: string;
   title: string;
   width: number;
@@ -29,14 +31,14 @@ export type ArtPiece = ArtSingle | ArtCollage;
 
 export const artworks: ArtPiece[] = [
   {
-    imageSrc: "/images/art/PAINTING.jpg",
+    path: "artwork/painting_sunrise",
     imageAlt: "Painting of a beach sunrise with palm tree and gulls",
     title: "sunrise at lanikai beach",
     width: 3533,
     height: 2659,
   },
   {
-    imageSrc: "/images/art/IMG_5341.jpg",
+    path: "artwork/third_movement",
     imageAlt: "Abstract painting with treble clef, music notes, and piano keys",
     title: "third movement",
     width: 3581,
@@ -47,19 +49,19 @@ export const artworks: ArtPiece[] = [
     title: "venice, unfinished",
     images: [
       {
-        src: "/images/art/venice1.jpg",
+        path: "artwork/venice_1",
         alt: "Venice painting in progress — panel one",
         width: 3618,
         height: 4824,
       },
       {
-        src: "/images/art/venice2.jpg",
+        path: "artwork/venice_2",
         alt: "Venice painting in progress — panel two",
         width: 3710,
         height: 4947,
       },
       {
-        src: "/images/art/venice3.jpg",
+        path: "artwork/venice_3",
         alt: "Venice painting in progress — panel three",
         width: 3652,
         height: 4869,

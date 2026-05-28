@@ -1,7 +1,8 @@
 import type { MetaPart, PressItem, WorkLink } from "~/components/WorkRow.astro";
 
 export interface ShippedRow {
-  thumbSrc: string;
+  /** R2 site-asset path, e.g. "shipped/phota". Resolved via siteAssetUrl. */
+  thumbPath: string;
   thumbAlt: string;
   titleHtml: string;
   meta: MetaPart[];
@@ -20,9 +21,9 @@ export const shippedSection = {
 
 export const shippedRows: ShippedRow[] = [
   {
-    thumbSrc: "/images/phota-blog.webp",
+    thumbPath: "shipped/phota",
     thumbAlt: "Phota Labs",
-    titleHtml: "Generative AI for photography",
+    titleHtml: "Phota API &amp; Phota Studio — identity-preserving visual generation",
     meta: [
       { kind: "smallcaps", text: "Phota Labs · 2025 — present" },
       { kind: "plain", text: "founding engineer" },
@@ -34,6 +35,8 @@ export const shippedRows: ShippedRow[] = [
       "team's research into a shipped product. The launch post covers what's " +
       "live now.",
     links: [
+      { href: "https://docs.photalabs.com/", label: "Phota API", external: true },
+      { href: "https://studio.photalabs.com/", label: "Phota Studio", external: true },
       { href: "https://www.photalabs.com/", label: "Phota Labs", external: true },
       {
         href: "https://www.photalabs.com/blog/the-new-photo-experience-starts-here",
@@ -44,7 +47,7 @@ export const shippedRows: ShippedRow[] = [
     highlight: true,
   },
   {
-    thumbSrc: "/images/indigo2.png",
+    thumbPath: "shipped/indigo",
     thumbAlt: "Project Indigo",
     titleHtml: "Project Indigo — Computational Photography Camera App",
     meta: [
@@ -131,7 +134,7 @@ export const shippedRows: ShippedRow[] = [
     ],
   },
   {
-    thumbSrc: "/images/adobe_adaptive.webp",
+    thumbPath: "shipped/adaptive",
     thumbAlt: "Adobe Adaptive Profile result",
     titleHtml: "Adobe Adaptive Profile — Camera Raw and Lightroom",
     meta: [
@@ -185,7 +188,7 @@ export const shippedRows: ShippedRow[] = [
     ],
   },
   {
-    thumbSrc: "/images/reflection-teaser.jpg",
+    thumbPath: "shipped/reflection",
     thumbAlt: "Adobe Reflection Removal result",
     titleHtml: "Reflection Removal — Camera Raw, Lightroom, Photoshop",
     meta: [

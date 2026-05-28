@@ -12,6 +12,7 @@
     "astro": "astro",
     "check": "astro check",
     "photos:sync": "tsx scripts/photos/sync.ts",
+    "photos:sync-site": "tsx scripts/photos/sync-site-assets.ts",
     "photos:manifest": "tsx scripts/photos/manifest.ts",
     "photos:categorize": "tsx scripts/photos/categorize.ts",
     "photos:seed-categories": "tsx scripts/photos/seed-categories.ts"

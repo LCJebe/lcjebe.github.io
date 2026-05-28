@@ -1,0 +1,42 @@
+---
+// Square 1:1 portrait slideshow shown at the top of the sidebar in place of a
+// static profile photo. Forks the cross-fade pattern from HeroCarousel.astro
+// but uses plain <img> + object-position rather than R2 image-set backgrounds,
+// so it can render the /images/me/*.jpg originals directly until they're moved
+// into the R2 pipeline.
+
+export interface PortraitFrame {
+  /** Absolute URL or path served by Astro (e.g. "/images/me/lars_lucy3.jpg"). */
+  src: string;
+  alt: string;
+  /** All-caps caption, e.g. "KITE · WAVES". Currently not rendered (see below);
+      kept so the overlay can be restored without re-authoring copy. */
+  caption: string;
+  /** Optional object-position override to tune square crop, e.g. "center 30%". */
+  position?: string;
+}
+
+interface Props {
+  frames: PortraitFrame[];
+}
+
+const { frames } = Astro.props;
+
+const dwell = 8;
+const total = dwell * frames.length;
+---
+<div class="hero-portrait" data-frame-count={frames.length}>
+  {frames.map((f, i) => (
+    <img
+      class="frame"
+      src={f.src}
+      alt={f.alt}
+      style={`object-position: ${f.position ?? "center"}; animation-delay: ${i * dwell}s; animation-duration: ${total}s;`}
+      loading={i === 0 ? "eager" : "lazy"}
+      decoding="async"
+    />
+  ))}
+  {/* Per-frame captions are kept in the data (PortraitFrame.caption) but not
+      rendered for now — re-add the overlaid #portrait-cap div + cycling script
+      to bring them back. */}
+</div>

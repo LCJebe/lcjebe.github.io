@@ -1,4 +1,6 @@
 ---
+import { siteAssetUrl, siteAssetSrcset, THUMB_SIZES } from "~/lib/siteAssetUrl";
+
 export interface MetaPart {
   /** "smallcaps" renders with all-small-caps treatment; "plain" is regular text */
   kind: "smallcaps" | "plain";
@@ -19,8 +21,8 @@ export interface PressItem {
 }
 
 interface Props {
-  /** Path or URL for the 88×88 thumbnail image */
-  thumbSrc: string;
+  /** R2 site-asset path for the 88×88 thumbnail, e.g. "shipped/phota". */
+  thumbPath: string;
   thumbAlt: string;
   /**
    * Title can include a trailing accent like "— best paper candidate".
@@ -40,11 +42,18 @@ interface Props {
   highlight?: boolean;
 }
 
-const { thumbSrc, thumbAlt, titleHtml, meta, note, links = [], press = [], highlight = false } = Astro.props;
+const { thumbPath, thumbAlt, titleHtml, meta, note, links = [], press = [], highlight = false } = Astro.props;
 ---
 <article class={`work-row${highlight ? " is-highlighted" : ""}`}>
   <div class="thumb">
-    <img src={thumbSrc} alt={thumbAlt} loading="lazy" decoding="async" />
+    <img
+      src={siteAssetUrl(thumbPath, "270")}
+      srcset={siteAssetSrcset(thumbPath, THUMB_SIZES)}
+      sizes="88px"
+      alt={thumbAlt}
+      loading="lazy"
+      decoding="async"
+    />
   </div>
   <div class="body">
     <h3 class="title" set:html={titleHtml} />

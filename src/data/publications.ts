@@ -1,7 +1,8 @@
 import type { MetaPart, WorkLink } from "~/components/WorkRow.astro";
 
 export interface PublicationRow {
-  thumbSrc: string;
+  /** R2 site-asset path, e.g. "publications/diffusionrig". Resolved via siteAssetUrl. */
+  thumbPath: string;
   thumbAlt: string;
   titleHtml: string;
   meta: MetaPart[];
@@ -16,13 +17,14 @@ export const publicationsSection = {
 
 export const publications: PublicationRow[] = [
   {
-    thumbSrc: "/images/diffusionrig_teaser.jpg",
+    thumbPath: "publications/diffusionrig",
     thumbAlt: "DiffusionRig teaser",
     titleHtml:
       "DiffusionRig — Learning Personalized Priors for Facial Appearance Editing",
     meta: [
       { kind: "smallcaps", text: "CVPR 2023" },
       { kind: "plain", text: "Z. Ding, C. Zhang, Z. Xia, <strong>L. Jebe</strong>, Z. Tu, X. Zhang" },
+      { kind: "smallcaps", text: "Cited by 118" },
     ],
     note: "Adobe. I co-mentored and contributed.",
     links: [
@@ -31,7 +33,7 @@ export const publications: PublicationRow[] = [
     ],
   },
   {
-    thumbSrc: "/images/NeuralPhotoFinishing.jpg",
+    thumbPath: "publications/neural_photo_finishing",
     thumbAlt: "Neural Photo-Finishing teaser",
     titleHtml: "Neural Photo-Finishing",
     meta: [
@@ -40,6 +42,7 @@ export const publications: PublicationRow[] = [
         kind: "plain",
         text: "E. Tseng, Y. Zhang, <strong>L. Jebe</strong>, C. Zhang, Z. Xia, Y. Fan, F. Heide, J. Chen",
       },
+      { kind: "smallcaps", text: "Cited by 24" },
     ],
     note:
       "Adobe. I developed and trained the style transfer network, and " +
@@ -58,7 +61,7 @@ export const publications: PublicationRow[] = [
     ],
   },
   {
-    thumbSrc: "/images/nlr_square.jpg",
+    thumbPath: "publications/nlr",
     thumbAlt: "Neural Lumigraph Rendering teaser",
     titleHtml:
       `Neural Lumigraph Rendering ` +
@@ -69,6 +72,7 @@ export const publications: PublicationRow[] = [
         kind: "plain",
         text: "P. Kellnhofer, <strong>L. Jebe</strong>, A. Jones, R. Spicer, K. Pulli, G. Wetzstein",
       },
+      { kind: "smallcaps", text: "Cited by 177" },
     ],
     note:
       "Raxium. I designed, built, and calibrated the multi-camera " +
@@ -91,7 +95,7 @@ export const publications: PublicationRow[] = [
  */
 export const earlierPublications: PublicationRow[] = [
   {
-    thumbSrc: "/images/rwth_2.jpg",
+    thumbPath: "publications/rwth_2",
     thumbAlt: "Inverter voltage distortion calibration",
     titleHtml:
       "Online Phase Current and Voltage Offset Calibration using Inverter Voltage Distortion",
@@ -108,7 +112,7 @@ export const earlierPublications: PublicationRow[] = [
     ],
   },
   {
-    thumbSrc: "/images/rwth_1.jpg",
+    thumbPath: "publications/rwth_1",
     thumbAlt: "Gate driver phase voltage measurement",
     titleHtml:
       "Gate Driver Integrated Instantaneous Phase Voltage Measurement in PWM Voltage Source Inverters",

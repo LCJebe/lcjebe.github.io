@@ -1,6 +1,7 @@
 ---
 import Chip from "./Chip.astro";
 import ThemeToggle from "./ThemeToggle.astro";
+import HeroPortrait, { type PortraitFrame } from "./HeroPortrait.astro";
 
 export interface NavItem {
   href: string;
@@ -23,18 +24,17 @@ export interface CredentialChip {
 interface Props {
   name: string;
   role: { line1: string; line2: string; line3?: string; line4?: string };
-  portrait: { src: string; alt: string };
+  /** Cross-fading square slideshow shown in place of a static profile photo. */
+  frames: PortraitFrame[];
   chips: CredentialChip[];
   navItems: NavItem[];
   socials: SocialLink[];
 }
 
-const { name, role, portrait, chips, navItems, socials } = Astro.props;
+const { name, role, frames, chips, navItems, socials } = Astro.props;
 ---
 <aside class="sidebar">
-  <div class="portrait">
-    <img src={portrait.src} alt={portrait.alt} />
-  </div>
+  <HeroPortrait frames={frames} />
 
   {/* Page-level <h1> lives in Hero (SEO/a11y prefers one prominent h1).
       Sidebar name is rendered as a <p> styled identically. */}

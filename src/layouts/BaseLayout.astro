@@ -4,6 +4,9 @@ import "~/styles/globals.css";
 import "~/styles/components.css";
 import "~/styles/variants.css";
 import { designDataAttrs } from "~/design";
+import { hero } from "~/data/hero";
+
+const heroLead = hero.frames[0];
 
 interface Props {
   title: string;
@@ -49,14 +52,16 @@ const canonical = new URL(path, Astro.site ?? "https://larsjebe.com").toString()
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter+Tight:ital,wght@0,300..700;1,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap"
     />
 
-    {/* LCP preload: first frame of the hero carousel.
-        Update path here if the lead hero photograph changes in src/data/hero.ts. */}
+    {/* LCP preload: first frame of the sidebar profile slideshow. Sourced from
+        src/data/hero.ts — single src URL since portrait frames are served
+        directly from /public/images/me/ without R2 responsive variants. */}
     <link
       rel="preload"
       as="image"
-      href="/images/gallery/kite_sunset.jpg"
+      href={heroLead.src}
       fetchpriority="high"
     />
+
 
     {/* Open Graph */}
     <meta property="og:type" content="website" />

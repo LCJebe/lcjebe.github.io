@@ -83,6 +83,7 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
   padding: var(--s-7) var(--s-6);
   border-right: 1px solid var(--hairline);
   display: flex;
@@ -99,19 +100,13 @@
   }
 }
 
-.portrait {
-  width: 88px;
-  height: 88px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: var(--bg-sunken);
-  margin-bottom: var(--s-5);
-}
-.portrait img {
+/* The cross-fading square slideshow stands in for a static profile photo at
+   the top of the sidebar. Base .hero-portrait sizing is tuned for the hero
+   column, so fill the sidebar's content width here instead. */
+.sidebar .hero-portrait {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  max-width: 296px;
+  margin-bottom: var(--s-5);
 }
 
 .sidebar .name {
@@ -238,12 +233,16 @@
 
 /* —————————————————————— Hero */
 .hero {
-  padding: var(--s-7) var(--s-7) var(--s-8);
+  padding: var(--s-7) var(--s-7);
   border-bottom: 1px solid var(--hairline);
 }
 @media (max-width: 720px) {
-  .hero { padding: var(--s-6) var(--s-5) var(--s-7); }
+  .hero { padding: var(--s-6) var(--s-5); }
 }
+
+/* Hero layout: a single stacked column — eyebrow, title, lead, CTAs. The
+   profile slideshow that used to sit to the right now lives in the sidebar. */
+.hero-stack { display: flex; flex-direction: column; }
 
 .hero .eyebrow {
   font-family: var(--font-mono);
@@ -346,42 +345,46 @@
   margin-left: var(--s-3);
 }
 
-/* Hero photograph (the craft moment lives here).
-   The .container cap (--content-max) constrains width, which constrains the
-   21:9 height. max-height is a safety net for very tall viewports.
-   Per-frame `background-position` (set inline from hero.ts) tunes which slice is shown. */
-.hero-photo {
+/* Hero portrait (square slideshow sitting next to the headline/lead).
+   Each .frame is an absolutely-positioned <img> with object-fit: cover;
+   per-frame object-position (set inline from hero.ts) tunes the 1:1 crop. */
+.hero-portrait {
   position: relative;
-  aspect-ratio: 21 / 9;
-  max-height: 520px;
-  margin-top: var(--s-7);
+  aspect-ratio: 1 / 1;
+  width: clamp(280px, 32vw, 380px); /* fallback; overridden inline by Hero.astro measurer */
+  flex: 0 0 auto;
   overflow: hidden;
   background: var(--bg-sunken);
+  border-radius: var(--r-2);
 }
-.hero-photo .frame {
+.hero-portrait .frame {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   opacity: 0;
-  animation: hero-cycle 24s infinite;
+  animation: portrait-cycle 32s infinite;
   will-change: opacity;
 }
-@keyframes hero-cycle {
-  0%, 28%   { opacity: 1; }
-  33%, 95%  { opacity: 0; }
+/* 4 frames × 8s dwell = 32s total. Each frame is visible for ~22% of cycle
+   with ~3% crossfade on either side. animation-delay (set inline) staggers
+   the frames by 8s each. */
+@keyframes portrait-cycle {
+  0%, 22%   { opacity: 1; }
+  25%, 97%  { opacity: 0; }
   100%      { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo .frame { animation: none; }
-  .hero-photo .frame:nth-child(1) { opacity: 1; }
-  .hero-photo .frame:nth-child(2),
-  .hero-photo .frame:nth-child(3) { opacity: 0; }
+  .hero-portrait .frame { animation: none; }
+  .hero-portrait .frame:nth-child(1) { opacity: 1; }
+  .hero-portrait .frame:nth-child(n + 2) { opacity: 0; }
 }
-.hero-photo .caption {
+.hero-portrait .caption {
   position: absolute;
-  left: var(--s-4);
-  bottom: var(--s-4);
+  left: var(--s-3);
+  bottom: var(--s-3);
   font-family: var(--font-mono);
   font-size: var(--t-micro);
   color: oklch(0.95 0.012 80 / 0.85);
@@ -390,7 +393,7 @@
   text-shadow: 0 1px 8px oklch(0.21 0.014 70 / 0.6);
   background: oklch(0.21 0.014 70 / 0.4);
   backdrop-filter: blur(6px);
-  padding: 5px 8px;
+  padding: 4px 7px;
   border-radius: var(--r-1);
   transition: opacity 400ms var(--ease);
 }
@@ -1181,29 +1184,23 @@ html .pswp {
 /* —————————————————————— Artwork */
 .artwork-block {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: var(--s-6);
-  align-items: end;
-}
-@media (max-width: 720px) {
-  .artwork-block { grid-template-columns: 1fr; }
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
 }
 
 /* Image and copy each get their own "stack" so multiple pieces can
  * occupy the same cell and crossfade via opacity. */
-.image-stack { grid-column: 1; grid-row: 1; display: grid; }
+.image-stack { display: grid; }
 .copy-col {
-  grid-column: 2;
-  grid-row: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: var(--s-3);
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--s-4);
 }
-.copy-stack { display: grid; align-items: end; }
+.copy-stack { display: grid; align-items: center; }
 @media (max-width: 720px) {
-  .image-stack { grid-column: 1; grid-row: 1; }
-  .copy-col    { grid-column: 1; grid-row: 2; }
+  .copy-col { flex-wrap: wrap; }
 }
 
 .art-img, .art-copy {
@@ -1221,13 +1218,13 @@ html .pswp {
 .art-img {
   background: var(--bg);
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
 }
 .art-img > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: left center;
   display: block;
 }
 
@@ -1235,8 +1232,8 @@ html .pswp {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   gap: var(--s-2);
 }
 .art-collage img {
@@ -1245,7 +1242,7 @@ html .pswp {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: left center;
   display: block;
 }
 
@@ -1262,10 +1259,9 @@ html .pswp {
   font-variation-settings: "opsz" 96, "SOFT" 30;
   font-size: 22px;
   line-height: 1.2;
-  margin: 0 0 var(--s-2);
+  margin: 0;
 }
 
-/* Prev/next + dots row at the bottom of the copy column. */
 .art-controls {
   display: flex;
   align-items: center;

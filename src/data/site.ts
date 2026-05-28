@@ -6,9 +6,9 @@
 export const site = {
   // Browser tab + first line of every Google result. Lead with the name
   // (highest-intent search) then the positioning line.
-  title: "Lars Jebe — AI engineer building creative tools",
+  title: "Lars Jebe — Research Engineer · Generative Vision & Computational Photography",
   description:
-    "AI engineer at Phota Labs (ex-Adobe / Marc Levoy's team). " +
+    "Research engineer at Phota Labs (ex-Adobe / Marc Levoy's team). " +
     "Computational photography, generative AI, image quality. " +
     "Stanford EE. Co-author at CVPR, SIGGRAPH Asia.",
   url: "https://larsjebe.com",
@@ -17,14 +17,10 @@ export const site = {
 export const sidebar = {
   name: "Hi, I'm Lars",
   role: {
-    line1: "AI Research Engineer",
+    line1: "Research Engineer",
     line2: "Data, Infra, Inference",
     line3: "Computational Photography",
     line4: "Product-first instinct",
-  },
-  portrait: {
-    src: "/images/lars_pali.jpg",
-    alt: "Portrait of Lars Jebe in the Hawaiian mountains",
   },
   // Per DESIGN.md §3: company affiliations only — no CVPR/SIGGRAPH chips here.
   chips: [
@@ -39,7 +35,7 @@ export const sidebar = {
     { href: "#photography", label: "Photography", num: "04" },
     { href: "#piano", label: "Piano", num: "05" },
     { href: "#artwork", label: "Artwork", num: "06" },
-    { href: "#about", label: "About & contact", num: "07" },
+    { href: "#about", label: "Bio", num: "07" },
   ],
   socials: [
     { href: "mailto:lars.jebe@gmail.com", label: "Email" },

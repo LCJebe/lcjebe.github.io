@@ -1,7 +1,9 @@
 ---
+import { siteAssetUrl } from "~/lib/siteAssetUrl";
+
 export interface Frame {
-  /** Image URL — absolute path or imported asset src */
-  src: string;
+  /** R2 site-asset path, e.g. "hero/kite_sunset". Resolved via siteAssetUrl. */
+  path: string;
   /** Alt-text equivalent / aria-label for the frame */
   alt: string;
   /** All-caps caption shown bottom-left, e.g. "KITE · SUNSET · O'AHU" */
@@ -24,6 +26,11 @@ const total = dwell * frames.length;
 // Generate inline style for each frame's background-image + animation-delay.
 // The shared @keyframes lives in components.css and assumes 24s total / 3 frames;
 // for differing frame counts we'd need parameterized keyframes — start with 3 to match design ref.
+//
+// `image-set()` lets the browser pick 1k for standard displays and 2k for
+// hi-DPI / wide viewports — both come from the R2 site/ bucket.
+const bgFor = (path: string) =>
+  `image-set(url('${siteAssetUrl(path, "1k")}') 1x, url('${siteAssetUrl(path, "2k")}') 2x)`;
 ---
 <div class="hero-photo">
   {frames.map((f, i) => (
@@ -31,7 +38,7 @@ const total = dwell * frames.length;
       class="frame"
       role="img"
       aria-label={f.alt}
-      style={`background-image: url('${f.src}'); ${f.position ? `background-position: ${f.position};` : ""} animation-delay: ${i * dwell}s; animation-duration: ${total}s;`}
+      style={`background-image: ${bgFor(f.path)}; ${f.position ? `background-position: ${f.position};` : ""} animation-delay: ${i * dwell}s; animation-duration: ${total}s;`}
     />
   ))}
   <div class="caption" id="hero-cap">{frames[0]?.caption ?? ""}</div>

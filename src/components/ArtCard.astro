@@ -1,5 +1,6 @@
 ---
 import type { ArtPiece } from "~/data/artwork";
+import { siteAssetUrl, siteAssetSrcset, LARGE_SIZES } from "~/lib/siteAssetUrl";
 
 interface Props {
   pieces: ArtPiece[];
@@ -7,6 +8,11 @@ interface Props {
 
 const { pieces } = Astro.props;
 const showNav = pieces.length > 1;
+
+// Artwork is full-bleed in the layout — use all 4 sizes incl. 2k.
+// `sizes="100vw"` is a coarse but safe upper bound; the browser will still
+// pick the smallest variant that satisfies the rendered width × DPR.
+const ART_SIZES_ATTR = "(min-width: 1024px) 60vw, 100vw";
 ---
 <div class="artwork-block">
   <div class="image-stack">
@@ -15,15 +21,25 @@ const showNav = pieces.length > 1;
         {p.kind === "collage" ? (
           <div class="art-collage">
             {p.images.map((img) => (
-              <img src={img.src} alt={img.alt}
-                   width={img.width} height={img.height}
-                   loading="lazy" decoding="async" />
+              <img
+                src={siteAssetUrl(img.path, "1k")}
+                srcset={siteAssetSrcset(img.path, LARGE_SIZES)}
+                sizes={ART_SIZES_ATTR}
+                alt={img.alt}
+                width={img.width} height={img.height}
+                loading="lazy" decoding="async"
+              />
             ))}
           </div>
         ) : (
-          <img src={p.imageSrc} alt={p.imageAlt}
-               width={p.width} height={p.height}
-               loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+          <img
+            src={siteAssetUrl(p.path, "1k")}
+            srcset={siteAssetSrcset(p.path, LARGE_SIZES)}
+            sizes={ART_SIZES_ATTR}
+            alt={p.imageAlt}
+            width={p.width} height={p.height}
+            loading={i === 0 ? "eager" : "lazy"} decoding="async"
+          />
         )}
       </div>
     ))}

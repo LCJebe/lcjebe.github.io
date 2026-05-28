@@ -33,7 +33,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
   <Sidebar
     name={sidebar.name}
     role={sidebar.role}
-    portrait={sidebar.portrait}
+    frames={hero.frames}
     chips={[...sidebar.chips]}
     navItems={[...sidebar.navItems]}
     socials={[...sidebar.socials]}
@@ -46,7 +46,6 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
       leadHtml={hero.leadHtml}
       primaryCta={hero.primaryCta}
       secondaryCta={hero.secondaryCta}
-      frames={hero.frames}
     />
 
     {/* —— 01 NOW / HOW I WORK —— */}
@@ -71,7 +70,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <div class="work-list">
           {shippedRows.map((row) => (
             <WorkRow
-              thumbSrc={row.thumbSrc}
+              thumbPath={row.thumbPath}
               thumbAlt={row.thumbAlt}
               titleHtml={row.titleHtml}
               meta={row.meta}
@@ -95,7 +94,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
         <div class="work-list">
           {publications.map((row) => (
             <WorkRow
-              thumbSrc={row.thumbSrc}
+              thumbPath={row.thumbPath}
               thumbAlt={row.thumbAlt}
               titleHtml={row.titleHtml}
               meta={row.meta}
@@ -112,7 +111,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
           <div class="work-list">
             {earlierPublications.map((row) => (
               <WorkRow
-                thumbSrc={row.thumbSrc}
+                thumbPath={row.thumbPath}
                 thumbAlt={row.thumbAlt}
                 titleHtml={row.titleHtml}
                 meta={row.meta}

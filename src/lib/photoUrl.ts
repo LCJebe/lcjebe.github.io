@@ -4,7 +4,8 @@
 
 import type { Format, Size } from "~/data/schema";
 
-/** Cloudflare R2 custom domain serving the `assets` bucket. */
+/** Cloudflare R2 custom domain serving the `assets` bucket.
+ *  Also re-used by ./siteAssetUrl.ts for non-portfolio assets. */
 export const R2_PUBLIC_BASE = "https://assets.larsjebe.com";
 
 const EXTENSION: Record<Format, string> = {
