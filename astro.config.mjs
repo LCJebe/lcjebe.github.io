@@ -7,18 +7,19 @@ import { fileURLToPath } from 'node:url';
 import { readdir, readFile, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 
-// Strip leaked builder artifacts from the production build. The /builder page
-// short-circuits via `if (import.meta.env.PROD) return 404` in its frontmatter,
-// so no HTML lands in dist/builder/. But Astro/Vite still bundles JS chunks
-// (Builder.<hash>.js) and CSS chunks (index.<hash>.css containing builder.css)
-// because the page's imports are evaluated. They end up orphaned — referenced
+// Strip leaked dev-tool artifacts from the production build. Dev-only pages
+// (/builder, /mockups/*) short-circuit via `if (import.meta.env.PROD) return
+// 404` in their frontmatter, so no HTML lands in dist/. But Astro/Vite still
+// bundles their JS/CSS chunks (e.g. Builder.<hash>.js, work-rows.<hash>.css)
+// because the pages' imports are evaluated. They end up orphaned — referenced
 // by nothing in dist/ — but `grep -rq "builder" dist/` would still flag them.
 //
-// Pass 1: delete files whose name contains "builder".
+// Pass 1: delete files whose name matches a dev-tool token.
 // Pass 2: read every remaining _astro/ file; delete any whose content
-// references "builder" AND is not referenced by any HTML page in dist.
+// references a dev-tool token AND is not referenced by any HTML page in dist.
+const DEV_TOOL_TOKEN = /builder|mockup|work-rows/i;
 const stripBuilderInProd = {
-  name: 'strip-builder-in-prod',
+  name: 'strip-dev-tools-in-prod',
   hooks: {
     'astro:build:done': async (/** @type {{dir: URL}} */ { dir }) => {
       const distDir = fileURLToPath(dir);
@@ -38,7 +39,7 @@ const stripBuilderInProd = {
       // Pass 1 — name match.
       const surviving = [];
       for (const f of files) {
-        if (/builder/i.test(f)) await remove(f);
+        if (DEV_TOOL_TOKEN.test(f)) await remove(f);
         else surviving.push(f);
       }
 
@@ -47,7 +48,7 @@ const stripBuilderInProd = {
       const htmlText = (await Promise.all(htmlFiles.map((p) => readFile(p, 'utf8')))).join('\n');
       for (const f of surviving) {
         const content = await readFile(join(astroDir, f), 'utf8');
-        if (!/builder/i.test(content)) continue;
+        if (!DEV_TOOL_TOKEN.test(content)) continue;
         const referenced = htmlText.includes(f);
         if (!referenced) await remove(f);
       }
@@ -75,7 +76,7 @@ export default defineConfig({
   trailingSlash: 'never',
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/builder'),
+      filter: (page) => !page.includes('/builder') && !page.includes('/mockups'),
     }),
     react(),
     stripBuilderInProd,

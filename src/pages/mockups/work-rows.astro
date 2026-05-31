@@ -11,6 +11,11 @@ import { siteAssetUrl } from "~/lib/siteAssetUrl";
 const indigo = shippedRows.find((r) => /Indigo/.test(r.titleHtml)) ?? shippedRows[1];
 const { thumbPath, thumbAlt, titleHtml, meta, note, links = [], press = [] } = indigo;
 const thumbSrc = siteAssetUrl(thumbPath, "270");
+
+// Dev-only mockup page; never ship it to the live site.
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
 ---
 <BaseLayout title="Work-row mockups" path="/mockups/work-rows">
   <Sidebar
