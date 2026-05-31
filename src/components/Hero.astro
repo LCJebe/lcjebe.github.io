@@ -4,13 +4,13 @@ import Button from "./Button.astro";
 interface Props {
   /** Tagline HTML — pass as raw string. Use <em>...</em> for the italic accent. */
   taglineHtml: string;
-  /** Lead paragraph HTML — supports inline <span class="smallcaps"> */
-  leadHtml: string;
+  /** Lead paragraphs — one <p class="sub"> per entry. Each supports inline HTML. */
+  leadParagraphsHtml: string[];
   primaryCta: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
 }
 
-const { taglineHtml, leadHtml, primaryCta, secondaryCta } = Astro.props;
+const { taglineHtml, leadParagraphsHtml, primaryCta, secondaryCta } = Astro.props;
 ---
 <section class="hero" id="hero">
   <div class="container hero-stack">
@@ -25,7 +25,9 @@ const { taglineHtml, leadHtml, primaryCta, secondaryCta } = Astro.props;
 
     <h1 class="tagline" set:html={taglineHtml} />
 
-    <p class="sub" set:html={leadHtml} />
+    {leadParagraphsHtml.map((p) => (
+      <p class="sub" set:html={p} />
+    ))}
 
     <div class="hero-cta">
       <Button href={primaryCta.href} variant="primary">

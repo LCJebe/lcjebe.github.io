@@ -30,7 +30,7 @@
 .link {
   color: var(--fg);
   text-decoration: underline;
-  text-decoration-color: var(--hairline-strong);
+  text-decoration-color: var(--underline);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   transition: text-decoration-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
@@ -119,11 +119,22 @@
   margin: 0 0 var(--s-2);
 }
 .sidebar .role {
-  font-size: var(--t-meta);
-  color: var(--fg-muted);
-  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+  line-height: 1.7;
   margin: 0 0 var(--s-5);
   max-width: 30ch;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar .role .line { display: block; }
+.sidebar .role .line::before {
+  content: "›";
+  color: var(--accent);
+  margin-right: 8px;
 }
 
 .credentials {
@@ -173,20 +184,60 @@
   flex-wrap: wrap;
 }
 .sidebar .socials a:hover { color: var(--accent); }
+
+/* Hamburger toggle — hidden on desktop; the nav list shows in full. */
+.nav-toggle { display: none; }
+
 @media (max-width: 960px) {
-  .sidebar nav {
-    flex-direction: row;
-    gap: var(--s-4);
-    flex-wrap: wrap;
-    padding-top: var(--s-4);
+  /* Mobile: collapse the section list behind a hamburger so it stops
+     sprawling across two wrapping rows. The button reveals the adjacent
+     <nav> as a vertical list (see [aria-expanded] rule below). */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+    align-self: flex-start;
     margin-top: var(--s-4);
+    padding: 10px 0;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .nav-toggle:hover { color: var(--fg); }
+  /* Three-bar glyph: the span is the middle bar; ::before/::after are the
+     outer bars, offset ±6px and taken out of flow so the span stays 2px. */
+  .nav-toggle-bars,
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    content: "";
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+  }
+  .nav-toggle-bars { position: relative; }
+  .nav-toggle-bars::before { position: absolute; top: -6px; left: 0; }
+  .nav-toggle-bars::after { position: absolute; top: 6px; left: 0; }
+
+  .sidebar nav {
+    display: none;
+    margin-top: var(--s-3);
+    padding-top: 0;
+    border-top: 0;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .nav-toggle[aria-expanded="true"] + nav {
+    display: flex;
   }
   .sidebar nav a {
-    padding: 12px 0;
-    justify-content: flex-start;
+    padding: 10px 0;
+    justify-content: space-between;
     min-height: 44px;
   }
-  .sidebar nav a .num { display: none; }
 }
 
 /* —————————————————————— Theme toggle */
@@ -215,6 +266,10 @@
 .theme-toggle button[aria-pressed="true"] {
   background: var(--fg);
   color: var(--bg);
+}
+@media (max-width: 960px) {
+  /* Mobile is locked to light (see tokens.css), so the toggle has no job. */
+  .theme-toggle { display: none; }
 }
 
 /* —————————————————————— Main column */
@@ -625,6 +680,16 @@
   color: var(--accent);
 }
 
+@media (max-width: 960px) {
+  /* Mobile: trim each row to thumb + title + meta. Hide the body note and
+     all link pills — the whole-row tap still navigates (its handler reads
+     the hidden first link). Keep the collapsible Press pill where it exists
+     (Shipped) and drop the now-empty pill row everywhere else. */
+  .work-row .note { display: none; }
+  .work-row .pills a.pill { display: none; }
+  .work-row .pills:not(:has(.pill--press)) { display: none; }
+}
+
 /* —————————————————————— Earlier-work expand (Publications) */
 .earlier-expand {
   margin-top: 0;
@@ -762,6 +827,10 @@
 .hdr-badge-wrap[data-state="checking"] {
   visibility: hidden;
 }
+@media (max-width: 960px) {
+  /* Mobile: drop the HDR awareness badge entirely. */
+  .hdr-badge-wrap { display: none; }
+}
 /* Plain inline label — no border, no background, no chip chrome. Reads as
    a quiet status annotation rather than another tap target competing with
    the filter chips. The native <button> element is preserved for keyboard
@@ -821,36 +890,33 @@
   box-shadow: 0 0 6px -2px oklch(0.80 0.10 70 / 0.5);
 }
 
-/* Warning glyph — shown only in the OFF state. Red exclamation, bold weight,
-   sized + colored to read clearly against both themes' near-white / near-black
-   backgrounds. Sits in a small circle so it reads as a "look at me" badge
-   rather than a stray character. */
+/* Red "!!" — shown only in the suggest (SDR) state, leading the "VIEW IN HDR"
+   nudge. Color-only (no chip chrome) so it reads as urgent punctuation against
+   the quiet badge text, in both themes' near-white / near-black backgrounds. */
 .hdr-glyph {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: var(--r-pill);
   color: oklch(0.62 0.22 28);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
+  /* Cancel the badge's caps tracking so "!!" sits tight, not "! !". */
+  letter-spacing: 0;
   flex: none;
 }
 
-/* State-based show/hide. On-state: dot + "HDR · ON". Suggest-state:
-   "HDR · OFF ⚠". The "HDR" label is constant; the suffix and indicator
-   swap to reflect what the viewer's display is actually doing. */
+/* State-based show/hide. On-state: "HDR · ON" + dot. Suggest-state:
+   "!! VIEW IN HDR" (red glyph leads the nudge). Both states share the one
+   badge button; each hides the other's spans. */
 .hdr-badge-wrap[data-state="on"] .hdr-glyph,
-.hdr-badge-wrap[data-state="on"] .hdr-state-off,
-.hdr-badge-wrap[data-state="suggest"] .hdr-dot,
-.hdr-badge-wrap[data-state="suggest"] .hdr-state-on {
+.hdr-badge-wrap[data-state="on"] .hdr-suggest,
+.hdr-badge-wrap[data-state="suggest"] .hdr-label,
+.hdr-badge-wrap[data-state="suggest"] .hdr-state-on,
+.hdr-badge-wrap[data-state="suggest"] .hdr-dot {
   display: none;
 }
-.hdr-state-on,
-.hdr-state-off {
+.hdr-state-on {
   color: var(--fg-faint);
 }
 .hdr-popover {
@@ -946,7 +1012,7 @@
 .masonry-item {
   width: 100%;
   background: var(--bg-sunken);
-  cursor: zoom-in;
+  cursor: pointer;
   overflow: hidden;
   position: relative;
   display: block;
@@ -1003,11 +1069,17 @@ html .pswp {
 .pswp__filmstrip-track {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s-2);
-  /* Allow the first and last thumbs to scroll all the way to the strip's
-     visual center — without this, scrollLeft can't push them past the edge. */
-  padding-inline: 50%;
   height: 100%;
+}
+/* When the thumbs overflow the viewport, JS scrolls the strip to keep the
+   active thumb centered. There's no inline padding, so once an end is reached
+   the strip stays flush and the active highlight moves to the edge thumb
+   instead of over-scrolling. When the thumbs all fit, this class is absent and
+   justify-content keeps the group centered rather than left-aligned. */
+.pswp__filmstrip-track.is-overflow {
+  justify-content: flex-start;
 }
 
 .pswp__filmstrip-thumb {
@@ -1036,6 +1108,11 @@ html .pswp {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+@media (max-width: 960px) {
+  /* Mobile: lightbox goes edge-to-edge (see paddingFn in PhotoGrid.astro).
+     Hide the filmstrip — native swipe handles navigation. */
+  .pswp__filmstrip { display: none; }
 }
 
 /* —————————————————————— Piano */
@@ -1165,6 +1242,10 @@ html .pswp {
   color: var(--fg-muted);
   line-height: 1.55;
 }
+@media (max-width: 960px) {
+  /* Mobile: drop the description, keep the accent label + title. */
+  .piano-copy p:not(.label) { display: none; }
+}
 .piano-copy .more {
   font-family: var(--font-mono);
   font-size: var(--t-micro);
@@ -1186,6 +1267,9 @@ html .pswp {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--s-4);
+  /* Containing block for the absolutely-positioned making-of button, which
+     now lives in .art-copy but overlays the image on desktop. */
+  position: relative;
 }
 
 /* Image and copy each get their own "stack" so multiple pieces can
@@ -1219,6 +1303,7 @@ html .pswp {
   background: var(--bg);
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  position: relative;
 }
 .art-img > img {
   width: 100%;
@@ -1308,6 +1393,86 @@ html .pswp {
   opacity: 1;
   background: var(--fg-muted);
 }
+
+/* Making-of button — overlaid on the painting's top-right corner.
+   The pineapple is square, letterboxed left (object-position: left) in a 16:9
+   frame, so its right edge sits 7/16 (43.75%) in from the frame's right edge —
+   anchor the button there rather than to the frame's empty right gutter. */
+.art-makingof {
+  position: absolute;
+  top: var(--s-3);
+  right: calc(43.75% + var(--s-3));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 8px 14px;
+  font-family: var(--font-text);
+  font-size: var(--t-meta);
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  background: color-mix(in oklch, var(--bg-sunken) 72%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.art-makingof::before { content: "↗"; font-size: 14px; line-height: 1; }
+.art-makingof:hover {
+  border-color: var(--fg);
+  background: color-mix(in oklch, var(--bg-sunken) 88%, transparent);
+}
+@media (max-width: 960px) {
+  /* Mobile: the painting renders small, so don't cover it. Let the button
+     flow in below the title instead of overlaying the image. */
+  .art-makingof {
+    position: static;
+    margin-top: var(--s-3);
+  }
+  /* Only the active piece's button takes up layout space, so the other
+     pieces don't reserve an empty gap below their title. */
+  .art-copy:not(.is-active) .art-makingof { display: none; }
+}
+
+/* Making-of lightbox */
+.art-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--s-5);
+  background: color-mix(in oklch, var(--bg-sunken) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+.art-lightbox[hidden] { display: none; }
+.art-lightbox-img {
+  max-width: min(90vw, 1400px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--r-2);
+  box-shadow: 0 24px 80px oklch(0 0 0 / 0.5);
+}
+.art-lightbox-close {
+  position: absolute;
+  top: var(--s-4);
+  right: var(--s-4);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.art-lightbox-close:hover { border-color: var(--fg); }
 
 /* —————————————————————— About + contact */
 .about {

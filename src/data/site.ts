@@ -6,7 +6,7 @@
 export const site = {
   // Browser tab + first line of every Google result. Lead with the name
   // (highest-intent search) then the positioning line.
-  title: "Lars Jebe — Research Engineer · Generative Vision & Computational Photography",
+  title: "Lars Jebe — Research Engineer · Visual Generative AI & Computational Photography",
   description:
     "Research engineer at Phota Labs (ex-Adobe / Marc Levoy's team). " +
     "Computational photography, generative AI, image quality. " +
@@ -17,10 +17,13 @@ export const site = {
 export const sidebar = {
   name: "Hi, I'm Lars",
   role: {
-    line1: "Research Engineer",
-    line2: "Data, Infra, Inference",
-    line3: "Computational Photography",
-    line4: "Product-first instinct",
+    lines: [
+      "Research Engineer",
+      "Data, Infra, Inference",
+      "Visual GenAI",
+      "Computational Photography",
+      "Product-first instinct",
+    ],
   },
   // Per DESIGN.md §3: company affiliations only — no CVPR/SIGGRAPH chips here.
   chips: [
@@ -31,10 +34,10 @@ export const sidebar = {
   navItems: [
     { href: "#now", label: "How I work", num: "01" },
     { href: "#shipped", label: "Shipped products", num: "02" },
-    { href: "#publications", label: "Publications", num: "03" },
+    { href: "#publications", label: "Research", num: "03" },
     { href: "#photography", label: "Photography", num: "04" },
     { href: "#piano", label: "Piano", num: "05" },
-    { href: "#artwork", label: "Artwork", num: "06" },
+    { href: "#artwork", label: "Paint + Craft", num: "06" },
     { href: "#about", label: "Bio", num: "07" },
   ],
   socials: [

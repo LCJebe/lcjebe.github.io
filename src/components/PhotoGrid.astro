@@ -39,11 +39,7 @@ import { packIntoColumns } from "~/lib/masonryPack";
 
 const { filters, photos, categoryOrders, footerHtml } = Astro.props;
 
-// Server-render the desktop (3-column) pack of the "all" view. The client
-// script repacks (and re-filters) in-place on filter changes and on narrower
-// viewports using the same algorithm.
 const SSR_COLS = 3;
-const packed = packIntoColumns(photos, SSR_COLS);
 
 // Build the orders payload consumed by the client. "all" is the photos array
 // order; the rest comes from the loader's resolved per-category orders.
@@ -51,15 +47,33 @@ const orders: Record<string, string[]> = {
   all: photos.map((p) => p.id),
   ...categoryOrders,
 };
+
+// Filter active on first paint. We SSR this filter's pack into `.masonry` and
+// the rest (hidden) into `.masonry-stash`, so JS users don't flash the full
+// "all" grid before the client filters down on hydration. No-JS users see the
+// default view's photos in the grid and the remainder below it.
+const DEFAULT_FILTER = "landscape";
+const byId = new Map(photos.map((p) => [p.id, p]));
+const defaultIds = orders[DEFAULT_FILTER] ?? orders.all;
+const defaultSet = new Set(defaultIds);
+const defaultPhotos = defaultIds
+  .map((id) => byId.get(id))
+  .filter((p): p is Photo => Boolean(p));
+const stashedPhotos = photos.filter((p) => !defaultSet.has(p.id));
+
+// Server-render the desktop (3-column) pack of the default view. The client
+// script repacks (and re-filters) in-place on filter changes and on narrower
+// viewports using the same algorithm.
+const packed = packIntoColumns(defaultPhotos, SSR_COLS);
 ---
 <div class="gallery-toolbar">
   <div class="filter-row" role="tablist" aria-label="Photography filters">
-    {filters.map((f, i) => (
+    {filters.map((f) => (
       <button
         type="button"
         class="filter"
         data-filter={f.id}
-        aria-pressed={i === 0 ? "true" : "false"}
+        aria-pressed={f.id === DEFAULT_FILTER ? "true" : "false"}
       >{f.label}</button>
     ))}
   </div>
@@ -72,15 +86,16 @@ const orders: Record<string, string[]> = {
     <button
       type="button"
       class="hdr-badge"
+      aria-label="HDR display status"
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-controls="hdr-popover"
     >
-      <span class="hdr-label">HDR</span>
+      <span class="hdr-glyph" aria-hidden="true">!!</span>
+      <span class="hdr-label" aria-hidden="true">HDR</span>
       <span class="hdr-state-on" aria-hidden="true">· ON</span>
-      <span class="hdr-state-off" aria-hidden="true">· OFF</span>
       <span class="hdr-dot" aria-hidden="true" />
-      <span class="hdr-glyph" aria-hidden="true">!</span>
+      <span class="hdr-suggest" aria-hidden="true">VIEW IN HDR</span>
     </button>
     <div id="hdr-popover" class="hdr-popover" role="dialog" aria-label="About HDR" hidden>
       <p class="hdr-popover-on">
@@ -114,8 +129,21 @@ const orders: Record<string, string[]> = {
 
 {/* Hidden sibling for items filtered out by the active chip. Keeping them out
     of `.masonry` means PhotoSwipe's lightbox query (`.masonry .masonry-item`)
-    naturally skips filtered items — no extra opt-out logic needed. */}
-<div class="masonry-stash" hidden />
+    naturally skips filtered items — no extra opt-out logic needed. SSR'd with
+    every photo not in the default filter so the client can index all tiles. */}
+<div class="masonry-stash" hidden>
+  {stashedPhotos.map((p) => (
+    <a
+      class="masonry-item"
+      data-id={p.id}
+      href={p.fullSrc}
+      data-pswp-width={p.width}
+      data-pswp-height={p.height}
+    >
+      <img src={p.src} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async" />
+    </a>
+  ))}
+</div>
 
 {/* Per-filter ordered id lists. Inlined as JSON so the client repack can read
     them without an extra fetch. Built server-side by loadPortfolio. */}
@@ -150,11 +178,14 @@ const orders: Record<string, string[]> = {
     const orders: Record<string, string[]> = JSON.parse(ordersEl.textContent || "{}");
 
     // Index every tile once. Items live either in .masonry (visible) or in
-    // .masonry-stash (filtered). The map persists across repacks.
+    // .masonry-stash (filtered) — both are SSR'd, so scan both. The map
+    // persists across repacks.
     const itemsById = new Map<string, HTMLAnchorElement>();
-    for (const item of grid.querySelectorAll<HTMLAnchorElement>(".masonry-item")) {
-      const id = item.dataset.id;
-      if (id) itemsById.set(id, item);
+    for (const container of [grid, stash]) {
+      for (const item of container.querySelectorAll<HTMLAnchorElement>(".masonry-item")) {
+        const id = item.dataset.id;
+        if (id) itemsById.set(id, item);
+      }
     }
 
     function pickColCount(): number {
@@ -163,7 +194,8 @@ const orders: Record<string, string[]> = {
       return 3;
     }
 
-    let currentFilter = "all";
+    const pressed = filterRow.querySelector<HTMLButtonElement>('button[aria-pressed="true"]');
+    let currentFilter = pressed?.dataset.filter ?? "all";
     let currentCols = Number(grid.dataset.cols ?? 0);
 
     function render(filter: string, nCols: number) {
@@ -322,6 +354,8 @@ const orders: Record<string, string[]> = {
 
     const FILMSTRIP_HEIGHT = 96;
     const SLIDE_INSET = 48;
+    // Matches the CSS --bp-mobile breakpoint (filmstrip hidden below it).
+    const MOBILE_BP = 960;
 
     const lightbox = new PhotoSwipeLightbox({
       gallery: ".masonry",
@@ -332,14 +366,43 @@ const orders: Record<string, string[]> = {
       // No wraparound — first/last slide is a hard stop, matching the
       // filmstrip's non-looping behavior.
       loop: false,
-      // Reserve the bottom strip so the slide image doesn't sit underneath,
-      // and inset all sides so the photo doesn't touch the viewport edges.
-      padding: {
-        top: SLIDE_INSET,
-        bottom: FILMSTRIP_HEIGHT + SLIDE_INSET,
-        left: SLIDE_INSET,
-        right: SLIDE_INSET,
-      },
+      // Desktop reserves the bottom strip + side insets so the photo doesn't
+      // touch the edges. On mobile the filmstrip is hidden (CSS) and we go
+      // edge-to-edge so the photo fills the screen — PhotoSwipe's native
+      // left/right swipe and swipe-down-to-close then do all the work.
+      paddingFn: (viewportSize) =>
+        viewportSize.x <= MOBILE_BP
+          ? { top: 0, bottom: 0, left: 0, right: 0 }
+          : {
+              top: SLIDE_INSET,
+              bottom: FILMSTRIP_HEIGHT + SLIDE_INSET,
+              left: SLIDE_INSET,
+              right: SLIDE_INSET,
+            },
+    });
+
+    // Mobile: swap the lightbox source to the 1k derivative (~0.3 MB) instead
+    // of the full-res HDR JPEG (~3 MB, ~9 MP). Several of the latter preloaded
+    // at once OOM-crash and stall mobile browsers. The SSR'd data-pswp-width is
+    // a generous 8000px placeholder (the manifest lacks true full dims), which
+    // also gives PhotoSwipe wrong pan/zoom bounds and makes swipes feel stuck —
+    // so we also set the real 1k dimensions (1024px long edge, same aspect).
+    // Evaluated per-open, so desktop (full-res) is untouched.
+    const LIGHTBOX_LONG_EDGE_1K = 1024;
+    lightbox.addFilter("itemData", (itemData) => {
+      if (window.innerWidth > MOBILE_BP) return itemData;
+      const src =
+        typeof itemData.src === "string"
+          ? itemData.src.replace("/hdr_jpg_full/", "/hdr_jpg_1k/")
+          : itemData.src;
+      const long = Math.max(itemData.width || 0, itemData.height || 0) || 1;
+      const scale = LIGHTBOX_LONG_EDGE_1K / long;
+      return {
+        ...itemData,
+        src,
+        width: Math.round((itemData.width || 0) * scale),
+        height: Math.round((itemData.height || 0) * scale),
+      };
     });
 
     // Custom UI: thumbnail filmstrip pinned to the bottom of the viewport,
@@ -381,11 +444,24 @@ const orders: Record<string, string[]> = {
             return btn;
           });
 
-          // Smooth-scroll only for in-lightbox navigation; the first call on
-          // open uses instant so the strip isn't already animating when the
-          // lightbox fades in.
-          let scrollBehavior: ScrollBehavior = "auto";
-          const setActive = (i: number) => {
+          // A single navigation step scrolls smoothly, but rapid back-to-back
+          // steps (holding the arrow key) fire `change` faster than a smooth
+          // scroll can finish — each new scroll interrupts the last, so the
+          // strip lags and then lurches to catch up. Jump instantly when steps
+          // arrive in quick succession; animate only when there's a pause.
+          let prevNav = 0;
+
+          // Scroll-center the active thumb only when the thumbs overflow the
+          // viewport; when they all fit, CSS centers the group and the strip
+          // stays unscrolled.
+          const syncOverflow = () => {
+            track.classList.remove("is-overflow");
+            if (el.scrollWidth > el.clientWidth) track.classList.add("is-overflow");
+          };
+
+          // `instant` forces a non-animated jump — used for the open/resize
+          // calls so the strip isn't animating as the lightbox fades in.
+          const setActive = (i: number, instant = false) => {
             thumbs.forEach((t, idx) => {
               const isActive = idx === i;
               t.classList.toggle("is-active", isActive);
@@ -393,17 +469,30 @@ const orders: Record<string, string[]> = {
               else t.removeAttribute("aria-current");
             });
             const active = thumbs[i];
-            if (!active) return;
+            if (!active || !track.classList.contains("is-overflow")) return;
+            const now = performance.now();
+            const behavior: ScrollBehavior =
+              instant || now - prevNav < 250 ? "auto" : "smooth";
+            prevNav = now;
             const center = active.offsetLeft + active.offsetWidth / 2;
-            el.scrollTo({
-              left: center - el.clientWidth / 2,
-              behavior: scrollBehavior,
-            });
-            scrollBehavior = "smooth";
+            el.scrollTo({ left: center - el.clientWidth / 2, behavior });
           };
 
-          setActive(pswp.currIndex);
+          // PhotoSwipe appends this element to the DOM right after onInit
+          // returns, so defer the first measurement a frame — until then the
+          // strip is detached and reports zero width, hiding any overflow.
+          requestAnimationFrame(() => {
+            syncOverflow();
+            setActive(pswp.currIndex, true);
+          });
           pswp.on("change", () => setActive(pswp.currIndex));
+
+          const onResize = () => {
+            syncOverflow();
+            setActive(pswp.currIndex, true);
+          };
+          window.addEventListener("resize", onResize);
+          pswp.on("destroy", () => window.removeEventListener("resize", onResize));
         },
       });
     });

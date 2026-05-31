@@ -5,6 +5,7 @@ import "~/styles/components.css";
 import "~/styles/variants.css";
 import { designDataAttrs } from "~/design";
 import { hero } from "~/data/hero";
+import { siteAssetUrl, siteAssetSrcset, THUMB_SIZES } from "~/lib/siteAssetUrl";
 
 const heroLead = hero.frames[0];
 
@@ -53,12 +54,14 @@ const canonical = new URL(path, Astro.site ?? "https://larsjebe.com").toString()
     />
 
     {/* LCP preload: first frame of the sidebar profile slideshow. Sourced from
-        src/data/hero.ts — single src URL since portrait frames are served
-        directly from /public/images/me/ without R2 responsive variants. */}
+        src/data/hero.ts and served from R2; imagesrcset/imagesizes mirror the
+        <img> in HeroPortrait.astro so the preloaded variant matches. */}
     <link
       rel="preload"
       as="image"
-      href={heroLead.src}
+      href={siteAssetUrl(heroLead.path, "540")}
+      imagesrcset={siteAssetSrcset(heroLead.path, THUMB_SIZES)}
+      imagesizes="(max-width: 1023px) 90vw, 380px"
       fetchpriority="high"
     />
 

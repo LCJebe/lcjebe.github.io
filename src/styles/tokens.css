@@ -100,6 +100,9 @@
   /* Focus + selection */
   --focus: oklch(0.86 0.12 70);
   --selection: oklch(0.80 0.10 70 / 0.32);
+
+  /* Link underline — amber-tinted at rest, full accent on hover */
+  --underline: oklch(0.80 0.10 70 / 0.55);
 }
 
 /* —— Light mode (follow-up, not an inversion) —— */
@@ -125,4 +128,39 @@
 
   --focus: oklch(0.55 0.14 65);
   --selection: oklch(0.62 0.12 65 / 0.25);
+
+  --underline: oklch(0.62 0.12 65 / 0.6);
+}
+
+/* —— Mobile is always light ——
+   Force the light palette at --bp-mobile regardless of stored/system
+   preference (the theme toggle is hidden on mobile). Mirrors the
+   [data-theme="light"] values above; placed last so it wins at equal
+   specificity even when data-theme="dark". Keep in sync with that block. */
+@media (max-width: 960px) {
+  :root {
+    color-scheme: light;
+    --bg: oklch(0.985 0.004 80);
+    --bg-raised: oklch(0.97 0.005 80);
+    --bg-sunken: oklch(0.95 0.006 80);
+
+    --fg: oklch(0.22 0.008 80);
+    --fg-muted: oklch(0.42 0.010 80);
+    --fg-faint: oklch(0.62 0.010 80);
+
+    --hairline: oklch(0.22 0.008 80 / 0.12);
+    --hairline-strong: oklch(0.22 0.008 80 / 0.22);
+
+    --accent-amber: oklch(0.62 0.12 65);
+    --accent-teal: oklch(0.58 0.10 200);
+    --accent-terracotta: oklch(0.58 0.12 30);
+
+    --accent: var(--accent-amber);
+    --accent-ink: oklch(0.985 0.004 80);
+
+    --focus: oklch(0.55 0.14 65);
+    --selection: oklch(0.62 0.12 65 / 0.25);
+
+    --underline: oklch(0.62 0.12 65 / 0.6);
+  }
 }

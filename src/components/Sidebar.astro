@@ -23,7 +23,7 @@ export interface CredentialChip {
 
 interface Props {
   name: string;
-  role: { line1: string; line2: string; line3?: string; line4?: string };
+  role: { lines: readonly string[] };
   /** Cross-fading square slideshow shown in place of a static profile photo. */
   frames: PortraitFrame[];
   chips: CredentialChip[];
@@ -40,7 +40,7 @@ const { name, role, frames, chips, navItems, socials } = Astro.props;
       Sidebar name is rendered as a <p> styled identically. */}
   <p class="name">{name}</p>
   <p class="role">
-    {role.line1}<br />{role.line2}{role.line3 && <><br />{role.line3}</>}{role.line4 && <><br />{role.line4}</>}
+    {role.lines.map((line) => <span class="line">{line}</span>)}
   </p>
 
   <div class="credentials">
@@ -49,7 +49,18 @@ const { name, role, frames, chips, navItems, socials } = Astro.props;
     ))}
   </div>
 
-  <nav aria-label="Sections">
+  {/* Hamburger toggle — visible on mobile only (CSS). On desktop the nav
+      below is always shown and this button is hidden. */}
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="section-nav"
+  >
+    <span class="nav-toggle-bars" aria-hidden="true"></span>
+    <span>Sections</span>
+  </button>
+  <nav id="section-nav" aria-label="Sections">
     {navItems.map((item) => (
       <a href={item.href}>
         <span>{item.label}</span>
@@ -66,3 +77,21 @@ const { name, role, frames, chips, navItems, socials } = Astro.props;
 
   <ThemeToggle />
 </aside>
+
+<script>
+  // Mobile hamburger: flip aria-expanded; CSS reveals the adjacent <nav>.
+  // Choosing a section collapses the menu again.
+  const toggle = document.querySelector<HTMLButtonElement>(".nav-toggle");
+  const nav = document.querySelector<HTMLElement>("#section-nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", open ? "false" : "true");
+    });
+    nav.addEventListener("click", (e) => {
+      if ((e.target as Element).closest("a")) {
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>

@@ -13,20 +13,18 @@ export const now = {
   title: "How I work",
 
   paragraphs: [
-    `Most of my best engineering isn't visible from the outside. The papers ` +
-    `below got published; the day-to-day is the long tail underneath — ` +
-    `model pipelines, training and dataset infrastructure, evaluation, the ` +
-    `unglamorous work that decides whether a feature actually survives on a ` +
-    `real device or doesn't.`,
+    `Most of my best engineering isn't visible from the outside, but you can ` +
+    `see it in the products it ends up in. The parts that don't show are usually ` +
+    `the parts that decide whether a feature actually survives in the real world.`,
 
-    `I'm useful at two seams. Between research and product — taking ` +
+    `I'm useful at two seams. Between research and product: taking ` +
     `something that works in a notebook and making it ship for a million ` +
-    `people. And between engineering and product instinct — most ML ` +
+    `people. And between engineering and product instinct: <strong>most ML ` +
     `engineers shipping at scale aren't thinking product-first; most ` +
-    `people with product judgment can't actually build the model. Both ` +
-    `together is rarer than it should be, and it's why the work lands.`,
+    `people with product judgment can't ship the system underneath.</strong> Both ` +
+    `together is rare, and it's why the work lands.`,
 
-    `Sometimes the engineering rises to a publication; more often it just ` +
+    `Sometimes the engineering is turned into a publication; more often it just ` +
     `ships. I prefer to ship.`,
   ],
 };

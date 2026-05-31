@@ -1,6 +1,6 @@
 export const artworkSection = {
   marker: "06 · Made by hand",
-  title: "Artwork",
+  title: "Paint + Craft",
 };
 
 export interface ArtImage {
@@ -19,6 +19,15 @@ export interface ArtSingle {
   title: string;
   width: number;
   height: number;
+  /** Optional "making-of" image, opened in a lightbox via a button on this slide. */
+  makingOf?: {
+    path: string;
+    alt: string;
+    width: number;
+    height: number;
+    /** Button label. */
+    label: string;
+  };
 }
 
 export interface ArtCollage {
@@ -67,5 +76,19 @@ export const artworks: ArtPiece[] = [
         height: 4869,
       },
     ],
+  },
+  {
+    path: "artwork/pineapple",
+    imageAlt: "String-art pineapple mounted on a reclaimed pallet-wood backdrop",
+    title: "string art on pallet wood",
+    width: 3996,
+    height: 3996,
+    makingOf: {
+      path: "artwork/woodworking/woodwork-collage",
+      alt: "Process collage: building the pallet-wood backdrop for the pineapple piece",
+      width: 1600,
+      height: 1272,
+      label: "see how I made this backdrop",
+    },
   },
 ];

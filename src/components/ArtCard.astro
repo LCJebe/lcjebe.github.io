@@ -50,6 +50,15 @@ const ART_SIZES_ATTR = "(min-width: 1024px) 60vw, 100vw";
       {pieces.map((p, i) => (
         <div class:list={["art-copy", { "is-active": i === 0 }]} data-index={i}>
           <h4>{p.title}</h4>
+          {p.kind !== "collage" && p.makingOf && (
+            <button
+              type="button"
+              class="art-makingof"
+              data-src={siteAssetUrl(p.makingOf.path, "2k")}
+              data-srcset={siteAssetSrcset(p.makingOf.path, LARGE_SIZES)}
+              data-alt={p.makingOf.alt}
+            >{p.makingOf.label}</button>
+          )}
         </div>
       ))}
     </div>
@@ -69,6 +78,11 @@ const ART_SIZES_ATTR = "(min-width: 1024px) 60vw, 100vw";
       </div>
     )}
   </div>
+</div>
+
+<div class="art-lightbox" id="art-lightbox" role="dialog" aria-modal="true" aria-label="Making-of" hidden>
+  <button type="button" class="art-lightbox-close" aria-label="Close">✕</button>
+  <img class="art-lightbox-img" src="" alt="" sizes="90vw" />
 </div>
 
 <script>
@@ -100,5 +114,36 @@ const ART_SIZES_ATTR = "(min-width: 1024px) 60vw, 100vw";
         if (!Number.isNaN(idx)) show(idx);
       }
     });
+
+    // —— Making-of lightbox ——
+    const lb = document.querySelector<HTMLElement>("#art-lightbox");
+    const lbImg = lb?.querySelector<HTMLImageElement>(".art-lightbox-img");
+    if (lb && lbImg) {
+      const close = () => {
+        lb.hidden = true;
+        lbImg.removeAttribute("srcset");
+        lbImg.src = "";
+        document.body.style.removeProperty("overflow");
+      };
+
+      block.addEventListener("click", (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLElement>(".art-makingof");
+        if (!btn) return;
+        const { src, srcset, alt } = btn.dataset;
+        if (srcset) lbImg.srcset = srcset;
+        lbImg.src = src ?? "";
+        lbImg.alt = alt ?? "";
+        lb.hidden = false;
+        document.body.style.overflow = "hidden";
+      });
+
+      lb.addEventListener("click", (e) => {
+        if ((e.target as HTMLElement).closest(".art-lightbox-img")) return;
+        close();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !lb.hidden) close();
+      });
+    }
   }
 </script>

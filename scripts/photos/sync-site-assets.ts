@@ -66,6 +66,15 @@ const ASSETS: Asset[] = [
   // sidebar
   { path: "sidebar/lars_pali", ext: ".jpg", tier: "thumb" },
 
+  // sidebar portrait slideshow — pre-cropped 1:1 frames (public/images/me/square)
+  { path: "me/square/DSC_0899",   ext: ".jpg", tier: "thumb" },
+  { path: "me/square/A7409780",   ext: ".jpg", tier: "thumb" },
+  { path: "me/square/lars_lucy3", ext: ".jpg", tier: "thumb" },
+  { path: "me/square/DSC_1049",   ext: ".jpg", tier: "thumb" },
+  { path: "me/square/A7400151",   ext: ".jpg", tier: "thumb" },
+  { path: "me/square/DSC_1063",   ext: ".jpg", tier: "thumb" },
+  { path: "me/square/kitesurfing", ext: ".jpg", tier: "thumb" },
+
   // hero carousel
   { path: "hero/kite_sunset",  ext: ".jpg", tier: "large" },
   { path: "hero/waves_narrow", ext: ".jpg", tier: "large" },
@@ -87,6 +96,10 @@ const ASSETS: Asset[] = [
   // artwork — single pieces
   { path: "artwork/painting_sunrise", ext: ".jpg", tier: "large" },
   { path: "artwork/third_movement",   ext: ".jpg", tier: "large" },
+  { path: "artwork/pineapple",        ext: ".jpg", tier: "large" },
+
+  // artwork — pineapple making-of collage
+  { path: "artwork/woodworking/woodwork-collage", ext: ".jpg", tier: "large" },
 
   // artwork — venice collage
   { path: "artwork/venice_1", ext: ".jpg", tier: "large" },

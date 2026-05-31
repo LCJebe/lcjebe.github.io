@@ -26,7 +26,7 @@ export const shippedRows: ShippedRow[] = [
     titleHtml: "Phota API &amp; Phota Studio — identity-preserving visual generation",
     meta: [
       { kind: "smallcaps", text: "Phota Labs · 2025 — present" },
-      { kind: "plain", text: "founding engineer" },
+      { kind: "plain", text: "founding technical staff" },
     ],
     note:
       "Building an identity-preserving generative photography product. I own " +
