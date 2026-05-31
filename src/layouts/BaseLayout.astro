@@ -6,6 +6,7 @@ import "~/styles/variants.css";
 import { designDataAttrs } from "~/design";
 import { hero } from "~/data/hero";
 import { siteAssetUrl, siteAssetSrcset, THUMB_SIZES } from "~/lib/siteAssetUrl";
+import ThemeToggle from "~/components/ThemeToggle.astro";
 
 const heroLead = hero.frames[0];
 
@@ -77,22 +78,23 @@ const canonical = new URL(path, Astro.site ?? "https://larsjebe.com").toString()
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    {/* No-FOUC theme: read preference before paint */}
+    {/* No-FOUC theme: read stored preference before paint. Light is the
+        unconditional default — OS dark mode no longer auto-flips the site. */}
     <script is:inline>
       (function () {
         try {
           var stored = localStorage.getItem("theme");
-          var prefers = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-          var theme = stored === "light" || stored === "dark" ? stored : prefers;
+          var theme = stored === "light" || stored === "dark" ? stored : "light";
           document.documentElement.dataset.theme = theme;
         } catch (e) {
-          /* SSR / private mode — fall back to dark default */
+          document.documentElement.dataset.theme = "light";
         }
       })();
     </script>
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
+    <ThemeToggle />
     <slot />
 
     {/* Dev-only: when the builder saves portfolio.json, the savePlugin

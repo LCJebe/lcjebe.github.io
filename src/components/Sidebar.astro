@@ -1,6 +1,5 @@
 ---
 import Chip from "./Chip.astro";
-import ThemeToggle from "./ThemeToggle.astro";
 import HeroPortrait, { type PortraitFrame } from "./HeroPortrait.astro";
 
 export interface NavItem {
@@ -74,8 +73,6 @@ const { name, role, frames, chips, navItems, socials } = Astro.props;
       <a href={s.href}>{s.label}</a>
     ))}
   </div>
-
-  <ThemeToggle />
 </aside>
 
 <script>
