@@ -2,11 +2,21 @@
 interface Props {
   /** Show the accent dot (signals "currently / live") */
   withDot?: boolean;
+  /** Optional link target — renders the chip as an <a> instead of <span> */
+  href?: string;
+  /** When href is external, opens in a new tab with safe rel attrs */
+  external?: boolean;
 }
 
-const { withDot = false } = Astro.props;
+const { withDot = false, href, external = false } = Astro.props;
+const Tag = href ? "a" : "span";
 ---
-<span class="chip">
+<Tag
+  class="chip"
+  href={href}
+  target={href && external ? "_blank" : undefined}
+  rel={href && external ? "noopener noreferrer" : undefined}
+>
   {withDot && <span class="dot" aria-hidden="true" />}
   <slot />
-</span>
+</Tag>

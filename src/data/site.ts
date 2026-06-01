@@ -27,9 +27,9 @@ export const sidebar = {
   },
   // Per DESIGN.md §3: company affiliations only — no CVPR/SIGGRAPH chips here.
   chips: [
-    { label: "PHOTA LABS", withDot: true },
-    { label: "ADOBE" },
-    { label: "STANFORD EE" },
+    { label: "PHOTA LABS", withDot: true, href: "https://photalabs.com", external: true },
+    { label: "ADOBE", href: "https://www.adobe.com", external: true },
+    { label: "STANFORD EE", href: "https://ee.stanford.edu/", external: true },
   ],
   navItems: [
     { href: "#now", label: "How I work", num: "01" },

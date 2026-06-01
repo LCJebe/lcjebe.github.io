@@ -21,6 +21,7 @@ import {
   earlierPublications,
 } from "~/data/research";
 import { photographySection, galleryFooterHtml } from "~/data/photographyMeta";
+import PeerReview from "~/components/PeerReview.astro";
 import { loadPortfolio } from "~/lib/loadPortfolio";
 
 const { photos, filters, categoryOrders } = loadPortfolio();
@@ -121,6 +122,7 @@ import { aboutSection, bioParagraphsHtml, contactRows } from "~/data/about";
             ))}
           </div>
         </details>
+        <PeerReview />
       </div>
     </section>
 

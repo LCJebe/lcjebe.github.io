@@ -18,6 +18,8 @@ export interface SocialLink {
 export interface CredentialChip {
   label: string;
   withDot?: boolean;
+  href?: string;
+  external?: boolean;
 }
 
 interface Props {
@@ -44,9 +46,26 @@ const { name, role, frames, chips, navItems, socials } = Astro.props;
 
   <div class="credentials">
     {chips.map((c) => (
-      <Chip withDot={c.withDot}>{c.label}</Chip>
+      <Chip withDot={c.withDot} href={c.href} external={c.external}>{c.label}</Chip>
     ))}
   </div>
+
+  <p class="location">
+    <svg
+      class="location-pin"
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+        fill="currentColor"
+      />
+    </svg>
+    <span>San Francisco Bay Area</span>
+  </p>
 
   {/* Hamburger toggle — visible on mobile only (CSS). On desktop the nav
       below is always shown and this button is hidden. */}

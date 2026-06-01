@@ -25,6 +25,7 @@
   background: var(--accent);
   flex: none;
 }
+a.chip { cursor: pointer; }
 
 /* —————————————————————— Link */
 .link {
@@ -131,10 +132,22 @@
   flex-direction: column;
 }
 .sidebar .role .line { display: block; }
-.sidebar .role .line::before {
-  content: "›";
+
+.sidebar .location {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  letter-spacing: -0.01em;
+  line-height: 1.55;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sidebar .location .location-pin {
   color: var(--accent);
-  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .credentials {
@@ -471,19 +484,6 @@
 .section-head {
   margin-bottom: var(--s-6);
 }
-.section-head .marker {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--fg-faint);
-  font-weight: 700;
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-  margin-bottom: var(--s-3); /* 12px */
-}
-.section-head .marker .dot {
-  display: inline-block;
-  margin: 0 0.8ch;
-}
 .section-head h2 {
   font-family: var(--font-display);
   font-weight: 400;
@@ -728,6 +728,28 @@
 }
 .earlier-expand[open] > summary .chevron {
   transform: rotate(180deg);
+}
+
+/* —————————————————————— Peer-review credential
+   Sits below the Earlier-work expand in the Research section: a small
+   mono eyebrow over a dot-separated list of conference venues. */
+.peer-review {
+  margin-top: var(--s-5);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.peer-review__eyebrow {
+  color: var(--fg);
+  font-weight: 700;
 }
 
 /* —————————————————————— Pinned shipped product */

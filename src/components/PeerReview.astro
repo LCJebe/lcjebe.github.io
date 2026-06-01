@@ -1,0 +1,14 @@
+---
+/**
+ * Reviewer / community-service credential surfaced at the bottom of the
+ * Research section, beneath the "Earlier work" expand. A small mono eyebrow
+ * over a dot-separated list of venues.
+ */
+import { peerReview } from "~/data/peerReview";
+
+const { venues } = peerReview;
+---
+<div class="peer-review">
+  <span class="peer-review__eyebrow">Peer review</span>
+  <span class="peer-review__venues">{venues.join(" · ")}</span>
+</div>

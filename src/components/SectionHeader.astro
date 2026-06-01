@@ -1,28 +1,15 @@
 ---
 interface Props {
-  /** Section number + label, e.g. "01 · NOW" */
-  marker: string;
+  /** Optional section number + label, e.g. "01 · NOW". Currently unused. */
+  marker?: string;
   /** Heading text */
   title: string;
 }
 
-const { marker, title } = Astro.props;
-
-// Split "01 · NOW" so the dot can be styled independently.
-// Falls back to plain text if the marker doesn't match the expected shape.
-const parts = marker.match(/^(\s*\S+)\s*·\s*(.+?)\s*$/);
+const { title } = Astro.props;
 ---
 <div class="section-head">
   <div>
-    <div class="marker">
-      {parts ? (
-        <>
-          <span class="num">{parts[1]}</span><span class="dot" aria-hidden="true">·</span><span class="label">{parts[2]}</span>
-        </>
-      ) : (
-        marker
-      )}
-    </div>
     <h2>{title}</h2>
   </div>
 </div>

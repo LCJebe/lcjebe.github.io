@@ -36,6 +36,11 @@ export const bioParagraphsHtml: string[] = [
 
 export const contactRows: ContactRow[] = [
   {
+    key: "Location",
+    value: "San Francisco Bay Area",
+    arrow: "",
+  },
+  {
     key: "Email",
     value: "lars.jebe@gmail.com",
     href: "mailto:lars.jebe@gmail.com",
