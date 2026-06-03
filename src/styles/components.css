@@ -1367,20 +1367,6 @@ html .pswp {
   gap: var(--s-4);
 }
 .copy-stack { display: grid; align-items: center; }
-@media (max-width: 720px) {
-  .copy-col { flex-wrap: wrap; }
-  /* Mobile: drop the fixed 16:9 box and the left-anchored object-position so
-     artwork fills the full column width at its natural aspect, matching how
-     the photography masonry sits on mobile. */
-  .art-img { aspect-ratio: auto; }
-  .art-img > img {
-    height: auto;
-    object-fit: contain;
-    object-position: center;
-  }
-  .art-collage { height: auto; }
-  .art-collage img { height: auto; }
-}
 
 .art-img, .art-copy {
   grid-column: 1;
@@ -1424,6 +1410,32 @@ html .pswp {
   object-fit: contain;
   object-position: left center;
   display: block;
+}
+
+@media (max-width: 720px) {
+  /* Mirror how the photo masonry sizes its single-column layout: each piece
+     fills the column at its own natural aspect. The implicit grid track on
+     .image-stack would snap to the image's intrinsic pixel width, so drop to
+     block layout. The shared grid cell would also size to the tallest piece,
+     so lift inactive pieces out of flow — only the active one drives column
+     height (square pieces grow the section, wide ones shrink it). */
+  .copy-col { flex-wrap: wrap; }
+  .image-stack { display: block; position: relative; }
+  .art-img {
+    aspect-ratio: auto;
+    width: 100%;
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .art-img:not(.is-active) { position: absolute; inset: 0; }
+  .art-img > img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+  .art-collage { height: auto; }
+  .art-collage img { height: auto; }
 }
 
 .art-copy p {
