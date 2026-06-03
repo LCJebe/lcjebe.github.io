@@ -709,7 +709,7 @@ a.chip { cursor: pointer; }
   border-top: 1px solid var(--hairline);
   cursor: pointer;
   font-family: var(--font-mono);
-  font-size: var(--t-meta);
+  font-size: var(--t-micro);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--fg-muted);
@@ -719,8 +719,12 @@ a.chip { cursor: pointer; }
 }
 .earlier-expand > summary::-webkit-details-marker { display: none; }
 .earlier-expand > summary::marker { content: ""; }
-.earlier-expand > summary:hover { color: var(--fg); }
-.earlier-expand[open] > summary { color: var(--fg); }
+.earlier-expand .earlier-label {
+  color: var(--fg);
+  font-weight: 700;
+}
+.earlier-expand > summary:hover .earlier-label { color: var(--fg); }
+.earlier-expand[open] > summary .earlier-label { color: var(--fg); }
 .earlier-expand .chevron {
   display: inline-block;
   font-family: var(--font-mono);
@@ -750,6 +754,58 @@ a.chip { cursor: pointer; }
 .peer-review__eyebrow {
   color: var(--fg);
   font-weight: 700;
+}
+
+/* —————————————————————— Patents credential
+   Sits directly under the peer-review row: small mono eyebrow over a
+   tight list — one line per granted patent, linked to the record. */
+.patents {
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.patents__eyebrow {
+  color: var(--fg);
+  font-weight: 700;
+}
+.patents__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+.patents__item {
+  margin: 0;
+}
+.patents__link {
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--hairline);
+  display: inline;
+}
+.patents__link:hover {
+  color: var(--fg);
+  border-bottom-color: currentColor;
+}
+.patents__num {
+  color: var(--fg-faint);
+  font-weight: 700;
+  margin-right: var(--s-2);
+}
+.patents__title {
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* —————————————————————— Pinned shipped product */
@@ -1313,6 +1369,17 @@ html .pswp {
 .copy-stack { display: grid; align-items: center; }
 @media (max-width: 720px) {
   .copy-col { flex-wrap: wrap; }
+  /* Mobile: drop the fixed 16:9 box and the left-anchored object-position so
+     artwork fills the full column width at its natural aspect, matching how
+     the photography masonry sits on mobile. */
+  .art-img { aspect-ratio: auto; }
+  .art-img > img {
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+  .art-collage { height: auto; }
+  .art-collage img { height: auto; }
 }
 
 .art-img, .art-copy {
