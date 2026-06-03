@@ -15,7 +15,7 @@ export const aboutSection = {
 export const bioParagraphsHtml: string[] = [
   `I grew up in Germany, where I studied Electrical Engineering and Information ` +
   `Technology at <strong>RWTH Aachen</strong>. I then moved to California to study at ` +
-  `<strong>Stanford</strong> with a focus on <strong>Computational Imaging and Neural Rendering</strong>.
+  `<strong>Stanford</strong> with a focus on <strong>computational imaging and neural rendering</strong>.
    I've always been ` +
   `fascinated by building things, seeing how they work, and improving ` +
   `them. ` +
