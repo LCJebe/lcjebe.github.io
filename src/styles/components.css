@@ -1519,15 +1519,6 @@ html .pswp {
   max-width: 56ch;
   text-wrap: pretty;
 }
-.about p:first-child::first-letter {
-  font-family: var(--font-display);
-  font-size: 3.6em;
-  line-height: 0.85;
-  float: left;
-  padding: 6px 10px 0 0;
-  color: var(--fg);
-  font-weight: 400;
-}
 .about p strong {
   color: var(--fg);
   font-weight: 600;

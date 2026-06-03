@@ -7,21 +7,23 @@ export const aboutSection = {
 
 /**
  * Bio paragraphs as raw HTML strings to allow inline <span class="smallcaps">
- * for institution names. The first paragraph automatically gets a drop-cap
- * via the .about p:first-child::first-letter rule.
+ * for institution names.
  *
  * Style note: this is About-as-context, not About-as-CV-recap. The hero +
  * sidebar already list affiliations; this section adds the through-line.
  */
 export const bioParagraphsHtml: string[] = [
-  `Grew up in Germany. Studied Electrical Engineering and Information ` +
-  `Technology at <strong>RWTH Aachen</strong> and ` +
-  `<strong>Stanford</strong> because I've always been ` +
+  `I grew up in Germany, where I studied Electrical Engineering and Information ` +
+  `Technology at <strong>RWTH Aachen</strong>. I then moved to California to study at ` +
+  `<strong>Stanford</strong> with a focus on Computational Imaging and Neural Rendering.
+   I've always been ` +
   `fascinated by building things, seeing how they work, and improving ` +
-  `them. Worked for a MicroLED startup that was acquired by Google, then switched to ` +
+  `them. ` +
+  `Following Stanford, I worked for a MicroLED startup that was acquired by Google. ` +
+  `Then, I switched to ` +
   `Marc Levoy's <strong>computational photography</strong> team at ` +
-  `<strong>Adobe</strong>. Now at <strong>Phota Labs</strong>, taking ` +
-  `my passion for photography and colors to a new level.`,
+  `<strong>Adobe</strong>. Now at <strong>Phota Labs</strong>, ` +
+  `building personalized generative models and workflows, and shipping faster than ever!`,
 
   `Outside the engineering I've played <strong>classical piano</strong> ` +
   `since I was a kid, and I'm constantly chasing bigger waves and ` +

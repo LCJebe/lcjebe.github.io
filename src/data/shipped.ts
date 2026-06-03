@@ -35,9 +35,9 @@ export const shippedRows: ShippedRow[] = [
       "team's research into a shipped product. The launch post covers what's " +
       "live now.",
     links: [
-      { href: "https://docs.photalabs.com/", label: "Phota API", external: true },
-      { href: "https://studio.photalabs.com/", label: "Phota Studio", external: true },
       { href: "https://www.photalabs.com/", label: "Phota Labs", external: true },
+      { href: "https://www.photalabs.com/", label: "Phota API", external: true },
+      { href: "https://studio.photalabs.com/", label: "Phota Studio", external: true },
       {
         href: "https://www.photalabs.com/blog/the-new-photo-experience-starts-here",
         label: "Launch post",
